@@ -269,11 +269,80 @@ def notify(text):
         print("  discord failed:", e)
 
 
+# One pinned Discord message that always shows the current state of everything.
+# Rewritten in place each sweep, so it never spams the channel. The message id
+# is kept in status_message.txt so later runs know what to edit.
+STATUS_FILE = Path(__file__).parent / "status_message.txt"
+
+ICON = {"in": "\U0001F7E2", "low": "\U0001F7E1", "out": "⬜"}
+
+
+def build_status(hits, now):
+    lines = [f"**RESTOCK RADAR** · updated {now:%b %d, %H:%M}"]
+    by_pid = {}
+    for h in hits:
+        by_pid.setdefault(h["pid"], []).append(h)
+
+    for product in PRODUCTS:
+        rows = by_pid.get(product["id"], [])
+        if not rows:
+            continue
+        lines.append(f"\n**{product['product']}** · ${product['msrp']}")
+        # anything in stock floats to the top, then nearest first
+        rows.sort(key=lambda h: (h["status"] == "out", STORES[h["store"]]["km"]))
+        for h in rows:
+            store = STORES[h["store"]]
+            icon = ICON.get(h["status"], "⬜")
+            if h["status"] == "out":
+                lines.append(f"{icon} {store['name']}")
+            else:
+                postal = store.get("postal_code", "")
+                tail = f" · `{postal}`" if postal else ""
+                lines.append(f"{icon} **{store['name']} — {h['qty']} in stock**{tail}")
+
+    manual = [s["name"] for s in STORES.values() if s["kind"] == "manual"]
+    if manual:
+        lines.append("\n*No feed — call to check: " + ", ".join(manual) + "*")
+    return "\n".join(lines)
+
+
+def push_status(text):
+    """Edit the existing status message, or post a new one and remember its id."""
+    if not DISCORD_WEBHOOK_URL:
+        return
+    body = json.dumps({"content": text}).encode()
+    headers = {**UA, "Content-Type": "application/json"}
+
+    msg_id = STATUS_FILE.read_text(encoding="utf-8").strip() if STATUS_FILE.exists() else ""
+    if msg_id:
+        try:
+            req = urllib.request.Request(
+                f"{DISCORD_WEBHOOK_URL}/messages/{msg_id}", data=body,
+                headers=headers, method="PATCH")
+            urllib.request.urlopen(req, timeout=15)
+            print("  status message updated")
+            return
+        except Exception as e:
+            # message was probably deleted - fall through and post a fresh one
+            print("  couldn't edit status message, posting a new one:", e)
+
+    try:
+        req = urllib.request.Request(
+            DISCORD_WEBHOOK_URL + "?wait=true", data=body, headers=headers)
+        with urllib.request.urlopen(req, timeout=15) as r:
+            new_id = json.loads(r.read().decode()).get("id", "")
+        if new_id:
+            STATUS_FILE.write_text(new_id, encoding="utf-8")
+            print("  posted new status message - pin it in Discord")
+    except Exception as e:
+        print("  status message failed:", e)
+
+
 # ----------------------------------------------------------------------------
 # main loop
 # ----------------------------------------------------------------------------
 
-previous = {}   # (pid, store) -> status
+previous = {}   # (pid, store) -> (status, qty)
 alerts = []     # newest first, capped
 
 
@@ -292,7 +361,7 @@ def load_previous_state():
         print("  couldn't read previous state:", e)
         return
     for hit in data.get("hits", []):
-        previous[(hit["pid"], hit["store"])] = hit["status"]
+        previous[(hit["pid"], hit["store"])] = (hit["status"], hit.get("qty"))
     alerts.extend(data.get("alerts", []))
     print(f"  restored {len(previous)} store states, {len(alerts)} past alerts")
 
@@ -331,10 +400,25 @@ def sweep():
             })
 
             key = (product["id"], store_key)
-            was = previous.get(key)
-            previous[key] = state
+            was_state, was_qty = previous.get(key, (None, None))
+            previous[key] = (state, qty)
 
-            if was in (None, "out") and state in ("in", "low"):
+            def where_to_buy():
+                """The 'how do I act on this' lines shared by both alerts."""
+                out = []
+                if store.get("postal_code"):
+                    # paste this into the retailer's "find a store" box to
+                    # switch to this location - their store picker is
+                    # session-based, so no link can do it for you
+                    out.append(f"Set store with postal code: `{store['postal_code']}`")
+                product_url = product.get("urls", {}).get(store_key)
+                if product_url:
+                    out.append(f"Buy: {product_url}")
+                if store.get("store_url"):
+                    out.append(f"Store (address & phone): {store['store_url']}")
+                return out
+
+            if was_state in (None, "out") and state in ("in", "low"):
                 line = f"{qty} unit(s) · ${price or product['msrp']}"
                 alerts.insert(0, {
                     "pid": product["id"], "store": store_key,
@@ -342,20 +426,22 @@ def sweep():
                     "tag": "IN" if state == "in" else "LOW",
                     "status": state, "extra": line,
                 })
-                msg = ["**IN STOCK**", product["product"], store["name"], line]
-                if store.get("postal_code"):
-                    # paste this into the retailer's "find a store" box to
-                    # switch to this location - their store picker is
-                    # session-based, so no link can do it for you
-                    msg.append(f"Set store with postal code: `{store['postal_code']}`")
-                product_url = product.get("urls", {}).get(store_key)
-                if product_url:
-                    msg.append(f"Buy: {product_url}")
-                if store.get("store_url"):
-                    msg.append(f"Store (address & phone): {store['store_url']}")
-                notify("\n".join(msg))
+                notify("\n".join(["**IN STOCK**", product["product"],
+                                  store["name"], line] + where_to_buy()))
                 print(f"  ALERT {product['product']} @ {store['name']} - {line}")
-            elif was in ("in", "low") and state == "out":
+            elif (state in ("in", "low") and was_state in ("in", "low")
+                    and was_qty is not None and qty != was_qty):
+                direction = "dropped" if qty < was_qty else "went up"
+                line = f"{was_qty} → {qty} unit(s)"
+                alerts.insert(0, {
+                    "pid": product["id"], "store": store_key,
+                    "time": now.strftime("%H:%M"), "tag": "QTY",
+                    "status": state, "extra": line,
+                })
+                notify("\n".join([f"**STOCK {direction.upper()}**", product["product"],
+                                  store["name"], line] + where_to_buy()))
+                print(f"  ALERT qty {direction} {product['product']} @ {store['name']} - {line}")
+            elif was_state in ("in", "low") and state == "out":
                 alerts.insert(0, {
                     "pid": product["id"], "store": store_key,
                     "time": now.strftime("%H:%M"), "tag": "GONE",
@@ -375,6 +461,8 @@ def sweep():
     }, indent=2), encoding="utf-8")
 
     print(f"[{now:%H:%M:%S}] {len(hits)} rows written")
+
+    push_status(build_status(hits, now))
 
 
 def serve():
