@@ -1,5 +1,6 @@
-# the Discord webhook - never commit this
+# Discord webhooks - never commit these
 webhook.txt
+webhook_*.txt
 
 __pycache__/
 *.pyc

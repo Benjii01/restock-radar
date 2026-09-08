@@ -56,6 +56,190 @@
       "method": "official API",
       "conf": "high"
     },
+    "bb_on620": {
+      "name": "Best Buy \u00b7 Brantford ON",
+      "km": 47.0,
+      "postal_code": "N3R 7J9",
+      "store_url": "https://stores.bestbuy.ca/en-ca/on/brantford/61-lynden-rd-unit-a",
+      "method": "official API",
+      "conf": "high"
+    },
+    "bb_on936": {
+      "name": "Best Buy \u00b7 London South ON",
+      "km": 53.0,
+      "postal_code": "N6E 1M2",
+      "store_url": "https://stores.bestbuy.ca/en-ca/on/london/1080-wellington-rd",
+      "method": "official API",
+      "conf": "high"
+    },
+    "bb_on980": {
+      "name": "Best Buy \u00b7 North London ON",
+      "km": 57.0,
+      "postal_code": "N5X 3Y2",
+      "store_url": "https://stores.bestbuy.ca/en-ca/on/london/1735-richmond-st-unit-1",
+      "method": "official API",
+      "conf": "high"
+    },
+    "bb_on995": {
+      "name": "Best Buy \u00b7 Cambridge ON",
+      "km": 51.0,
+      "postal_code": "N1R 8K5",
+      "store_url": "https://stores.bestbuy.ca/en-ca/on/cambridge/28-pinebush-rd",
+      "method": "official API",
+      "conf": "high"
+    },
+    "bb_on935": {
+      "name": "Best Buy \u00b7 Kitchener ON",
+      "km": 52.0,
+      "postal_code": "N2C 1X2",
+      "store_url": "https://stores.bestbuy.ca/en-ca/on/kitchener/215-fairway-rd-s",
+      "method": "official API",
+      "conf": "high"
+    },
+    "bb_on608": {
+      "name": "Best Buy \u00b7 Waterloo ON",
+      "km": 60.0,
+      "postal_code": "N2L 6L3",
+      "store_url": "https://stores.bestbuy.ca/en-ca/on/waterloo/580-king-st-n-bldg-b",
+      "method": "official API",
+      "conf": "high"
+    },
+    "stap_on260": {
+      "name": "Staples \u00b7 Tillsonburg ON",
+      "km": 27.0,
+      "postal_code": "N4G 5A7",
+      "store_url": "https://stores.staples.ca/on/tillsonburg/office-supplies-ca-260.html",
+      "method": "official API",
+      "conf": "high"
+    },
+    "stap_on284": {
+      "name": "Staples \u00b7 Stratford ON",
+      "km": 41.0,
+      "postal_code": "N4Z 1A5",
+      "store_url": "https://stores.staples.ca/on/stratford/office-supplies-ca-284.html",
+      "method": "official API",
+      "conf": "high"
+    },
+    "stap_on103": {
+      "name": "Staples \u00b7 Brantford ON",
+      "km": 47.0,
+      "postal_code": "N3R 7J2",
+      "store_url": "https://stores.staples.ca/on/brantford/office-supplies-ca-103.html",
+      "method": "official API",
+      "conf": "high"
+    },
+    "stap_on9": {
+      "name": "Staples \u00b7 London East ON",
+      "km": 50.0,
+      "postal_code": "N5V 1P7",
+      "store_url": "https://stores.staples.ca/on/london/office-supplies-ca-9.html",
+      "method": "official API",
+      "conf": "high"
+    },
+    "stap_on53": {
+      "name": "Staples \u00b7 Cambridge ON",
+      "km": 51.0,
+      "postal_code": "N1R 6J5",
+      "store_url": "https://stores.staples.ca/on/cambridge/office-supplies-ca-53.html",
+      "method": "official API",
+      "conf": "high"
+    },
+    "stap_on5": {
+      "name": "Staples \u00b7 Kitchener S ON",
+      "km": 52.0,
+      "postal_code": "N2E 3W7",
+      "store_url": "https://stores.staples.ca/on/kitchener/office-supplies-ca-5.html",
+      "method": "official API",
+      "conf": "high"
+    },
+    "stap_on8": {
+      "name": "Staples \u00b7 London S ON",
+      "km": 53.0,
+      "postal_code": "N6C 4P6",
+      "store_url": "https://stores.staples.ca/on/london/office-supplies-ca-8.html",
+      "method": "official API",
+      "conf": "high"
+    },
+    "stap_on445": {
+      "name": "Staples \u00b7 Kitchener W ON",
+      "km": 54.0,
+      "postal_code": "N2N 0B1",
+      "store_url": "https://stores.staples.ca/on/kitchener/office-supplies-ca-445.html",
+      "method": "official API",
+      "conf": "high"
+    },
+    "stap_on262": {
+      "name": "Staples \u00b7 London W ON",
+      "km": 55.0,
+      "postal_code": "N6L 1A6",
+      "store_url": "https://stores.staples.ca/on/london/office-supplies-ca-262.html",
+      "method": "official API",
+      "conf": "high"
+    },
+    "stap_on67": {
+      "name": "Staples \u00b7 London N ON",
+      "km": 57.0,
+      "postal_code": "N5X 3Y2",
+      "store_url": "https://stores.staples.ca/on/london/office-supplies-ca-67.html",
+      "method": "official API",
+      "conf": "high"
+    },
+    "stap_on120": {
+      "name": "Staples \u00b7 Waterloo ON",
+      "km": 60.0,
+      "postal_code": "N2J 4G8",
+      "store_url": "https://stores.staples.ca/on/waterloo/office-supplies-ca-120.html",
+      "method": "official API",
+      "conf": "high"
+    },
+    "stap_on441": {
+      "name": "Staples \u00b7 St. Thomas ON",
+      "km": 62.0,
+      "postal_code": "N5P 1G4",
+      "store_url": "https://stores.staples.ca/on/stthomas/office-supplies-ca-441.html",
+      "method": "official API",
+      "conf": "high"
+    },
+    "stap_on201": {
+      "name": "Staples \u00b7 Guelph N ON",
+      "km": 66.0,
+      "postal_code": "N1H 1G7",
+      "store_url": "https://stores.staples.ca/on/guelph/office-supplies-ca-201.html",
+      "method": "official API",
+      "conf": "high"
+    },
+    "stap_on81": {
+      "name": "Staples \u00b7 Guelph S ON",
+      "km": 68.0,
+      "postal_code": "N1G 4Z1",
+      "store_url": "https://stores.staples.ca/on/guelph/office-supplies-ca-81.html",
+      "method": "official API",
+      "conf": "high"
+    },
+    "stap_on59": {
+      "name": "Staples \u00b7 Ancaster ON",
+      "km": 84.0,
+      "postal_code": "L9K 1L6",
+      "store_url": "https://stores.staples.ca/on/ancaster/office-supplies-ca-59.html",
+      "method": "official API",
+      "conf": "high"
+    },
+    "stap_on222": {
+      "name": "Staples \u00b7 Hamilton Mtn ON",
+      "km": 95.0,
+      "postal_code": "L9A 5C5",
+      "store_url": "https://stores.staples.ca/on/hamilton/office-supplies-ca-222.html",
+      "method": "official API",
+      "conf": "high"
+    },
+    "stap_on456": {
+      "name": "Staples \u00b7 Hamilton E ON",
+      "km": 97.0,
+      "postal_code": "L9H 7K6",
+      "store_url": "https://stores.staples.ca/on/hamilton/office-supplies-ca-456.html",
+      "method": "official API",
+      "conf": "high"
+    },
     "wm_stav": {
       "name": "Walmart \u00b7 Stavanger Dr",
       "km": 3.1,
@@ -80,41 +264,79 @@
       "id": "p5",
       "cat": "PS5",
       "tag": "CONSOLE",
+      "channel": "ps5",
       "product": "PlayStation 5 Pro 2TB",
       "sku": "19492009",
       "msrp": 1099.99,
       "urls": {
         "bb": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
         "bb_aval": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
+        "bb_on620": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
+        "bb_on936": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
+        "bb_on980": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
+        "bb_on995": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
+        "bb_on935": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
+        "bb_on608": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
         "stap_stav": "https://www.staples.ca/products/3103551-en-sony-playstation-5-pro-console",
         "stap_mtpearl": "https://www.staples.ca/products/3103551-en-sony-playstation-5-pro-console",
         "stap_kelsey": "https://www.staples.ca/products/3103551-en-sony-playstation-5-pro-console",
         "stap_cb": "https://www.staples.ca/products/3103551-en-sony-playstation-5-pro-console",
-        "stap_wood": "https://www.staples.ca/products/3103551-en-sony-playstation-5-pro-console"
+        "stap_wood": "https://www.staples.ca/products/3103551-en-sony-playstation-5-pro-console",
+        "stap_on260": "https://www.staples.ca/products/3103551-en-sony-playstation-5-pro-console",
+        "stap_on284": "https://www.staples.ca/products/3103551-en-sony-playstation-5-pro-console",
+        "stap_on103": "https://www.staples.ca/products/3103551-en-sony-playstation-5-pro-console",
+        "stap_on9": "https://www.staples.ca/products/3103551-en-sony-playstation-5-pro-console",
+        "stap_on53": "https://www.staples.ca/products/3103551-en-sony-playstation-5-pro-console",
+        "stap_on5": "https://www.staples.ca/products/3103551-en-sony-playstation-5-pro-console",
+        "stap_on8": "https://www.staples.ca/products/3103551-en-sony-playstation-5-pro-console",
+        "stap_on445": "https://www.staples.ca/products/3103551-en-sony-playstation-5-pro-console",
+        "stap_on262": "https://www.staples.ca/products/3103551-en-sony-playstation-5-pro-console",
+        "stap_on67": "https://www.staples.ca/products/3103551-en-sony-playstation-5-pro-console",
+        "stap_on120": "https://www.staples.ca/products/3103551-en-sony-playstation-5-pro-console",
+        "stap_on441": "https://www.staples.ca/products/3103551-en-sony-playstation-5-pro-console",
+        "stap_on201": "https://www.staples.ca/products/3103551-en-sony-playstation-5-pro-console",
+        "stap_on81": "https://www.staples.ca/products/3103551-en-sony-playstation-5-pro-console",
+        "stap_on59": "https://www.staples.ca/products/3103551-en-sony-playstation-5-pro-console",
+        "stap_on222": "https://www.staples.ca/products/3103551-en-sony-playstation-5-pro-console",
+        "stap_on456": "https://www.staples.ca/products/3103551-en-sony-playstation-5-pro-console"
       }
     },
     {
       "id": "gpu1",
       "cat": "GPU",
       "tag": "GRAPHICS CARD",
+      "channel": "gpu",
       "product": "NVIDIA GeForce RTX 5080 16GB GDDR7",
       "sku": "18931347",
       "msrp": 1449.99,
       "urls": {
         "bb": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5080-16gb-gddr7-video-card/18931347",
-        "bb_aval": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5080-16gb-gddr7-video-card/18931347"
+        "bb_aval": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5080-16gb-gddr7-video-card/18931347",
+        "bb_on620": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5080-16gb-gddr7-video-card/18931347",
+        "bb_on936": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5080-16gb-gddr7-video-card/18931347",
+        "bb_on980": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5080-16gb-gddr7-video-card/18931347",
+        "bb_on995": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5080-16gb-gddr7-video-card/18931347",
+        "bb_on935": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5080-16gb-gddr7-video-card/18931347",
+        "bb_on608": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5080-16gb-gddr7-video-card/18931347"
       }
     },
     {
       "id": "gpu2",
       "cat": "GPU",
       "tag": "GRAPHICS CARD",
+      "channel": "gpu",
       "product": "NVIDIA GeForce RTX 5090 32GB GDDR7",
       "sku": "18931348",
       "msrp": 2899.99,
       "urls": {
         "bb": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5090-32gb-gddr7-video-card/18931348",
-        "bb_aval": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5090-32gb-gddr7-video-card/18931348"
+        "bb_aval": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5090-32gb-gddr7-video-card/18931348",
+        "bb_on620": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5090-32gb-gddr7-video-card/18931348",
+        "bb_on936": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5090-32gb-gddr7-video-card/18931348",
+        "bb_on980": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5090-32gb-gddr7-video-card/18931348",
+        "bb_on995": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5090-32gb-gddr7-video-card/18931348",
+        "bb_on935": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5090-32gb-gddr7-video-card/18931348",
+        "bb_on608": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5090-32gb-gddr7-video-card/18931348"
       }
     }
   ],
@@ -162,9 +384,9 @@
     {
       "pid": "p5",
       "store": "stap_cb",
-      "qty": 0,
+      "qty": 1,
       "price": 1099.99,
-      "status": "out",
+      "status": "low",
       "seenSecs": 0
     },
     {
@@ -176,6 +398,190 @@
       "seenSecs": 0
     },
     {
+      "pid": "p5",
+      "store": "bb_on620",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on936",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on980",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on995",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on935",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on608",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "stap_on260",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "stap_on284",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "stap_on103",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "stap_on9",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "stap_on53",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "stap_on5",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "stap_on8",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "stap_on445",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "stap_on262",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "stap_on67",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "stap_on120",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "stap_on441",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "stap_on201",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "stap_on81",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "stap_on59",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "stap_on222",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "stap_on456",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
       "pid": "gpu1",
       "store": "bb",
       "qty": 0,
@@ -186,6 +592,54 @@
     {
       "pid": "gpu1",
       "store": "bb_aval",
+      "qty": 0,
+      "price": 1449.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "gpu1",
+      "store": "bb_on620",
+      "qty": 0,
+      "price": 1449.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "gpu1",
+      "store": "bb_on936",
+      "qty": 0,
+      "price": 1449.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "gpu1",
+      "store": "bb_on980",
+      "qty": 0,
+      "price": 1449.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "gpu1",
+      "store": "bb_on995",
+      "qty": 0,
+      "price": 1449.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "gpu1",
+      "store": "bb_on935",
+      "qty": 0,
+      "price": 1449.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "gpu1",
+      "store": "bb_on608",
       "qty": 0,
       "price": 1449.99,
       "status": "out",
@@ -202,6 +656,54 @@
     {
       "pid": "gpu2",
       "store": "bb_aval",
+      "qty": 0,
+      "price": 2899.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "gpu2",
+      "store": "bb_on620",
+      "qty": 0,
+      "price": 2899.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "gpu2",
+      "store": "bb_on936",
+      "qty": 0,
+      "price": 2899.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "gpu2",
+      "store": "bb_on980",
+      "qty": 0,
+      "price": 2899.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "gpu2",
+      "store": "bb_on995",
+      "qty": 0,
+      "price": 2899.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "gpu2",
+      "store": "bb_on935",
+      "qty": 0,
+      "price": 2899.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "gpu2",
+      "store": "bb_on608",
       "qty": 0,
       "price": 2899.99,
       "status": "out",
@@ -212,11 +714,19 @@
     {
       "pid": "p5",
       "store": "stap_cb",
+      "time": "20:51",
+      "tag": "LOW",
+      "status": "low",
+      "extra": "1 unit(s) \u00b7 $1099.99"
+    },
+    {
+      "pid": "p5",
+      "store": "stap_cb",
       "time": "19:42",
       "tag": "LOW",
       "status": "low",
       "extra": "1 unit(s) \u00b7 $1099.99"
     }
   ],
-  "updated": "2026-09-08T22:59:16.085780"
+  "updated": "2026-09-08T21:20:05.361476"
 }

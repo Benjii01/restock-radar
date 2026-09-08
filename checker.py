@@ -21,25 +21,36 @@ from pathlib import Path
 # CONFIG - this is the only part you need to edit
 # ----------------------------------------------------------------------------
 
-# The webhook is a secret - it never goes in this file, or it would end up in
-# git history forever. Locally it's read from webhook.txt (gitignored); on
-# GitHub Actions it comes from the DISCORD_WEBHOOK_URL repository secret.
-def _load_webhook():
+# Webhooks are secrets - they never go in this file, or they'd be in git
+# history forever. Each Discord channel has its own. Locally they're read from
+# gitignored files; on GitHub Actions from repository secrets:
+#
+#   channel "ps5" -> webhook.txt      / DISCORD_WEBHOOK_URL
+#   channel "gpu" -> webhook_gpu.txt  / DISCORD_WEBHOOK_GPU
+#
+def _load_webhook(channel=""):
     # ﻿ is a BOM - Windows tooling loves to prepend one, and Python's
     # strip() won't remove it, which yields "unknown url type: ﻿https"
     def clean(s):
         return s.strip().lstrip("﻿").strip()
 
-    from_env = clean(os.environ.get("DISCORD_WEBHOOK_URL", ""))
+    env_name = f"DISCORD_WEBHOOK_{channel.upper()}" if channel else "DISCORD_WEBHOOK_URL"
+    from_env = clean(os.environ.get(env_name, ""))
     if from_env:
         return from_env
-    local = Path(__file__).parent / "webhook.txt"
+    fname = f"webhook_{channel}.txt" if channel else "webhook.txt"
+    local = Path(__file__).parent / fname
     if local.exists():
         return clean(local.read_text(encoding="utf-8-sig"))
     return ""
 
 
-DISCORD_WEBHOOK_URL = _load_webhook()
+# Each product carries a "channel" naming which Discord channel it reports to.
+# Anything unrecognised falls back to the ps5 webhook rather than vanishing.
+WEBHOOKS = {
+    "ps5": _load_webhook(),
+    "gpu": _load_webhook("gpu"),
+}
 
 CHECK_EVERY_SECONDS = 120  # don't go below 60 - Walmart blocks fast pollers
 
@@ -101,6 +112,149 @@ STORES = {
         "store_url": "https://stores.staples.ca/on/woodstock/office-supplies-ca-235.html",
         "method": "official API", "conf": "high",
     },
+    # --- Ontario cluster: km is distance from Woodstock, not St. John's,
+    # since these are only useful as a delivery/pickup order around there ---
+    # Best Buy: full-size stores only. The Express/Mobile mall kiosks nearby
+    # (Stratford, Argyle, Fairview, White Oaks, Masonville, Conestoga) are
+    # phone-and-accessory counters and won't hold a console.
+    "bb_on620": {
+        "name": "Best Buy · Brantford ON", "km": 47.0,
+        "kind": "bestbuy", "store_id": "620", "postal_code": "N3R 7J9",
+        "store_url": "https://stores.bestbuy.ca/en-ca/on/brantford/61-lynden-rd-unit-a",
+        "method": "official API", "conf": "high",
+    },
+    "bb_on936": {
+        "name": "Best Buy · London South ON", "km": 53.0,
+        "kind": "bestbuy", "store_id": "936", "postal_code": "N6E 1M2",
+        "store_url": "https://stores.bestbuy.ca/en-ca/on/london/1080-wellington-rd",
+        "method": "official API", "conf": "high",
+    },
+    "bb_on980": {
+        "name": "Best Buy · North London ON", "km": 57.0,
+        "kind": "bestbuy", "store_id": "980", "postal_code": "N5X 3Y2",
+        "store_url": "https://stores.bestbuy.ca/en-ca/on/london/1735-richmond-st-unit-1",
+        "method": "official API", "conf": "high",
+    },
+    "bb_on995": {
+        "name": "Best Buy · Cambridge ON", "km": 51.0,
+        "kind": "bestbuy", "store_id": "995", "postal_code": "N1R 8K5",
+        "store_url": "https://stores.bestbuy.ca/en-ca/on/cambridge/28-pinebush-rd",
+        "method": "official API", "conf": "high",
+    },
+    "bb_on935": {
+        "name": "Best Buy · Kitchener ON", "km": 52.0,
+        "kind": "bestbuy", "store_id": "935", "postal_code": "N2C 1X2",
+        "store_url": "https://stores.bestbuy.ca/en-ca/on/kitchener/215-fairway-rd-s",
+        "method": "official API", "conf": "high",
+    },
+    "bb_on608": {
+        "name": "Best Buy · Waterloo ON", "km": 60.0,
+        "kind": "bestbuy", "store_id": "608", "postal_code": "N2L 6L3",
+        "store_url": "https://stores.bestbuy.ca/en-ca/on/waterloo/580-king-st-n-bldg-b",
+        "method": "official API", "conf": "high",
+    },
+    "stap_on260": {
+        "name": "Staples · Tillsonburg ON", "km": 27.0,
+        "kind": "staples", "store_id": "260", "postal_code": "N4G 5A7",
+        "store_url": "https://stores.staples.ca/on/tillsonburg/office-supplies-ca-260.html",
+        "method": "official API", "conf": "high",
+    },
+    "stap_on284": {
+        "name": "Staples · Stratford ON", "km": 41.0,
+        "kind": "staples", "store_id": "284", "postal_code": "N4Z 1A5",
+        "store_url": "https://stores.staples.ca/on/stratford/office-supplies-ca-284.html",
+        "method": "official API", "conf": "high",
+    },
+    "stap_on103": {
+        "name": "Staples · Brantford ON", "km": 47.0,
+        "kind": "staples", "store_id": "103", "postal_code": "N3R 7J2",
+        "store_url": "https://stores.staples.ca/on/brantford/office-supplies-ca-103.html",
+        "method": "official API", "conf": "high",
+    },
+    "stap_on9": {
+        "name": "Staples · London East ON", "km": 50.0,
+        "kind": "staples", "store_id": "9", "postal_code": "N5V 1P7",
+        "store_url": "https://stores.staples.ca/on/london/office-supplies-ca-9.html",
+        "method": "official API", "conf": "high",
+    },
+    "stap_on53": {
+        "name": "Staples · Cambridge ON", "km": 51.0,
+        "kind": "staples", "store_id": "53", "postal_code": "N1R 6J5",
+        "store_url": "https://stores.staples.ca/on/cambridge/office-supplies-ca-53.html",
+        "method": "official API", "conf": "high",
+    },
+    "stap_on5": {
+        "name": "Staples · Kitchener S ON", "km": 52.0,
+        "kind": "staples", "store_id": "5", "postal_code": "N2E 3W7",
+        "store_url": "https://stores.staples.ca/on/kitchener/office-supplies-ca-5.html",
+        "method": "official API", "conf": "high",
+    },
+    "stap_on8": {
+        "name": "Staples · London S ON", "km": 53.0,
+        "kind": "staples", "store_id": "8", "postal_code": "N6C 4P6",
+        "store_url": "https://stores.staples.ca/on/london/office-supplies-ca-8.html",
+        "method": "official API", "conf": "high",
+    },
+    "stap_on445": {
+        "name": "Staples · Kitchener W ON", "km": 54.0,
+        "kind": "staples", "store_id": "445", "postal_code": "N2N 0B1",
+        "store_url": "https://stores.staples.ca/on/kitchener/office-supplies-ca-445.html",
+        "method": "official API", "conf": "high",
+    },
+    "stap_on262": {
+        "name": "Staples · London W ON", "km": 55.0,
+        "kind": "staples", "store_id": "262", "postal_code": "N6L 1A6",
+        "store_url": "https://stores.staples.ca/on/london/office-supplies-ca-262.html",
+        "method": "official API", "conf": "high",
+    },
+    "stap_on67": {
+        "name": "Staples · London N ON", "km": 57.0,
+        "kind": "staples", "store_id": "67", "postal_code": "N5X 3Y2",
+        "store_url": "https://stores.staples.ca/on/london/office-supplies-ca-67.html",
+        "method": "official API", "conf": "high",
+    },
+    "stap_on120": {
+        "name": "Staples · Waterloo ON", "km": 60.0,
+        "kind": "staples", "store_id": "120", "postal_code": "N2J 4G8",
+        "store_url": "https://stores.staples.ca/on/waterloo/office-supplies-ca-120.html",
+        "method": "official API", "conf": "high",
+    },
+    "stap_on441": {
+        "name": "Staples · St. Thomas ON", "km": 62.0,
+        "kind": "staples", "store_id": "441", "postal_code": "N5P 1G4",
+        "store_url": "https://stores.staples.ca/on/stthomas/office-supplies-ca-441.html",
+        "method": "official API", "conf": "high",
+    },
+    "stap_on201": {
+        "name": "Staples · Guelph N ON", "km": 66.0,
+        "kind": "staples", "store_id": "201", "postal_code": "N1H 1G7",
+        "store_url": "https://stores.staples.ca/on/guelph/office-supplies-ca-201.html",
+        "method": "official API", "conf": "high",
+    },
+    "stap_on81": {
+        "name": "Staples · Guelph S ON", "km": 68.0,
+        "kind": "staples", "store_id": "81", "postal_code": "N1G 4Z1",
+        "store_url": "https://stores.staples.ca/on/guelph/office-supplies-ca-81.html",
+        "method": "official API", "conf": "high",
+    },
+    "stap_on59": {
+        "name": "Staples · Ancaster ON", "km": 84.0,
+        "kind": "staples", "store_id": "59", "postal_code": "L9K 1L6",
+        "store_url": "https://stores.staples.ca/on/ancaster/office-supplies-ca-59.html",
+        "method": "official API", "conf": "high",
+    },
+    "stap_on222": {
+        "name": "Staples · Hamilton Mtn ON", "km": 95.0,
+        "kind": "staples", "store_id": "222", "postal_code": "L9A 5C5",
+        "store_url": "https://stores.staples.ca/on/hamilton/office-supplies-ca-222.html",
+        "method": "official API", "conf": "high",
+    },
+    "stap_on456": {
+        "name": "Staples · Hamilton E ON", "km": 97.0,
+        "kind": "staples", "store_id": "456", "postal_code": "L9H 7K6",
+        "store_url": "https://stores.staples.ca/on/hamilton/office-supplies-ca-456.html",
+        "method": "official API", "conf": "high",
+    },
     "wm_stav": {
         # Walmart Canada's inventory API returns a consistent 403 (Cloudflare
         # bot-blocked), confirmed 2026-09-05. check_walmart() is left in the
@@ -121,52 +275,52 @@ STORES = {
     },
 }
 
+# The PS5 Pro's identifiers at each chain. A retailer uses one item number and
+# one product page nationally, so these are per-chain, not per-store.
+BESTBUY_PS5 = "19492009"
+STAPLES_PS5 = "3103551"
+RTX5080_URL = "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5080-16gb-gddr7-video-card/18931347"
+RTX5090_URL = "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5090-32gb-gddr7-video-card/18931348"
+STAPLES_PS5_URL = "https://www.staples.ca/products/3103551-en-sony-playstation-5-pro-console"
+BESTBUY_PS5_URL = "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929"
+
 # The products you're hunting. `skus` maps a store key -> that store's own SKU.
 # To add a Pokemon/One Piece box once you've picked one, copy this block and
 # fill in the "skus" the same way (F12 method in SETUP.md step 3).
 PRODUCTS = [
     {
-        "id": "p5", "cat": "PS5", "tag": "CONSOLE",
+        "id": "p5", "cat": "PS5", "tag": "CONSOLE", "channel": "ps5",
         "product": "PlayStation 5 Pro 2TB", "sku": "19492009", "msrp": 1099.99,
         # Walmart Canada doesn't carry the real PS5 Pro (only marketplace
         # resellers at inflated prices), so no "wm_stav" entry here.
+        # one item number covers every location of a chain, so stores added
+        # above are picked up here automatically
         "skus": {
-            "bb": "19492009", "bb_aval": "19492009",
-            "stap_stav": "3103551", "stap_mtpearl": "3103551", "stap_kelsey": "3103551",
-            "stap_cb": "3103551", "stap_wood": "3103551",
+            **{k: BESTBUY_PS5 for k, v in STORES.items() if v["kind"] == "bestbuy"},
+            **{k: STAPLES_PS5 for k, v in STORES.items() if v["kind"] == "staples"},
         },
         # same product page for every store of that chain - only the
         # postal code/store picker on the page itself changes, not the URL
         "urls": {
-            "bb": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
-            "bb_aval": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
-            "stap_stav": "https://www.staples.ca/products/3103551-en-sony-playstation-5-pro-console",
-            "stap_mtpearl": "https://www.staples.ca/products/3103551-en-sony-playstation-5-pro-console",
-            "stap_kelsey": "https://www.staples.ca/products/3103551-en-sony-playstation-5-pro-console",
-            "stap_cb": "https://www.staples.ca/products/3103551-en-sony-playstation-5-pro-console",
-            "stap_wood": "https://www.staples.ca/products/3103551-en-sony-playstation-5-pro-console",
+            **{k: BESTBUY_PS5_URL for k, v in STORES.items() if v["kind"] == "bestbuy"},
+            **{k: STAPLES_PS5_URL for k, v in STORES.items() if v["kind"] == "staples"},
         },
     },
     {
-        "id": "gpu1", "cat": "GPU", "tag": "GRAPHICS CARD",
+        "id": "gpu1", "cat": "GPU", "tag": "GRAPHICS CARD", "channel": "gpu",
         # this is the plain NVIDIA reference card at true MSRP - other AIB
         # models (MSI/ASUS/ZOTAC/PNY) sell for $2000-3000+ right now and
         # aren't worth chasing for resale margin the way this one is
         "product": "NVIDIA GeForce RTX 5080 16GB GDDR7", "sku": "18931347", "msrp": 1449.99,
-        "skus": {"bb": "18931347", "bb_aval": "18931347"},
-        "urls": {
-            "bb": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5080-16gb-gddr7-video-card/18931347",
-            "bb_aval": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5080-16gb-gddr7-video-card/18931347",
-        },
+        # Staples Canada only sells prebuilt systems, not standalone cards
+        "skus": {k: "18931347" for k, v in STORES.items() if v["kind"] == "bestbuy"},
+        "urls": {k: RTX5080_URL for k, v in STORES.items() if v["kind"] == "bestbuy"},
     },
     {
-        "id": "gpu2", "cat": "GPU", "tag": "GRAPHICS CARD",
+        "id": "gpu2", "cat": "GPU", "tag": "GRAPHICS CARD", "channel": "gpu",
         "product": "NVIDIA GeForce RTX 5090 32GB GDDR7", "sku": "18931348", "msrp": 2899.99,
-        "skus": {"bb": "18931348", "bb_aval": "18931348"},
-        "urls": {
-            "bb": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5090-32gb-gddr7-video-card/18931348",
-            "bb_aval": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5090-32gb-gddr7-video-card/18931348",
-        },
+        "skus": {k: "18931348" for k, v in STORES.items() if v["kind"] == "bestbuy"},
+        "urls": {k: RTX5090_URL for k, v in STORES.items() if v["kind"] == "bestbuy"},
     },
 ]
 
@@ -223,14 +377,23 @@ def check_walmart(sku, store_id):
     return None, None
 
 
-def check_staples(sku, store_id, postal_code):
-    """Staples Canada inventory API. No auth needed - a single call actually
-    returns nearby stores too, but we call it per-store to match the other
-    checkers.
+_staples_cache = {}   # sku -> {store_id: qty}, reset each sweep
 
-    postal_code must be near store_id - the API only returns stores within
-    range of the postal code, ignoring store_number if it's out of range.
+
+def check_staples(sku, store_id, postal_code):
+    """Staples Canada inventory API. No auth needed.
+
+    One call returns every store near the given postal code, not just the one
+    asked for, so results are cached per sweep - checking 20 nearby stores
+    costs a handful of requests rather than 20.
+
+    postal_code must be near store_id: the API only returns stores within
+    range of it, ignoring store_number if it's out of range.
     """
+    cache = _staples_cache.setdefault(sku, {})
+    if store_id in cache:
+        return cache[store_id], None
+
     body = json.dumps({
         "locale": "en-CA", "location": "PickInStore",
         "postal_code": postal_code, "store_number": store_id,
@@ -241,10 +404,12 @@ def check_staples(sku, store_id, postal_code):
         data=body, headers={**UA, "Content-Type": "application/json"})
     with urllib.request.urlopen(req, timeout=20) as r:
         data = json.loads(r.read().decode())
-    store = data.get("availability", {}).get(sku, {}).get(store_id)
-    if store is None:
-        return None, None
-    return int(store.get("availableqty", 0)), None
+
+    # absorb every store this response mentions, not just the one we wanted
+    for sid, info in data.get("availability", {}).get(sku, {}).items():
+        cache[sid] = int(info.get("availableqty", 0))
+
+    return cache.get(store_id), None
 
 
 def status_for(qty):
@@ -259,36 +424,45 @@ def status_for(qty):
 # discord
 # ----------------------------------------------------------------------------
 
-def notify(text):
-    if not DISCORD_WEBHOOK_URL:
-        print("  [discord not configured]", text)
+def webhook_for(channel):
+    """Fall back to the ps5 channel so a mis-tagged product still reaches you."""
+    return WEBHOOKS.get(channel) or WEBHOOKS.get("ps5", "")
+
+
+def notify(text, channel="ps5"):
+    hook = webhook_for(channel)
+    if not hook:
+        print(f"  [no webhook for '{channel}']", text)
         return
     body = json.dumps({"content": text}).encode()
     try:
         urllib.request.urlopen(
             urllib.request.Request(
-                DISCORD_WEBHOOK_URL, data=body,
+                hook, data=body,
                 headers={**UA, "Content-Type": "application/json"}),
             timeout=15)
     except Exception as e:
         print("  discord failed:", e)
 
 
-# One pinned Discord message that always shows the current state of everything.
-# Rewritten in place each sweep, so it never spams the channel. The message id
-# is kept in status_message.txt so later runs know what to edit.
-STATUS_FILE = Path(__file__).parent / "status_message.txt"
+# Each channel keeps one pinned message showing the current state of its own
+# products, rewritten in place each sweep so it never spams. Message ids live
+# in status_message.json ({channel: id}) so later runs know what to edit.
+STATUS_FILE = Path(__file__).parent / "status_message.json"
+LEGACY_STATUS_FILE = Path(__file__).parent / "status_message.txt"
 
 ICON = {"in": "\U0001F7E2", "low": "\U0001F7E1", "out": "⬜"}
 
 
-def build_status(hits, now):
+def build_status(hits, now, channel):
     lines = [f"**RESTOCK RADAR** · updated {now:%b %d, %H:%M}"]
     by_pid = {}
     for h in hits:
         by_pid.setdefault(h["pid"], []).append(h)
 
     for product in PRODUCTS:
+        if product.get("channel", "ps5") != channel:
+            continue
         rows = by_pid.get(product["id"], [])
         if not rows:
             continue
@@ -311,36 +485,50 @@ def build_status(hits, now):
     return "\n".join(lines)
 
 
-def push_status(text):
-    """Edit the existing status message, or post a new one and remember its id."""
-    if not DISCORD_WEBHOOK_URL:
+def _load_status_ids():
+    if STATUS_FILE.exists():
+        try:
+            return json.loads(STATUS_FILE.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            pass
+    # carry over the single-channel file from before channels existed
+    if LEGACY_STATUS_FILE.exists():
+        return {"ps5": LEGACY_STATUS_FILE.read_text(encoding="utf-8").strip()}
+    return {}
+
+
+def push_status(text, channel):
+    """Edit that channel's status message, or post a new one and remember its id."""
+    hook = webhook_for(channel)
+    if not hook:
         return
     body = json.dumps({"content": text}).encode()
     headers = {**UA, "Content-Type": "application/json"}
 
-    msg_id = STATUS_FILE.read_text(encoding="utf-8").strip() if STATUS_FILE.exists() else ""
+    ids = _load_status_ids()
+    msg_id = ids.get(channel, "")
     if msg_id:
         try:
             req = urllib.request.Request(
-                f"{DISCORD_WEBHOOK_URL}/messages/{msg_id}", data=body,
+                f"{hook}/messages/{msg_id}", data=body,
                 headers=headers, method="PATCH")
             urllib.request.urlopen(req, timeout=15)
-            print("  status message updated")
+            print(f"  [{channel}] status message updated")
             return
         except Exception as e:
             # message was probably deleted - fall through and post a fresh one
-            print("  couldn't edit status message, posting a new one:", e)
+            print(f"  [{channel}] couldn't edit status message, posting a new one:", e)
 
     try:
-        req = urllib.request.Request(
-            DISCORD_WEBHOOK_URL + "?wait=true", data=body, headers=headers)
+        req = urllib.request.Request(hook + "?wait=true", data=body, headers=headers)
         with urllib.request.urlopen(req, timeout=15) as r:
             new_id = json.loads(r.read().decode()).get("id", "")
         if new_id:
-            STATUS_FILE.write_text(new_id, encoding="utf-8")
-            print("  posted new status message - pin it in Discord")
+            ids[channel] = new_id
+            STATUS_FILE.write_text(json.dumps(ids, indent=2), encoding="utf-8")
+            print(f"  [{channel}] posted new status message - pin it in Discord")
     except Exception as e:
-        print("  status message failed:", e)
+        print(f"  [{channel}] status message failed:", e)
 
 
 # ----------------------------------------------------------------------------
@@ -374,6 +562,7 @@ def load_previous_state():
 def sweep():
     hits = []
     now = datetime.now()
+    _staples_cache.clear()   # stock moves between sweeps - never reuse across them
 
     for product in PRODUCTS:
         for store_key, store in STORES.items():
@@ -432,7 +621,8 @@ def sweep():
                     "status": state, "extra": line,
                 })
                 notify("\n".join(["**IN STOCK**", product["product"],
-                                  store["name"], line] + where_to_buy()))
+                                  store["name"], line] + where_to_buy()),
+                       product.get("channel", "ps5"))
                 print(f"  ALERT {product['product']} @ {store['name']} - {line}")
             elif (state in ("in", "low") and was_state in ("in", "low")
                     and was_qty is not None and qty != was_qty):
@@ -444,7 +634,8 @@ def sweep():
                     "status": state, "extra": line,
                 })
                 notify("\n".join([f"**STOCK {direction.upper()}**", product["product"],
-                                  store["name"], line] + where_to_buy()))
+                                  store["name"], line] + where_to_buy()),
+                       product.get("channel", "ps5"))
                 print(f"  ALERT qty {direction} {product['product']} @ {store['name']} - {line}")
             elif was_state in ("in", "low") and state == "out":
                 alerts.insert(0, {
@@ -467,7 +658,8 @@ def sweep():
 
     print(f"[{now:%H:%M:%S}] {len(hits)} rows written")
 
-    push_status(build_status(hits, now))
+    for channel in dict.fromkeys(p.get("channel", "ps5") for p in PRODUCTS):
+        push_status(build_status(hits, now, channel), channel)
 
 
 def serve():
@@ -495,9 +687,11 @@ def serve():
 
 
 if __name__ == "__main__":
-    if not DISCORD_WEBHOOK_URL:
-        print("WARNING: no webhook found (set DISCORD_WEBHOOK_URL or create "
-              "webhook.txt) - checks will run but nothing will be sent\n")
+    for _ch, _url in WEBHOOKS.items():
+        if not _url:
+            print(f"WARNING: no webhook for '{_ch}' - its alerts will fall back "
+                  f"to the ps5 channel (set DISCORD_WEBHOOK_{_ch.upper()} or "
+                  f"create webhook_{_ch}.txt)\n")
 
     load_previous_state()
 
