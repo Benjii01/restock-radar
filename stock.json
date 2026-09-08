@@ -1,0 +1,208 @@
+{
+  "stores": {
+    "bb": {
+      "name": "Best Buy \u00b7 Stavanger Dr",
+      "km": 3.0,
+      "method": "official API",
+      "conf": "high"
+    },
+    "bb_aval": {
+      "name": "Best Buy Express \u00b7 Avalon Mall",
+      "km": 2.2,
+      "method": "official API",
+      "conf": "high"
+    },
+    "stap_stav": {
+      "name": "Staples \u00b7 Stavanger Dr",
+      "km": 9.0,
+      "method": "official API",
+      "conf": "high"
+    },
+    "stap_mtpearl": {
+      "name": "Staples \u00b7 Mount Pearl",
+      "km": 0.1,
+      "method": "official API",
+      "conf": "high"
+    },
+    "stap_kelsey": {
+      "name": "Staples \u00b7 Kelsey Dr",
+      "km": 3.7,
+      "method": "official API",
+      "conf": "high"
+    },
+    "stap_cb": {
+      "name": "Staples \u00b7 Corner Brook",
+      "km": 680.0,
+      "method": "official API",
+      "conf": "high"
+    },
+    "stap_wood": {
+      "name": "Staples \u00b7 Woodstock ON",
+      "km": 2900.0,
+      "method": "official API",
+      "conf": "high"
+    },
+    "wm_stav": {
+      "name": "Walmart \u00b7 Stavanger Dr",
+      "km": 3.1,
+      "method": "no feed \u00b7 call to verify",
+      "conf": "none"
+    },
+    "eb_aval": {
+      "name": "EB Games \u00b7 Avalon Mall",
+      "km": 2.2,
+      "method": "no feed \u00b7 call to verify",
+      "conf": "none"
+    },
+    "cost": {
+      "name": "Costco \u00b7 Blackmarsh Rd",
+      "km": 4.6,
+      "method": "no feed \u00b7 call to verify",
+      "conf": "none"
+    }
+  },
+  "products": [
+    {
+      "id": "p5",
+      "cat": "PS5",
+      "tag": "CONSOLE",
+      "product": "PlayStation 5 Pro 2TB",
+      "sku": "19492009",
+      "msrp": 1099.99,
+      "urls": {
+        "bb": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
+        "bb_aval": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
+        "stap_stav": "https://www.staples.ca/products/3103551-en-sony-playstation-5-pro-console",
+        "stap_mtpearl": "https://www.staples.ca/products/3103551-en-sony-playstation-5-pro-console",
+        "stap_kelsey": "https://www.staples.ca/products/3103551-en-sony-playstation-5-pro-console",
+        "stap_cb": "https://www.staples.ca/products/3103551-en-sony-playstation-5-pro-console",
+        "stap_wood": "https://www.staples.ca/products/3103551-en-sony-playstation-5-pro-console"
+      }
+    },
+    {
+      "id": "gpu1",
+      "cat": "GPU",
+      "tag": "GRAPHICS CARD",
+      "product": "NVIDIA GeForce RTX 5080 16GB GDDR7",
+      "sku": "18931347",
+      "msrp": 1449.99,
+      "urls": {
+        "bb": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5080-16gb-gddr7-video-card/18931347",
+        "bb_aval": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5080-16gb-gddr7-video-card/18931347"
+      }
+    },
+    {
+      "id": "gpu2",
+      "cat": "GPU",
+      "tag": "GRAPHICS CARD",
+      "product": "NVIDIA GeForce RTX 5090 32GB GDDR7",
+      "sku": "18931348",
+      "msrp": 2899.99,
+      "urls": {
+        "bb": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5090-32gb-gddr7-video-card/18931348",
+        "bb_aval": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5090-32gb-gddr7-video-card/18931348"
+      }
+    }
+  ],
+  "hits": [
+    {
+      "pid": "p5",
+      "store": "bb",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "bb_aval",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "stap_stav",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "stap_mtpearl",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "stap_kelsey",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "stap_cb",
+      "qty": 1,
+      "price": 1099.99,
+      "status": "low",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "stap_wood",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "gpu1",
+      "store": "bb",
+      "qty": 0,
+      "price": 1449.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "gpu1",
+      "store": "bb_aval",
+      "qty": 0,
+      "price": 1449.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "gpu2",
+      "store": "bb",
+      "qty": 0,
+      "price": 2899.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "gpu2",
+      "store": "bb_aval",
+      "qty": 0,
+      "price": 2899.99,
+      "status": "out",
+      "seenSecs": 0
+    }
+  ],
+  "alerts": [
+    {
+      "pid": "p5",
+      "store": "stap_cb",
+      "time": "17:36",
+      "tag": "LOW",
+      "status": "low",
+      "extra": "1 unit(s) \u00b7 $1099.99"
+    }
+  ],
+  "updated": "2026-09-08T18:26:52.299181"
+}

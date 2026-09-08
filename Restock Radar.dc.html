@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  html, body { margin: 0; padding: 0; background: oklch(0.15 0.006 70); overflow-x: auto; }
+  a { color: oklch(0.8 0.065 155); text-decoration: none; }
+  a:hover { color: oklch(0.88 0.065 155); }
+  @keyframes rr-pulse { 0%,100% { opacity: 1 } 50% { opacity: 0.2 } }
+  @keyframes rr-in { from { opacity: 0; transform: translateY(-6px) } to { opacity: 1; transform: translateY(0) } }
+  @keyframes rr-pop { from { opacity: 0; transform: scale(0.97) } to { opacity: 1; transform: scale(1) } }
+  ::-webkit-scrollbar { width: 8px; height: 8px }
+  ::-webkit-scrollbar-thumb { background: oklch(0.32 0.008 70); border-radius: 4px }
+  ::-webkit-scrollbar-track { background: transparent }
+</style>
+</helmet>
+
+<div style="min-height: 100vh; min-width: 1520px; background: oklch(0.15 0.006 70); color: oklch(0.92 0.006 70); font-family: 'IBM Plex Sans', system-ui, sans-serif; display: flex; flex-direction: column;">
+
+  <div style="flex: none; display: flex; align-items: center; gap: 26px; padding: 0 22px; height: 60px; border-bottom: 1px solid oklch(0.225 0.008 70); background: oklch(0.185 0.007 70);">
+    <div style="display: flex; align-items: baseline; gap: 11px;">
+      <span style="font-size: 16px; font-weight: 700; letter-spacing: -0.01em; color: oklch(0.97 0.006 70);">RESTOCK RADAR</span>
+      <span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.06em; color: oklch(0.58 0.01 70);">ST. JOHN'S NL</span>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 9px; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: oklch(0.7 0.01 70);">
+      <span style="width: 7px; height: 7px; border-radius: 50%; background: oklch(0.8 0.075 155);"></span>
+      <span>{{ scanLine }}</span>
+    </div>
+
+    <div style="flex: 1;"></div>
+
+    <button onClick="{{ scanNow }}" style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; color: oklch(0.16 0.02 155); background: oklch(0.8 0.075 155); border: none; border-radius: 4px; padding: 10px 16px; cursor: pointer;" style-hover="background: oklch(0.88 0.075 155)">SCAN NOW</button>
+  </div>
+
+  <div style="flex: none; display: flex; align-items: center; gap: 14px; padding: 10px 22px; border-bottom: 1px solid oklch(0.225 0.008 70); background: {{ feedBg }};">
+    <span style="flex: none; font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600; letter-spacing: 0.12em; padding: 5px 9px; border-radius: 3px; border: 1px solid {{ feedBd }}; color: {{ feedFg }};">{{ feedLabel }}</span>
+    <span style="flex: 1; min-width: 0; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: oklch(0.76 0.01 70); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ feedNote }}</span>
+    <sc-if value="{{ showSchema }}" hint-placeholder-val="{{ false }}">
+      <span style="flex: none; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: oklch(0.62 0.01 70);">expects { hits: [ { pid, store, qty, price, status, seenSecs } ] }</span>
+    </sc-if>
+    <button onClick="{{ retry }}" style="flex: none; font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.08em; padding: 6px 11px; border-radius: 3px; border: 1px solid oklch(0.34 0.008 70); background: transparent; color: oklch(0.8 0.01 70); cursor: pointer;" style-hover="border-color: oklch(0.5 0.008 70)">RETRY</button>
+  </div>
+
+  <div style="flex: 1; display: grid; grid-template-columns: 248px minmax(0, 1fr) 312px; min-height: 0;">
+
+    <div style="border-right: 1px solid oklch(0.225 0.008 70); background: oklch(0.17 0.007 70); overflow-y: auto; padding: 16px 0 24px;">
+      <div style="padding: 0 16px 12px; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: 0.14em; color: oklch(0.55 0.01 70);">WATCHLIST · {{ watchCount }}</div>
+      <div style="display: flex; flex-direction: column;">
+        <sc-for list="{{ watch }}" as="w" hint-placeholder-count="5">
+          <div style="padding: 15px 16px; border-top: 1px solid oklch(0.21 0.008 70); background: {{ w.rowBg }};" style-hover="background: oklch(0.215 0.008 70)">
+            <div style="display: flex; gap: 10px; align-items: flex-start;">
+              <div style="flex: 1; min-width: 0;">
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 0.1em; color: {{ w.tagFg }};">{{ w.tag }}</div>
+                <div style="margin-top: 4px; font-size: 12.5px; font-weight: 600; line-height: 1.3; color: {{ w.nameFg }};">{{ w.product }}</div>
+              </div>
+              <button onClick="{{ w.toggle }}" style="flex: none; width: 38px; height: 21px; margin-top: 2px; border-radius: 3px; border: 1px solid {{ w.trackBd }}; background: {{ w.track }}; cursor: pointer; padding: 0; position: relative;">
+                <span style="position: absolute; top: 2px; left: {{ w.knobX }}; width: 15px; height: 15px; border-radius: 2px; background: {{ w.knob }}; transition: left 0.15s ease;"></span>
+              </button>
+            </div>
+            <div style="margin-top: 8px; display: flex; align-items: center; justify-content: space-between; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: oklch(0.6 0.01 70);">
+              <span>{{ w.rule }}</span>
+              <span style="color: {{ w.liveFg }}; font-weight: 600;">{{ w.live }}</span>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="margin: 14px 16px 0; border: 1px dashed oklch(0.32 0.008 70); border-radius: 4px; padding: 12px; text-align: center; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: 0.06em; color: oklch(0.58 0.01 70); cursor: pointer;" style-hover="border-color: oklch(0.5 0.08 155); color: oklch(0.8 0.08 155)">+ ADD PRODUCT</div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; min-width: 0; min-height: 0;">
+
+      <div style="flex: none; display: flex; align-items: center; gap: 8px; padding: 12px 18px; border-bottom: 1px solid oklch(0.225 0.008 70);">
+        <sc-for list="{{ chips }}" as="c" hint-placeholder-count="4">
+          <button onClick="{{ c.pick }}" style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; font-weight: 500; letter-spacing: 0.08em; padding: 7px 12px; border-radius: 3px; cursor: pointer; border: 1px solid {{ c.bd }}; background: {{ c.bg }}; color: {{ c.fg }};">{{ c.label }}</button>
+        </sc-for>
+        <div style="flex: 1;"></div>
+        <button onClick="{{ toggleOnly }}" style="display: flex; align-items: center; gap: 8px; background: transparent; border: none; cursor: pointer; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; letter-spacing: 0.06em; color: {{ onlyFg }};">
+          <span style="width: 13px; height: 13px; border-radius: 2px; border: 1px solid {{ onlyBd }}; background: {{ onlyBg }};"></span>
+          <span>IN-STOCK ONLY</span>
+        </button>
+      </div>
+
+      <div style="flex: none; display: grid; grid-template-columns: 76px minmax(230px,1fr) 190px 52px 84px 84px 66px 72px; gap: 10px; padding: 11px 18px; border-bottom: 1px solid oklch(0.225 0.008 70); background: oklch(0.175 0.007 70); font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: 0.12em; color: oklch(0.55 0.01 70);">
+        <div>STATUS</div>
+        <div>PRODUCT</div>
+        <div>STORE · HOW CHECKED</div>
+        <div style="text-align: right;">KM</div>
+        <div style="text-align: right;">ON SHELF</div>
+        <div style="text-align: right;">PRICE</div>
+        <div style="text-align: right;">VS MSRP</div>
+        <div style="text-align: right;">SEEN</div>
+      </div>
+
+      <div style="flex: 1; overflow-y: auto; overflow-x: hidden; min-height: 0; min-width: 950px;">
+        <sc-for list="{{ hits }}" as="h" hint-placeholder-count="8">
+          <div onClick="{{ h.open }}" style="display: grid; grid-template-columns: 76px minmax(230px,1fr) 190px 52px 84px 84px 66px 72px; gap: 10px; align-items: center; padding: 15px 18px; border-bottom: 1px solid oklch(0.2 0.008 70); cursor: pointer; background: {{ h.rowBg }}; animation: rr-in 0.3s ease;" style-hover="background: oklch(0.23 0.008 70)">
+            <div>
+              <span style="display: inline-block; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; font-weight: 600; letter-spacing: 0.08em; padding: 4px 6px; border-radius: 3px; background: {{ h.pillBg }}; color: {{ h.pillFg }};">{{ h.statusLabel }}</span>
+            </div>
+            <div style="min-width: 0;">
+              <div style="font-size: 13px; font-weight: 600; color: oklch(0.95 0.006 70); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ h.product }}</div>
+              <div style="margin-top: 2px; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: 0.06em; color: oklch(0.52 0.01 70);">{{ h.sku }}</div>
+            </div>
+            <div style="min-width: 0;">
+              <sc-if value="{{ h.storeUrl }}" hint-placeholder-val="{{ false }}">
+                <a href="{{ h.storeUrl }}" target="_blank" rel="noopener" onClick="{{ h.stopRowClick }}" style="display: block; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: oklch(0.78 0.01 70); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-decoration: underline; text-decoration-color: oklch(0.42 0.008 70); text-underline-offset: 3px;" style-hover="color: oklch(0.9 0.075 155); text-decoration-color: oklch(0.8 0.075 155)">{{ h.store }}</a>
+              </sc-if>
+              <sc-if value="{{ h.noStoreUrl }}" hint-placeholder-val="{{ false }}">
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: oklch(0.78 0.01 70); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ h.store }}</div>
+              </sc-if>
+              <div style="margin-top: 2px; display: flex; align-items: center; gap: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: 0.04em; white-space: nowrap;">
+                <span style="color: {{ h.confFg }}; font-weight: 600;">{{ h.confLabel }}</span>
+                <span style="color: oklch(0.5 0.01 70); overflow: hidden; text-overflow: ellipsis;">{{ h.method }}</span>
+              </div>
+            </div>
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: oklch(0.62 0.01 70); text-align: right;">{{ h.km }}</div>
+            <div style="text-align: right; font-family: 'IBM Plex Mono', monospace;">
+              <span style="font-size: 19px; font-weight: 700; color: {{ h.qtyFg }};">{{ h.qty }}</span>
+              <span style="font-size: 9.5px; letter-spacing: 0.06em; color: oklch(0.5 0.01 70); margin-left: 3px;">{{ h.qtyUnit }}</span>
+            </div>
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 500; color: oklch(0.93 0.006 70); text-align: right;">{{ h.price }}</div>
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: {{ h.markFg }}; text-align: right;">{{ h.markup }}</div>
+            <div style="font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: {{ h.agoFg }}; text-align: right;">{{ h.ago }}</div>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="flex: none; padding: 9px 18px; border-top: 1px solid oklch(0.225 0.008 70); background: oklch(0.175 0.007 70); font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: oklch(0.58 0.01 70); display: flex; gap: 22px;">
+        <span>{{ rowCount }}</span>
+        <span>{{ radiusLine }}</span>
+        <span style="margin-left: auto; display: flex; gap: 16px; color: oklch(0.5 0.01 70);">
+          <span style="color: oklch(0.8 0.075 155);">● UNDER 5 MIN</span>
+          <span style="color: oklch(0.83 0.085 78);">● UNDER 30 MIN</span>
+          <span style="color: oklch(0.62 0.06 25);">● OLDER — CALL FIRST</span>
+        </span>
+      </div>
+    </div>
+
+    <div style="border-left: 1px solid oklch(0.225 0.008 70); background: oklch(0.17 0.007 70); display: flex; flex-direction: column; min-height: 0;">
+      <div style="flex: none; padding: 13px 16px; border-bottom: 1px solid oklch(0.225 0.008 70); display: flex; align-items: center; justify-content: space-between;">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: 0.14em; color: oklch(0.55 0.01 70);">ALERT FEED</span>
+        <span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.06em; color: oklch(0.8 0.075 155);">{{ todayCount }}</span>
+      </div>
+      <div style="flex: 1; overflow-y: auto;">
+        <sc-for list="{{ alerts }}" as="a" hint-placeholder-count="9">
+          <div style="padding: 14px 16px; border-bottom: 1px solid oklch(0.2 0.008 70); display: flex; gap: 11px; animation: rr-in 0.3s ease;">
+            <div style="flex: none; width: 40px; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: oklch(0.55 0.01 70); padding-top: 2px;">{{ a.time }}</div>
+            <div style="flex: none; width: 2px; border-radius: 1px; background: {{ a.dot }};"></div>
+            <div style="flex: 1; min-width: 0;">
+              <div style="font-size: 12px; font-weight: 600; line-height: 1.35; color: oklch(0.93 0.006 70);">{{ a.product }}</div>
+              <div style="margin-top: 3px; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: oklch(0.66 0.01 70);">{{ a.detail }}</div>
+            </div>
+            <div style="flex: none; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; font-weight: 600; letter-spacing: 0.08em; color: {{ a.dot }}; padding-top: 3px;">{{ a.tag }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+
+  <sc-if value="{{ sheet }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; inset: 0; z-index: 50; background: rgb(0 0 0 / 0.6); display: flex; align-items: center; justify-content: center; padding: 40px;">
+      <div onClick="{{ closeSheet }}" style="position: absolute; inset: 0;"></div>
+      <div style="position: relative; width: 620px; max-height: 100%; overflow-y: auto; background: oklch(0.205 0.008 70); border: 1px solid oklch(0.32 0.008 70); border-radius: 6px; box-shadow: 0 40px 90px -20px rgb(0 0 0 / 0.8); animation: rr-pop 0.22s ease;">
+        <div style="padding: 20px 22px 16px; border-bottom: 1px solid oklch(0.27 0.008 70); display: flex; gap: 16px; align-items: flex-start;">
+          <div style="width: 62px; height: 80px; flex: none; border-radius: 4px; border: 1px solid oklch(0.32 0.008 70); background-color: oklch(0.26 0.008 70); background-image: repeating-linear-gradient(135deg, oklch(0.29 0.008 70) 0 5px, oklch(0.25 0.008 70) 5px 10px); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 5px;">
+            <span style="font-family: 'IBM Plex Mono', monospace; font-size: 8px; letter-spacing: 0.06em; color: oklch(0.6 0.01 70);">product shot</span>
+          </div>
+          <div style="flex: 1; min-width: 0;">
+            <div style="font-size: 18px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.25; color: oklch(0.97 0.006 70);">{{ sheet.product }}</div>
+            <div style="margin-top: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: oklch(0.62 0.01 70);">{{ sheet.sku }} · MSRP {{ sheet.msrp }}</div>
+            <div style="margin-top: 10px; font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; color: oklch(0.8 0.075 155);">{{ sheet.total }}</div>
+            <div style="margin-top: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: oklch(0.6 0.01 70); line-height: 1.5;">{{ sheet.caveat }}</div>
+          </div>
+          <button onClick="{{ closeSheet }}" style="flex: none; background: transparent; border: 1px solid oklch(0.32 0.008 70); border-radius: 3px; color: oklch(0.7 0.01 70); font-size: 14px; line-height: 1; cursor: pointer; padding: 5px 9px;" style-hover="border-color: oklch(0.5 0.008 70)">×</button>
+        </div>
+
+        <div style="padding: 16px 22px 20px;">
+          <div style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: 0.14em; color: oklch(0.55 0.01 70);">STORE-BY-STORE</div>
+          <div style="margin-top: 10px; display: flex; flex-direction: column; gap: 6px;">
+            <sc-for list="{{ sheet.rows }}" as="r" hint-placeholder-count="7">
+              <div style="display: grid; grid-template-columns: 10px minmax(0,1fr) 56px 88px 84px 74px; gap: 11px; align-items: center; background: oklch(0.235 0.008 70); border-radius: 4px; padding: 11px 13px;">
+                <span style="width: 8px; height: 8px; border-radius: 50%; background: {{ r.dot }};"></span>
+                <div style="min-width: 0;">
+                  <sc-if value="{{ r.storeUrl }}" hint-placeholder-val="{{ false }}">
+                    <a href="{{ r.storeUrl }}" target="_blank" rel="noopener" style="display: block; font-size: 12.5px; font-weight: 600; color: oklch(0.94 0.006 70); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-decoration: underline; text-decoration-color: oklch(0.45 0.008 70); text-underline-offset: 3px;" style-hover="text-decoration-color: oklch(0.8 0.075 155)">{{ r.store }}</a>
+                  </sc-if>
+                  <sc-if value="{{ r.noStoreUrl }}" hint-placeholder-val="{{ false }}">
+                    <div style="font-size: 12.5px; font-weight: 600; color: oklch(0.94 0.006 70); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ r.store }}</div>
+                  </sc-if>
+                  <div style="margin-top: 3px; display: flex; align-items: center; gap: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; white-space: nowrap;">
+                    <span style="color: {{ r.confFg }}; font-weight: 600;">{{ r.confLabel }}</span>
+                    <span style="color: oklch(0.55 0.01 70);">{{ r.note }}</span>
+                  </div>
+                </div>
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: oklch(0.62 0.01 70); text-align: right;">{{ r.km }}</div>
+                <div style="font-family: 'IBM Plex Mono', monospace; text-align: right;">
+                  <span style="font-size: 17px; font-weight: 700; color: {{ r.qtyFg }};">{{ r.qty }}</span>
+                  <span style="font-size: 9.5px; color: oklch(0.5 0.01 70); margin-left: 3px;">{{ r.qtyUnit }}</span>
+                </div>
+                <div style="font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: oklch(0.9 0.006 70); text-align: right;">{{ r.price }}</div>
+                <div style="display: flex; justify-content: center;">
+                  <sc-if value="{{ r.link }}" hint-placeholder-val="{{ false }}">
+                    <a href="{{ r.link }}" target="_blank" rel="noopener" style="display: flex; align-items: center; gap: 6px; text-decoration: none; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; font-weight: 600; letter-spacing: 0.04em; padding: 7px 10px; border-radius: 3px; border: 1px solid oklch(0.34 0.008 70); color: oklch(0.8 0.01 70);" style-hover="border-color: oklch(0.6 0.075 155)">
+                      <img src="{{ r.icon }}" style="width: 12px; height: 12px; border-radius: 2px;" />
+                      VIEW
+                    </a>
+                  </sc-if>
+                  <sc-if value="{{ r.noLink }}" hint-placeholder-val="{{ false }}">
+                    <span style="font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; color: oklch(0.45 0.008 70);">—</span>
+                  </sc-if>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="margin-top: 18px; display: flex; gap: 8px;">
+            <button style="flex: 1; font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; padding: 12px 0; border-radius: 4px; border: none; cursor: pointer; background: oklch(0.8 0.075 155); color: oklch(0.17 0.02 155);" style-hover="background: oklch(0.88 0.075 155)">DIRECTIONS TO NEAREST</button>
+            <button style="flex: 1; font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; padding: 12px 0; border-radius: 4px; border: 1px solid oklch(0.36 0.008 70); cursor: pointer; background: transparent; color: oklch(0.86 0.006 70);" style-hover="border-color: oklch(0.55 0.008 70)">CALL TO HOLD</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ banner }}" hint-placeholder-val="{{ false }}">
+    <div style="position: fixed; top: 72px; right: 332px; z-index: 45; width: 340px; animation: rr-in 0.3s ease;">
+      <div onClick="{{ openBanner }}" style="background: oklch(0.26 0.028 155); border: 1px solid oklch(0.45 0.065 155); border-radius: 5px; padding: 13px 14px; box-shadow: 0 18px 44px -12px rgb(0 0 0 / 0.75); cursor: pointer; display: flex; gap: 12px; align-items: center;">
+        <div style="flex: none; font-family: 'IBM Plex Mono', monospace; font-size: 22px; font-weight: 700; color: oklch(0.85 0.075 155);">{{ banner.qty }}</div>
+        <div style="flex: 1; min-width: 0;">
+          <div style="font-size: 12.5px; font-weight: 600; color: oklch(0.97 0.006 70); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ banner.product }}</div>
+          <div style="margin-top: 3px; font-family: 'IBM Plex Mono', monospace; font-size: 10.5px; color: oklch(0.84 0.06 155);">{{ banner.line }}</div>
+        </div>
+        <button onClick="{{ dismissBanner }}" style="flex: none; background: transparent; border: none; color: oklch(0.72 0.024 155); font-size: 15px; line-height: 1; cursor: pointer; padding: 4px;">×</button>
+      </div>
+    </div>
+  </sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;feedUrl&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;http://localhost:8000/stock.json&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Data source&quot;},&quot;radiusKm&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:3000,&quot;min&quot;:2,&quot;max&quot;:5000,&quot;step&quot;:1,&quot;unit&quot;:&quot;km&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Scanning&quot;},&quot;scanIntervalSec&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:30,&quot;min&quot;:15,&quot;max&quot;:300,&quot;unit&quot;:&quot;s&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Scanning&quot;},&quot;showMarkup&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Display&quot;}}">
+const CONF = {
+  high: { fg: "oklch(0.8 0.075 155)", label: "HIGH" },
+  med: { fg: "oklch(0.83 0.085 78)", label: "MED" },
+  none: { fg: "oklch(0.68 0.1 25)", label: "NONE" }
+};
+
+const COL = { in: "oklch(0.8 0.075 155)", low: "oklch(0.83 0.085 78)", out: "oklch(0.68 0.1 25)" };
+const PILL = { in: "oklch(0.29 0.04 155)", low: "oklch(0.3 0.04 78)", out: "oklch(0.29 0.035 25)" };
+const LABEL = { in: "IN STOCK", low: "LOW", out: "SOLD OUT" };
+
+class Component extends DCLogic {
+  state = {
+    feed: { status: "demo", at: null, err: null },
+    live: null,
+    filter: "ALL",
+    onlyIn: false,
+    tick: 0,
+    hits: [],
+    alerts: [],
+    banner: null,
+    sheetPid: null,
+    watchOn: { p5: true }
+  };
+
+  SS() { return (this.state.live && this.state.live.stores) || {}; }
+  PP() { return (this.state.live && this.state.live.products) || []; }
+  S(k) { return this.SS()[k] || { name: k, km: 0, method: "unknown", conf: "none" }; }
+
+  async pull() {
+    const url = (this.props.feedUrl || "").trim();
+    if (!url) return;
+    this.setState(s => ({ feed: { ...s.feed, status: "loading" } }));
+    try {
+      const r = await fetch(url, { cache: "no-store" });
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      const d = await r.json();
+      if (!d || !Array.isArray(d.hits)) throw new Error("no hits[] in response");
+      this.setState({
+        live: { stores: d.stores || {}, products: d.products || [] },
+        hits: d.hits.map((h, i) => ({ ...h, secs: h.seenSecs || 0, key: "l" + i })),
+        alerts: d.alerts || [],
+        tick: 0,
+        feed: { status: "live", at: new Date(), err: null }
+      });
+    } catch (e) {
+      this.setState({ feed: { status: "error", at: new Date(), err: String(e.message || e) } });
+    }
+  }
+
+  componentDidMount() {
+    if ((this.props.feedUrl || "").trim()) {
+      this.pull();
+      this.poller = setInterval(() => this.pull(), Math.max(15, this.props.scanIntervalSec ?? 30) * 1000);
+    }
+    this.timer = setInterval(() => {
+      this.setState(s => ({ tick: s.tick + 1 }));
+    }, 1000);
+  }
+
+  componentWillUnmount() { clearInterval(this.timer); clearInterval(this.poller); }
+
+  prod(pid) { return this.PP().find(p => p.id === pid) || { cat: "?", tag: "?", product: pid, sku: pid, msrp: 0 }; }
+
+  ago(s) {
+    const t = s + this.state.tick;
+    if (t < 60) return t + "s";
+    if (t < 3600) return Math.floor(t / 60) + "m";
+    return Math.floor(t / 3600) + "h " + Math.floor((t % 3600) / 60) + "m";
+  }
+
+  money(n) { return "$" + n.toFixed(2); }
+
+  fresh(secs) {
+    const t = secs + this.state.tick;
+    if (t < 300) return { fg: "oklch(0.8 0.075 155)", tier: "fresh" };
+    if (t < 1800) return { fg: "oklch(0.83 0.085 78)", tier: "aging" };
+    return { fg: "oklch(0.62 0.06 25)", tier: "stale" };
+  }
+
+  confOf(storeKey, pid) {
+    return this.S(storeKey).conf;
+  }
+
+  renderVals() {
+    const st = this.state;
+    const radius = this.props.radiusKm ?? 10;
+    const interval = this.props.scanIntervalSec ?? 30;
+    const showMarkup = this.props.showMarkup ?? true;
+
+    const inRadius = h => this.S(h.store).km <= radius;
+
+    const decorate = h => {
+      const p = this.prod(h.pid);
+      const s = this.S(h.store);
+      const diff = h.price - p.msrp;
+      return {
+        key: h.key,
+        cat: p.cat,
+        pid: h.pid,
+        status: h.status,
+        storeUrl: s.store_url || null,
+        noStoreUrl: !s.store_url,
+        stopRowClick: e => { if (e) e.stopPropagation(); },
+        product: p.product,
+        sku: p.tag + " · " + p.sku,
+        store: s.name,
+        km: s.km.toFixed(1),
+        qty: h.status === "out" ? "0" : String(h.qty),
+        qtyUnit: h.status === "out" ? "" : "left",
+        qtyFg: h.status === "out" ? "oklch(0.5 0.03 25)" : COL[h.status],
+        price: this.money(h.price),
+        markup: !showMarkup ? "" : (Math.abs(diff) < 0.01 ? "MSRP" : (diff > 0 ? "+" + diff.toFixed(2) : "−" + Math.abs(diff).toFixed(2))),
+        markFg: diff > 0.01 ? "oklch(0.74 0.1 40)" : (diff < -0.01 ? "oklch(0.7 0.075 155)" : "oklch(0.56 0.01 70)"),
+        ago: this.ago(h.secs),
+        agoFg: this.fresh(h.secs).fg,
+        method: this.S(h.store).method,
+        confLabel: CONF[this.confOf(h.store, h.pid)].label,
+        confFg: CONF[this.confOf(h.store, h.pid)].fg,
+        statusLabel: LABEL[h.status],
+        pillBg: PILL[h.status],
+        pillFg: COL[h.status],
+        rowBg: h.status === "out" ? "oklch(0.165 0.006 70)" : "transparent",
+        open: () => {
+          const link = p.urls && p.urls[h.store];
+          if (link) window.open(link, "_blank", "noopener");
+          else this.setState({ sheetPid: h.pid });
+        }
+      };
+    };
+
+    const visible = st.hits.filter(inRadius).map(decorate)
+      .filter(h => st.filter === "ALL" || h.cat.toUpperCase() === st.filter)
+      .filter(h => !st.onlyIn || h.status !== "out");
+
+    const chips = ["ALL", "POKÉMON", "ONE PIECE", "PS5", "GPU"].map(label => ({
+      key: label,
+      label,
+      bg: st.filter === label ? "oklch(0.3 0.038 155)" : "oklch(0.2 0.008 70)",
+      fg: st.filter === label ? "oklch(0.9 0.075 155)" : "oklch(0.68 0.01 70)",
+      bd: st.filter === label ? "oklch(0.48 0.065 155)" : "oklch(0.28 0.008 70)",
+      pick: () => this.setState({ filter: label })
+    }));
+
+    const alerts = st.alerts.map((a, i) => ({
+      key: "a" + i,
+      time: a.time,
+      product: this.prod(a.pid).product,
+      detail: this.S(a.store).name + " · " + a.extra,
+      tag: a.tag,
+      dot: COL[a.status]
+    }));
+
+    const watch = this.PP().map(p => {
+      const on = !!st.watchOn[p.id];
+      const live = st.hits.filter(h => h.pid === p.id && h.status !== "out" && inRadius(h))
+        .reduce((n, h) => n + h.qty, 0);
+      return {
+        key: p.id,
+        tag: p.tag,
+        tagFg: on ? "oklch(0.7 0.065 155)" : "oklch(0.48 0.01 70)",
+        product: p.product,
+        nameFg: on ? "oklch(0.95 0.006 70)" : "oklch(0.6 0.01 70)",
+        rule: on ? "any qty · " + radius + " km" : "paused",
+        live: on ? (live > 0 ? live + " nearby" : "none nearby") : "—",
+        liveFg: on && live > 0 ? COL.in : "oklch(0.52 0.01 70)",
+        rowBg: on ? "transparent" : "oklch(0.16 0.006 70)",
+        track: on ? "oklch(0.5 0.075 155)" : "oklch(0.24 0.008 70)",
+        trackBd: on ? "oklch(0.58 0.075 155)" : "oklch(0.3 0.008 70)",
+        knob: on ? "oklch(0.97 0.02 155)" : "oklch(0.5 0.008 70)",
+        knobX: on ? "20px" : "2px",
+        toggle: () => this.setState(s => ({ watchOn: { ...s.watchOn, [p.id]: !s.watchOn[p.id] } }))
+      };
+    });
+
+    let sheet = null;
+    if (st.sheetPid) {
+      const p = this.prod(st.sheetPid);
+      const mine = st.hits.filter(h => h.pid === st.sheetPid);
+      const rows = Object.keys(this.SS()).map(k => {
+        const h = mine.find(x => x.store === k);
+        const s = this.S(k);
+        const cKey = this.confOf(k, st.sheetPid);
+        const link = (p.urls && p.urls[k]) || null;
+        const icon = link ? "https://www.google.com/s2/favicons?domain=" + new URL(link).hostname + "&sz=32" : null;
+        const storeUrl = s.store_url || null;
+        const linkFields = {
+          link, icon, noLink: !link,
+          storeUrl, noStoreUrl: !storeUrl,
+          confLabel: CONF[cKey].label, confFg: CONF[cKey].fg
+        };
+        if (!h) return {
+          key: k, store: s.name, km: s.km.toFixed(1) + " km", ...linkFields,
+          note: s.method + " · nothing recorded", qty: "—", qtyUnit: "", qtyFg: "oklch(0.5 0.008 70)",
+          price: "—", dot: "oklch(0.38 0.008 70)"
+        };
+        return {
+          key: k, store: s.name, km: s.km.toFixed(1) + " km", ...linkFields,
+          note: h.status === "out" ? s.method + " · sold out " + this.ago(h.secs) + " ago" : s.method + " · " + this.ago(h.secs) + " old",
+          qty: h.status === "out" ? "0" : String(h.qty),
+          qtyUnit: h.status === "out" ? "" : "left",
+          qtyFg: h.status === "out" ? "oklch(0.5 0.03 25)" : COL[h.status],
+          price: this.money(h.price),
+          dot: COL[h.status]
+        };
+      });
+      const total = mine.filter(h => h.status !== "out").reduce((n, h) => n + h.qty, 0);
+      sheet = {
+        product: p.product, sku: p.tag + " · " + p.sku, msrp: this.money(p.msrp),
+        total: total > 0 ? total + " units across " + mine.filter(h => h.status !== "out").length + " stores" : "nothing on shelves right now",
+        caveat: "Counts come from store feeds that refresh every 15–60 min. Phone-confirm before driving.",
+        rows
+      };
+    }
+
+    const fs = st.feed;
+    const feedUrl = (this.props.feedUrl || "").trim();
+    const feedMap = {
+      demo: { label: "NOT CONNECTED", fg: "oklch(0.8 0.085 78)", bg: "oklch(0.26 0.04 78)", bd: "oklch(0.4 0.06 78)",
+              note: "No feed set. Point feedUrl at a JSON endpoint to go live." },
+      loading: { label: "CONNECTING", fg: "oklch(0.75 0.02 70)", bg: "oklch(0.24 0.008 70)", bd: "oklch(0.34 0.008 70)", note: "Fetching " + feedUrl },
+      live: { label: "LIVE", fg: "oklch(0.78 0.075 155)", bg: "oklch(0.25 0.028 155)", bd: "oklch(0.4 0.05 155)",
+              note: "Connected to " + feedUrl + (fs.at ? " · last pull " + fs.at.toLocaleTimeString() : "") },
+      error: { label: "FEED DOWN", fg: "oklch(0.7 0.1 25)", bg: "oklch(0.26 0.035 25)", bd: "oklch(0.42 0.06 25)",
+               note: (fs.err || "unreachable") + " — showing last known data" }
+    };
+    const fm = feedMap[fs.status] || feedMap.demo;
+
+    return {
+      feedLabel: fm.label,
+      feedFg: fm.fg,
+      feedBg: fm.bg,
+      feedBd: fm.bd,
+      feedNote: fm.note,
+      showSchema: fs.status === "demo",
+      retry: () => this.pull(),
+      scanLine: "6 stores · sweep every " + interval + "s · last " + (st.tick % interval) + "s ago",
+      radiusLine: radius + " KM RADIUS",
+      rowCount: visible.length + " OF " + st.hits.length + " ROWS",
+      hits: visible,
+      chips,
+      alerts,
+      watch,
+      sheet,
+      watchCount: Object.values(st.watchOn).filter(Boolean).length + " ACTIVE",
+      todayCount: st.alerts.length + " TODAY",
+      onlyFg: st.onlyIn ? "oklch(0.88 0.075 155)" : "oklch(0.62 0.01 70)",
+      onlyBd: st.onlyIn ? "oklch(0.6 0.08 155)" : "oklch(0.34 0.008 70)",
+      onlyBg: st.onlyIn ? "oklch(0.8 0.075 155)" : "transparent",
+      toggleOnly: () => this.setState(s => ({ onlyIn: !s.onlyIn })),
+      banner: st.banner ? {
+        qty: String(st.banner.qty),
+        product: this.prod(st.banner.pid).product,
+        line: this.S(st.banner.store).name + " · " + this.money(st.banner.price)
+      } : null,
+      openBanner: () => this.setState(s => ({ sheetPid: s.banner ? s.banner.pid : null, banner: null })),
+      dismissBanner: e => { if (e) e.stopPropagation(); this.setState({ banner: null }); },
+      closeSheet: () => this.setState({ sheetPid: null }),
+      scanNow: () => this.pull()
+    };
+  }
+}
+
+</script>
+</body>
+</html>

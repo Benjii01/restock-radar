@@ -1,0 +1,6 @@
+# the Discord webhook - never commit this
+webhook.txt
+
+__pycache__/
+*.pyc
+.thumbnail
