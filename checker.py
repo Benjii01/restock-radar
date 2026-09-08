@@ -25,12 +25,17 @@ from pathlib import Path
 # git history forever. Locally it's read from webhook.txt (gitignored); on
 # GitHub Actions it comes from the DISCORD_WEBHOOK_URL repository secret.
 def _load_webhook():
-    from_env = os.environ.get("DISCORD_WEBHOOK_URL", "").strip()
+    # ﻿ is a BOM - Windows tooling loves to prepend one, and Python's
+    # strip() won't remove it, which yields "unknown url type: ﻿https"
+    def clean(s):
+        return s.strip().lstrip("﻿").strip()
+
+    from_env = clean(os.environ.get("DISCORD_WEBHOOK_URL", ""))
     if from_env:
         return from_env
     local = Path(__file__).parent / "webhook.txt"
     if local.exists():
-        return local.read_text(encoding="utf-8").strip()
+        return clean(local.read_text(encoding="utf-8-sig"))
     return ""
 
 
