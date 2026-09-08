@@ -162,9 +162,9 @@
     {
       "pid": "p5",
       "store": "stap_cb",
-      "qty": 0,
+      "qty": 1,
       "price": 1099.99,
-      "status": "out",
+      "status": "low",
       "seenSecs": 0
     },
     {
@@ -212,11 +212,19 @@
     {
       "pid": "p5",
       "store": "stap_cb",
+      "time": "23:02",
+      "tag": "LOW",
+      "status": "low",
+      "extra": "1 unit(s) \u00b7 $1099.99"
+    },
+    {
+      "pid": "p5",
+      "store": "stap_cb",
       "time": "19:42",
       "tag": "LOW",
       "status": "low",
       "extra": "1 unit(s) \u00b7 $1099.99"
     }
   ],
-  "updated": "2026-09-08T22:59:16.085780"
+  "updated": "2026-09-08T23:02:03.047048"
 }
