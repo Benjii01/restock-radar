@@ -162,9 +162,9 @@
     {
       "pid": "p5",
       "store": "stap_cb",
-      "qty": 1,
+      "qty": 0,
       "price": 1099.99,
-      "status": "low",
+      "status": "out",
       "seenSecs": 0
     },
     {
