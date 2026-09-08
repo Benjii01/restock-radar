@@ -120,6 +120,7 @@
               </sc-if>
               <div style="margin-top: 2px; display: flex; align-items: center; gap: 6px; font-family: 'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: 0.04em; white-space: nowrap;">
                 <span style="color: {{ h.confFg }}; font-weight: 600;">{{ h.confLabel }}</span>
+                <span style="color: oklch(0.72 0.05 78); letter-spacing: 0.06em;">{{ h.postal }}</span>
                 <span style="color: oklch(0.5 0.01 70); overflow: hidden; text-overflow: ellipsis;">{{ h.method }}</span>
               </div>
             </div>
@@ -351,6 +352,7 @@ class Component extends DCLogic {
         status: h.status,
         storeUrl: s.store_url || null,
         noStoreUrl: !s.store_url,
+        postal: s.postal_code || "",
         stopRowClick: e => { if (e) e.stopPropagation(); },
         product: p.product,
         sku: p.tag + " · " + p.sku,

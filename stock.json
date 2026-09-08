@@ -3,42 +3,56 @@
     "bb": {
       "name": "Best Buy \u00b7 Stavanger Dr",
       "km": 3.0,
+      "postal_code": "A1A 5E8",
+      "store_url": "https://stores.bestbuy.ca/en-ca/nl/st-johns/3-stavanger-dr",
       "method": "official API",
       "conf": "high"
     },
     "bb_aval": {
       "name": "Best Buy Express \u00b7 Avalon Mall",
       "km": 2.2,
+      "postal_code": "A1B 1W3",
+      "store_url": "https://stores.bestbuy.ca/en-ca/nl/st-john%27s/48-kenmount-rd-unit-0185",
       "method": "official API",
       "conf": "high"
     },
     "stap_stav": {
       "name": "Staples \u00b7 Stavanger Dr",
       "km": 9.0,
+      "postal_code": "A1A 5E8",
+      "store_url": "https://stores.staples.ca/nl/st-johns/office-supplies-ca-65.html",
       "method": "official API",
       "conf": "high"
     },
     "stap_mtpearl": {
       "name": "Staples \u00b7 Mount Pearl",
       "km": 0.1,
+      "postal_code": "A1N 4Y9",
+      "store_url": "https://stores.staples.ca/nl/mountpearl/office-supplies-ca-101.html",
       "method": "official API",
       "conf": "high"
     },
     "stap_kelsey": {
       "name": "Staples \u00b7 Kelsey Dr",
       "km": 3.7,
+      "postal_code": "A1B 5C8",
+      "store_url": "https://stores.staples.ca/nl/st-johns/office-supplies-ca-434.html",
       "method": "official API",
       "conf": "high"
     },
     "stap_cb": {
       "name": "Staples \u00b7 Corner Brook",
       "km": 680.0,
+      "postal_code": "A2H 1R4",
+      "store_url": "https://stores.staples.ca/nl/cornerbrook/office-supplies-ca-218.html",
       "method": "official API",
       "conf": "high"
     },
     "stap_wood": {
       "name": "Staples \u00b7 Woodstock ON",
       "km": 2900.0,
+      "postal_code": "N4V 1B8",
+      "store_url": "https://stores.staples.ca/on/woodstock/office-supplies-ca-235.html",
       "method": "official API",
       "conf": "high"
     },
@@ -198,11 +212,11 @@
     {
       "pid": "p5",
       "store": "stap_cb",
-      "time": "17:36",
+      "time": "19:42",
       "tag": "LOW",
       "status": "low",
       "extra": "1 unit(s) \u00b7 $1099.99"
     }
   ],
-  "updated": "2026-09-08T18:26:52.299181"
+  "updated": "2026-09-08T19:42:34.878922"
 }

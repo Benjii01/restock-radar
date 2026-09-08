@@ -50,21 +50,25 @@ STORES = {
     # The product-page URL can't do this - every location of a chain shares one
     # product URL and the selected store lives in your browser session, not the
     # link, so a product link always opens with whatever store you last used.
+    # postal_code is each store's OWN postal code. It doubles as the search
+    # anchor for the Staples API (verified: every store is findable from its
+    # own postal code) and as the value you paste into a retailer's
+    # "find a store" box to switch to that exact location.
     "bb": {
         "name": "Best Buy · Stavanger Dr", "km": 3.0,
-        "kind": "bestbuy", "store_id": "909",
+        "kind": "bestbuy", "store_id": "909", "postal_code": "A1A 5E8",
         "store_url": "https://stores.bestbuy.ca/en-ca/nl/st-johns/3-stavanger-dr",
         "method": "official API", "conf": "high",
     },
     "bb_aval": {
         "name": "Best Buy Express · Avalon Mall", "km": 2.2,
-        "kind": "bestbuy", "store_id": "122",
+        "kind": "bestbuy", "store_id": "122", "postal_code": "A1B 1W3",
         "store_url": "https://stores.bestbuy.ca/en-ca/nl/st-john%27s/48-kenmount-rd-unit-0185",
         "method": "official API", "conf": "high",
     },
     "stap_stav": {
         "name": "Staples · Stavanger Dr", "km": 9.0,
-        "kind": "staples", "store_id": "65", "postal_code": "A1N 4Y9",
+        "kind": "staples", "store_id": "65", "postal_code": "A1A 5E8",
         "store_url": "https://stores.staples.ca/nl/st-johns/office-supplies-ca-65.html",
         "method": "official API", "conf": "high",
     },
@@ -76,7 +80,7 @@ STORES = {
     },
     "stap_kelsey": {
         "name": "Staples · Kelsey Dr", "km": 3.7,
-        "kind": "staples", "store_id": "434", "postal_code": "A1N 4Y9",
+        "kind": "staples", "store_id": "434", "postal_code": "A1B 5C8",
         "store_url": "https://stores.staples.ca/nl/st-johns/office-supplies-ca-434.html",
         "method": "official API", "conf": "high",
     },
@@ -338,7 +342,18 @@ def sweep():
                     "tag": "IN" if state == "in" else "LOW",
                     "status": state, "extra": line,
                 })
-                notify(f"**IN STOCK**\n{product['product']}\n{store['name']}\n{line}")
+                msg = ["**IN STOCK**", product["product"], store["name"], line]
+                if store.get("postal_code"):
+                    # paste this into the retailer's "find a store" box to
+                    # switch to this location - their store picker is
+                    # session-based, so no link can do it for you
+                    msg.append(f"Set store with postal code: `{store['postal_code']}`")
+                product_url = product.get("urls", {}).get(store_key)
+                if product_url:
+                    msg.append(f"Buy: {product_url}")
+                if store.get("store_url"):
+                    msg.append(f"Store (address & phone): {store['store_url']}")
+                notify("\n".join(msg))
                 print(f"  ALERT {product['product']} @ {store['name']} - {line}")
             elif was in ("in", "low") and state == "out":
                 alerts.insert(0, {
@@ -350,7 +365,8 @@ def sweep():
     del alerts[60:]
 
     OUT.write_text(json.dumps({
-        "stores": {k: {kk: vv for kk, vv in v.items() if kk in ("name", "km", "method", "conf", "store_url")}
+        "stores": {k: {kk: vv for kk, vv in v.items()
+                       if kk in ("name", "km", "method", "conf", "store_url", "postal_code")}
                    for k, v in STORES.items()},
         "products": [{k: v for k, v in p.items() if k != "skus"} for p in PRODUCTS],
         "hits": hits,
