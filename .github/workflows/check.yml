@@ -2,10 +2,12 @@ name: Restock check
 
 on:
   schedule:
-    # every 30 minutes. GitHub queues scheduled jobs, so real spacing is
-    # usually 30-45 min. Keeping it here (not tighter) stays inside the
-    # 2000 free Actions minutes/month that private repos get.
-    - cron: "*/30 * * * *"
+    # Every 10 minutes. Free because the repo is public; a private repo would
+    # blow past the 2000 min/month tier at this rate. GitHub queues scheduled
+    # jobs under load, so real spacing runs a few minutes longer than this.
+    # If run logs start showing "check failed (HTTP Error 403)", the retailers
+    # are rate-limiting us - raise this interval.
+    - cron: "*/10 * * * *"
   workflow_dispatch:        # lets you trigger a check by hand from the Actions tab
 
 # only one check at a time - two runs committing stock.json would collide
