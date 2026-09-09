@@ -1,101 +1,92 @@
-# Setup — plain version
+# Restock Radar
 
-## Is this actually possible?
+Watches Canadian retailers for stock on specific products and messages Discord
+the moment something appears. Runs itself on GitHub Actions every 10 minutes —
+no PC required.
 
-Partly. Being honest about each store, because it changes what you should expect:
+Built for St. John's NL and the Woodstock ON area, but the store list is just
+config.
 
-| Store | Can a script check it? | Reality |
+## What it actually checks
+
+| Retailer | Works? | How |
 |---|---|---|
-| Best Buy | Yes | Public API. Reliable, near real-time. This is your best source, and it covers the PS5 Pro. |
-| Walmart | Mostly | Their site exposes per-store stock. Works, but they block fast polling and change the page often, so it breaks every few months and needs fixing. |
-| EB Games / GameStop | No | No feed. Their site shows "check store" but there's nothing a script can read reliably. |
-| Costco | No | They don't publish warehouse stock anywhere. |
-| Local card shops | No | Most post on Facebook or Instagram instead. |
+| **Staples** | Yes | Open inventory API, no auth. One call returns every store near a postal code, so 22 stores cost ~7 requests. Most reliable source here. |
+| **Best Buy** | Yes | Open availability API, no auth. Store IDs can't be discovered from a postal code — they have to be captured from the site (see below). |
+| **Walmart** | No | Hard-blocked. Returns 403 through plain requests, session cookies, headless Chromium, and stealth-patched Chromium alike. Left in the code in case that changes; marked `manual` for now. |
+| **EB Games** | No | Sells the PS5 Pro but has no public feed and 403s. |
+| **Costco** | No | Publishes no per-warehouse stock anywhere. Their console bundles are online-only regardless. |
 
-So: consoles at Best Buy — genuinely solvable. Sealed Pokémon and One Piece at Walmart — solvable with maintenance. EB Games and Costco — you have to phone them, which is why the dashboard has a CONFIRM button per store.
+Stores marked `manual` are never checked — they're listed in the Discord
+summary as a reminder to phone them.
 
-One more honest point on speed. Even Best Buy's number updates every few minutes, and dedicated scalper tools run hundreds of proxies. You won't win a pure speed race against those. What you can win: Best Buy pickup slots at 6am, and the stores bots ignore entirely because there's no feed to hit.
+## Setup
 
----
+### Secrets
 
-## What you do
+Webhooks never go in the code. They're read from, in order:
 
-### 1. Install Python
+1. Environment variable — `DISCORD_WEBHOOK_URL`, `DISCORD_WEBHOOK_GPU`
+2. A local gitignored file — `webhook.txt`, `webhook_gpu.txt`
 
-Download from python.org. During install, tick **"Add Python to PATH"**. That checkbox matters.
+On GitHub they're repository secrets (Settings → Secrets and variables →
+Actions). Locally, create the files — they're in `.gitignore` and must stay
+there. **Do not paste a webhook into `checker.py`**; this repo is public and it
+would be in the history permanently.
 
-Then in VS Code, open the Extensions panel (the four-squares icon in the left bar) and install the **Python** extension by Microsoft. Restart VS Code afterwards.
-
-Download this project (the download button in the chat) and unzip it somewhere you'll remember. In VS Code: **File → Open Folder**, pick that folder. You should see `checker.py` and `SETUP.md` in the sidebar.
-
-### 2. Set up Discord (this is the part that alerts your phone)
-
-Make sure you have the Discord app installed on your phone and notifications turned on for it.
-
-1. In Discord, go to any server you're in (or make a new one — right-click the server list, **Add a Server**), open a text channel
-2. Click the gear icon next to the channel name (**Edit Channel**) → **Integrations** → **Webhooks** → **New Webhook**
-3. Click it, then **Copy Webhook URL** — it looks like `https://discord.com/api/webhooks/12345.../abcDEF...`
-4. Open `checker.py` and paste it into the top:
-
-```python
-DISCORD_WEBHOOK_URL = "https://discord.com/api/webhooks/12345.../abcDEF..."
-```
-
-### 3. Find your store IDs and product SKUs
-
-This is the fiddly part, and it's unavoidable — every store numbers its own shelves.
-
-**Best Buy:** open the PS5 Pro page on bestbuy.ca, set your store to Stavanger Drive. The SKU is in the URL (the long number at the end). For the store ID, press F12, click the Network tab, reload, and look for a request with `availability` in it — your store ID is in that URL.
-
-**Walmart:** same idea on walmart.ca. The product page URL ends in the item number.
-
-Put those into the `STORES` and `PRODUCTS` blocks in `checker.py`, replacing every line marked `TODO`.
-
-### 4. Run it
-
-Open `checker.py` in VS Code and press the **▷ play button** in the top-right corner. A terminal panel opens at the bottom and starts printing.
-
-Or use the terminal directly — **Terminal → New Terminal**, then:
+### Running it
 
 ```
-python checker.py
+python checker.py           # loop forever, serve stock.json on :8000
+python checker.py --once    # single sweep - what GitHub Actions runs
 ```
 
-Leave it running. It checks every two minutes, prints what it found, and pushes to your phone when something appears. `Ctrl+C` in the terminal stops it.
+GitHub Actions handles the real schedule (`.github/workflows/check.yml`).
+Each run does one sweep and commits `stock.json` and `status_message.json`
+back, which is how state survives between runs — without it, every run would
+look like a first run and re-alert on everything already in stock.
 
-You should see something like:
+## How Discord is used
 
-```
-serving http://localhost:8000/stock.json
-checking every 120 seconds - leave this window open
+Each product has a `channel`, and each channel maps to its own webhook:
 
-[09:14:02] 3 rows written
-```
+- **One pinned status message per channel**, rewritten in place each sweep.
+  Editing a message sends no notification, so it stays silently current. Its id
+  lives in `status_message.json`. If you delete the message, the next run posts
+  a fresh one — re-pin it.
+- **New messages for events**, which do notify: something coming in stock, and
+  quantity changes while in stock (3 → 1). Selling out is recorded silently.
 
-If instead you get `ModuleNotFoundError` or `python is not recognized`, Python either isn't installed or wasn't added to PATH — reinstall and tick that box.
+Alerts include the product link, that store's own page (address and phone), and
+the store's postal code — you need the postal code because retailer store
+pickers are session-cookie based, so no link can preselect a store for you.
+Paste it into their "find a store" box.
 
-### 5. Connect the dashboard
+## Adding things
 
-Open the dashboard, find the **feedUrl** setting, and paste:
+**A Staples store** — add it to `STORES` with `kind: "staples"`, its store
+number, and its own postal code. Everything else wires itself up: the product
+SKU and URL maps are built from `STORES`, since one item number covers a whole
+chain. Find store numbers by querying the API with a postal code near them.
 
-```
-http://localhost:8000/stock.json
-```
+**A Best Buy store** — same, but the store id must come from the site. Open a
+product page, put a postal code in the Pick Up box, F12 → Network → filter
+`availability`, click Check, and read `locationKey` values out of the response.
+One capture usually returns several nearby stores.
 
-The badge at the top should flip from **DEMO DATA** to **LIVE**.
+**A product** — copy a block in `PRODUCTS`. Best Buy SKUs are the number at the
+end of the product URL; Staples item numbers are on the product page.
 
----
+## Known limits
 
-## Expect to debug step 3
-
-The store IDs and SKUs are where this will go wrong first, and the error messages from the script are your guide. If a check fails it prints the reason rather than crashing.
-
-If a retailer's endpoint has changed shape since this was written, paste `checker.py` and the error into a Claude chat and ask it to fix that one function. The rest of the setup stays put.
-
-## If you want it running while you sleep
-
-Right now it only checks while your PC is on and the window is open. Two upgrades, in order of effort:
-
-**Windows Task Scheduler** — start the script automatically at login. Free, still needs the PC awake.
-
-**A $5/month cloud box** (Hetzner, DigitalOcean) — runs 24/7. Restocks often land overnight, so this is the single biggest improvement you can make after step 4 works.
+- **Discord caps messages at 2000 characters.** The PS5 Pro summary is ~980 with
+  30 stores. Another large product would exceed it and the status update would
+  fail silently. Needs splitting before the list grows much further.
+- **Scheduled runs drift.** GitHub queues them under load, so 10 minutes is
+  really 10-15.
+- **Watch for `check failed (HTTP Error 403)`** in the Actions logs. That means
+  a retailer is rate-limiting — raise the cron interval.
+- **GitHub disables scheduled workflows after 60 days of repo inactivity.** If
+  checks go quiet, that's the first thing to check.
+- Expect the retailer endpoints to change shape eventually. When one breaks, the
+  failure is printed rather than thrown, so the rest keeps working.
