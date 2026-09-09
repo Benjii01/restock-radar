@@ -2,12 +2,16 @@ name: Restock check
 
 on:
   schedule:
-    # Every 10 minutes. Free because the repo is public; a private repo would
-    # blow past the 2000 min/month tier at this rate. GitHub queues scheduled
-    # jobs under load, so real spacing runs a few minutes longer than this.
-    # If run logs start showing "check failed (HTTP Error 403)", the retailers
-    # are rate-limiting us - raise this interval.
-    - cron: "*/10 * * * *"
+    # Every 15 minutes. Free because the repo is public.
+    #
+    # Note: */10 was tried and GitHub's scheduler silently dropped every run -
+    # two hours, zero firings - while */30 had been firing reliably. GitHub
+    # throttles high-frequency crons hard, so if scheduled runs stop appearing
+    # in the Actions tab, raise this interval rather than lowering it.
+    #
+    # If run logs show "check failed (HTTP Error 403)", that's different - the
+    # retailers are rate-limiting us, and the fix is also a longer interval.
+    - cron: "*/15 * * * *"
   workflow_dispatch:        # lets you trigger a check by hand from the Actions tab
 
 # only one check at a time - two runs committing stock.json would collide
