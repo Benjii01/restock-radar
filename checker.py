@@ -13,7 +13,7 @@ message the moment something goes from out-of-stock to in-stock.
 SETUP: see SETUP.md. You only need to edit the CONFIG block below.
 """
 
-import json, os, sys, time, threading, http.server, socketserver, functools, urllib.request, urllib.parse
+import json, os, sys, time, threading, http.server, socketserver, functools, urllib.request, urllib.error, urllib.parse
 from datetime import datetime
 from pathlib import Path
 
@@ -508,16 +508,29 @@ def push_status(text, channel):
     ids = _load_status_ids()
     msg_id = ids.get(channel, "")
     if msg_id:
-        try:
-            req = urllib.request.Request(
-                f"{hook}/messages/{msg_id}", data=body,
-                headers=headers, method="PATCH")
-            urllib.request.urlopen(req, timeout=15)
-            print(f"  [{channel}] status message updated")
+        # Only a 404 means the pinned message is actually gone. Anything else
+        # (connection reset, timeout, 429, 5xx) is a blip - posting a fresh
+        # message on those would orphan the user's pin, which is exactly what
+        # happened once. Retry a couple of times, then leave it for next run.
+        for attempt in range(3):
+            try:
+                req = urllib.request.Request(
+                    f"{hook}/messages/{msg_id}", data=body,
+                    headers=headers, method="PATCH")
+                urllib.request.urlopen(req, timeout=15)
+                print(f"  [{channel}] status message updated")
+                return
+            except urllib.error.HTTPError as e:
+                if e.code == 404:
+                    print(f"  [{channel}] pinned message is gone (404) - posting a new one")
+                    break
+                print(f"  [{channel}] edit attempt {attempt + 1} failed: HTTP {e.code}")
+            except Exception as e:
+                print(f"  [{channel}] edit attempt {attempt + 1} failed: {e}")
+            time.sleep(3)
+        else:
+            print(f"  [{channel}] couldn't edit status message - leaving pin alone until next run")
             return
-        except Exception as e:
-            # message was probably deleted - fall through and post a fresh one
-            print(f"  [{channel}] couldn't edit status message, posting a new one:", e)
 
     try:
         req = urllib.request.Request(hook + "?wait=true", data=body, headers=headers)
