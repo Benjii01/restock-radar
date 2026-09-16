@@ -432,9 +432,9 @@
     {
       "pid": "p5",
       "store": "bb_on935",
-      "qty": 1,
+      "qty": 0,
       "price": 1099.99,
-      "status": "low",
+      "status": "out",
       "seenSecs": 0
     },
     {
@@ -713,6 +713,14 @@
   "alerts": [
     {
       "pid": "p5",
+      "store": "bb_on935",
+      "time": "18:21",
+      "tag": "GONE",
+      "status": "out",
+      "extra": "sold out"
+    },
+    {
+      "pid": "p5",
       "store": "stap_on8",
       "time": "17:30",
       "tag": "LOW",
@@ -784,5 +792,5 @@
       "extra": "1 unit(s) \u00b7 $1099.99"
     }
   ],
-  "updated": "2026-09-16T18:00:24.195005"
+  "updated": "2026-09-16T18:21:41.729090"
 }
