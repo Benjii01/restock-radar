@@ -343,6 +343,14 @@
   "hits": [
     {
       "pid": "p5",
+      "store": "bb",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
       "store": "bb_aval",
       "qty": 0,
       "price": 1099.99,
@@ -824,5 +832,5 @@
       "extra": "1 unit(s) \u00b7 $1099.99"
     }
   ],
-  "updated": "2026-09-19T21:00:24.356144"
+  "updated": "2026-09-19T21:30:20.308546"
 }
