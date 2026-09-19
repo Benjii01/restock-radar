@@ -671,14 +671,6 @@
     },
     {
       "pid": "gpu2",
-      "store": "bb_on936",
-      "qty": 0,
-      "price": 2899.99,
-      "status": "out",
-      "seenSecs": 0
-    },
-    {
-      "pid": "gpu2",
       "store": "bb_on980",
       "qty": 0,
       "price": 2899.99,
@@ -832,5 +824,5 @@
       "extra": "1 unit(s) \u00b7 $1099.99"
     }
   ],
-  "updated": "2026-09-19T08:00:25.241444"
+  "updated": "2026-09-19T08:30:23.810293"
 }
