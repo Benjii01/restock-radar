@@ -164,6 +164,34 @@ STORES = {
         "store_url": "https://stores.bestbuy.ca/en-ca/on/waterloo/580-king-st-n-bldg-b",
         "method": "official API", "conf": "high",
     },
+    # --- the 45-50 minute ring from Woodstock: far enough to be worth the
+    # drive for a console, close enough that the unit is still there when you
+    # arrive. Burlington is the edge (78 km / ~50 min); Oakville, Mississauga
+    # and Toronto are 60-90 min and deliberately left out.
+    "bb_on631": {
+        "name": "Best Buy · Guelph ON", "km": 60.0,
+        "kind": "bestbuy", "store_id": "631", "postal_code": "N1G 5L4",
+        "store_url": "https://stores.bestbuy.ca/en-ca/on/guelph/151-stone-rd-west",
+        "method": "official API", "conf": "high",
+    },
+    "bb_on982": {
+        "name": "Best Buy · Ancaster ON", "km": 65.0,
+        "kind": "bestbuy", "store_id": "982", "postal_code": "L9K 1J9",
+        "store_url": "https://stores.bestbuy.ca/en-ca/on/ancaster/14-martindale-crescent",
+        "method": "official API", "conf": "high",
+    },
+    "bb_on942": {
+        "name": "Best Buy · Burlington ON", "km": 78.0,
+        "kind": "bestbuy", "store_id": "942", "postal_code": "L7P 5C6",
+        "store_url": "https://stores.bestbuy.ca/en-ca/on/burlington/1200-brant-st-unit-1",
+        "method": "official API", "conf": "high",
+    },
+    "bb_on984": {
+        "name": "Best Buy · Hamilton ON", "km": 85.0,
+        "kind": "bestbuy", "store_id": "984", "postal_code": "L8J 0B4",
+        "store_url": "https://stores.bestbuy.ca/en-ca/on/hamilton/1779-stone-church-rd-e",
+        "method": "official API", "conf": "high",
+    },
     "stap_on260": {
         "name": "Staples · Tillsonburg ON", "km": 27.0,
         "kind": "staples", "store_id": "260", "postal_code": "N4G 5A7",
@@ -266,6 +294,24 @@ STORES = {
         "store_url": "https://stores.staples.ca/on/hamilton/office-supplies-ca-456.html",
         "method": "official API", "conf": "high",
     },
+    "stap_on14": {
+        "name": "Staples · Burlington Plains Rd ON", "km": 78.0,
+        "kind": "staples", "store_id": "14", "postal_code": "L7T 4K1",
+        "store_url": "https://stores.staples.ca/on/burlington/office-supplies-ca-14.html",
+        "method": "official API", "conf": "high",
+    },
+    "stap_on229": {
+        "name": "Staples · Burlington Davidson Ct ON", "km": 85.0,
+        "kind": "staples", "store_id": "229", "postal_code": "L7M 4X7",
+        "store_url": "https://stores.staples.ca/on/burlington/office-supplies-ca-229.html",
+        "method": "official API", "conf": "high",
+    },
+    "stap_on439": {
+        "name": "Staples · Hamilton Barton St ON", "km": 90.0,
+        "kind": "staples", "store_id": "439", "postal_code": "L8H 2V4",
+        "store_url": "https://stores.staples.ca/on/hamilton/office-supplies-ca-439.html",
+        "method": "official API", "conf": "high",
+    },
     "wm_stav": {
         # Walmart Canada's inventory API returns a consistent 403 (Cloudflare
         # bot-blocked), confirmed 2026-09-05. check_walmart() is left in the
@@ -350,26 +396,45 @@ def _get_json(url, headers=None):
         return json.loads(r.read().decode())
 
 
+_bestbuy_cache = {}   # sku -> {store_id: (qty, price)}, reset each sweep
+
+
 def check_bestbuy(sku, store_id):
     """Best Buy Canada availability. Returns (qty, price) or (None, None).
+
+    The endpoint takes a pipe-separated list of stores and names each one back
+    in the response, so a single request covers the whole chain. Results are
+    cached per sweep exactly the way Staples is: 12 stores cost one request
+    per product instead of 12. That headroom is the point - checking every
+    15 minutes across a dozen stores is what would otherwise earn us the
+    HTTP 403 rate-limit the workflow logs warn about.
 
     NOTE: verify this endpoint before trusting it - Best Buy changes it
     occasionally. Open a product page, press F12, watch the Network tab and
     look for the request that carries 'availability' in its URL.
     """
-    url = ("https://www.bestbuy.ca/ecomm-api/availability/products"
-           f"?accept=application%2Fvnd.bestbuy.standardproduct.v1%2Bjson"
-           f"&accept-language=en-CA&locations={store_id}&postalCode=A1A1A1&skus={sku}")
-    data = _get_json(url)
-    for av in data.get("availabilities", []):
-        pickup = av.get("pickup", {})
-        qty = pickup.get("quantityRemaining")
-        purchasable = pickup.get("purchasable")
-        price = (av.get("pricing") or {}).get("regularPrice")
-        if qty is None:
-            qty = 1 if purchasable else 0
-        return int(qty), price
-    return None, None
+    cache = _bestbuy_cache.get(sku)
+    if cache is None:
+        ids = [v["store_id"] for v in STORES.values() if v["kind"] == "bestbuy"]
+        url = ("https://www.bestbuy.ca/ecomm-api/availability/products"
+               "?accept=application%2Fvnd.bestbuy.standardproduct.v1%2Bjson"
+               "&accept-language=en-CA&locations=" + "%7C".join(ids) +
+               f"&postalCode=A1A1A1&skus={sku}")
+        data = _get_json(url)
+        cache = {}
+        for av in data.get("availabilities", []):
+            price = (av.get("pricing") or {}).get("regularPrice")
+            for loc in av.get("pickup", {}).get("locations", []):
+                qty = loc.get("quantityOnHand")
+                if qty is None:
+                    # older shape only says yes/no, so treat "yes" as a single
+                    # unit - enough to fire the alert and let you phone them
+                    qty = 1 if loc.get("hasInventory") else 0
+                cache[str(loc["locationKey"])] = (int(qty), price)
+        _bestbuy_cache[sku] = cache
+    # a store missing from the response is unknown, not out of stock
+    return cache.get(str(store_id), (None, None))
+
 
 
 def check_walmart(sku, store_id):
@@ -596,6 +661,7 @@ def sweep():
     hits = []
     now = datetime.now()
     _staples_cache.clear()   # stock moves between sweeps - never reuse across them
+    _bestbuy_cache.clear()
 
     for product in PRODUCTS:
         for store_key, store in STORES.items():
@@ -729,6 +795,12 @@ def _arg(name, default):
 
 
 if __name__ == "__main__":
+    # Windows consoles default to cp1252, which has no arrow character - so
+    # printing a "2 -> 1 unit(s)" alert would kill the sweep mid-run. The
+    # webhook payloads are UTF-8 regardless; this only affects the console.
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
     for _ch, _url in WEBHOOKS.items():
         if not _url:
             print(f"WARNING: no webhook for '{_ch}' - its alerts will fall back "
