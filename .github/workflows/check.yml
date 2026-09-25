@@ -53,5 +53,17 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add stock.json status_message.json
-          git diff --staged --quiet || git commit -m "stock update $(date -u '+%Y-%m-%d %H:%M UTC')"
-          git push
+          git diff --staged --quiet && exit 0
+          git commit -m "stock update $(date -u '+%Y-%m-%d %H:%M UTC')"
+          # A run now holds its checkout for ~16 minutes rather than ~20
+          # seconds, so any push to main while it sweeps leaves this commit
+          # behind origin and the plain push is rejected. Rebase onto whatever
+          # landed in the meantime and retry: the stock file is regenerated
+          # from scratch each sweep, so there is nothing to merge by hand.
+          for attempt in 1 2 3; do
+            git pull --rebase origin main && git push && exit 0
+            echo "push attempt $attempt was rejected - retrying"
+            sleep 5
+          done
+          echo "could not push the stock update after 3 attempts"
+          exit 1
