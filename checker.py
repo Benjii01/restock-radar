@@ -54,6 +54,15 @@ WEBHOOKS = {
 
 CHECK_EVERY_SECONDS = 120  # don't go below 60 - Walmart blocks fast pollers
 
+# Who to mention on a restock. A plain message notifies nobody - Discord only
+# raises a push notification (phone, watch, desktop badge) on a mention, which
+# is why these alerts were silent everywhere but an already-open Discord window.
+#   "@everyone"     - whole channel, works with no extra setup
+#   "<@1234567890>" - just you; better if anyone else joins the server
+#   ""              - no mention, the old silent behaviour
+# Override with the DISCORD_PING env var / repo secret.
+PING = os.environ.get("DISCORD_PING", "@everyone").strip()
+
 PORT = 8000
 
 # The stores you care about.
@@ -116,7 +125,9 @@ STORES = {
     # since these are only useful as a delivery/pickup order around there ---
     # Best Buy: full-size stores only. The Express/Mobile mall kiosks nearby
     # (Stratford, Argyle, Fairview, White Oaks, Masonville, Conestoga) are
-    # phone-and-accessory counters and won't hold a console.
+    # phone-and-accessory counters and won't hold a console. (Avalon Mall
+    # Express above is kept anyway - it's 2 km away and the API treats it as
+    # a real pickup point, so a ship-to-store unit there would show up.)
     "bb_on620": {
         "name": "Best Buy · Brantford ON", "km": 47.0,
         "kind": "bestbuy", "store_id": "620", "postal_code": "N3R 7J9",
@@ -429,12 +440,21 @@ def webhook_for(channel):
     return WEBHOOKS.get(channel) or WEBHOOKS.get("ps5", "")
 
 
-def notify(text, channel="ps5"):
+def notify(text, channel="ps5", ping=False):
     hook = webhook_for(channel)
     if not hook:
         print(f"  [no webhook for '{channel}']", text)
         return
-    body = json.dumps({"content": text}).encode()
+    if ping and PING:
+        text = f"{PING} {text}"
+    # allowed_mentions is not optional: without it Discord renders a webhook's
+    # @everyone as literal text and notifies nobody. The empty parse list on the
+    # quieter alerts stops a product name containing an @ from pinging the
+    # channel by accident.
+    body = json.dumps({
+        "content": text,
+        "allowed_mentions": {"parse": ["everyone", "users", "roles"] if ping else []},
+    }).encode()
     try:
         urllib.request.urlopen(
             urllib.request.Request(
@@ -635,7 +655,7 @@ def sweep():
                 })
                 notify("\n".join(["**IN STOCK**", product["product"],
                                   store["name"], line] + where_to_buy()),
-                       product.get("channel", "ps5"))
+                       product.get("channel", "ps5"), ping=True)
                 print(f"  ALERT {product['product']} @ {store['name']} - {line}")
             elif (state in ("in", "low") and was_state in ("in", "low")
                     and was_qty is not None and qty != was_qty):
@@ -699,6 +719,15 @@ def serve():
         httpd.serve_forever()
 
 
+def _arg(name, default):
+    """Read "--name value" out of argv."""
+    if name in sys.argv:
+        at = sys.argv.index(name)
+        if at + 1 < len(sys.argv):
+            return sys.argv[at + 1]
+    return default
+
+
 if __name__ == "__main__":
     for _ch, _url in WEBHOOKS.items():
         if not _url:
@@ -708,7 +737,30 @@ if __name__ == "__main__":
 
     load_previous_state()
 
-    if "--once" in sys.argv:
+    if "--for" in sys.argv:
+        # One Actions run that keeps sweeping, rather than one sweep per cron
+        # firing. GitHub silently drops crons tighter than */30 (tried */10 on
+        # 2026-09-09: zero runs in two hours), so a 10-15 minute cadence has to
+        # come from inside a single run the scheduler is happy to start.
+        #   python checker.py --for 25 --every 900   -> sweeps at 0 and 15 min
+        minutes = float(_arg("--for", "25"))
+        every = float(_arg("--every", CHECK_EVERY_SECONDS))
+        deadline = time.monotonic() + minutes * 60
+        swept = 0
+        while True:
+            try:
+                sweep()
+            except Exception as e:
+                print("sweep error:", e)
+            swept += 1
+            # stop once another interval wouldn't fit - overrunning would
+            # collide with the next cron firing, and the commit step still
+            # has to run after this
+            if time.monotonic() + every > deadline:
+                break
+            time.sleep(every)
+        print(f"{swept} sweep(s) over {minutes:g} min - exiting before the next run")
+    elif "--once" in sys.argv:
         sweep()
     else:
         threading.Thread(target=serve, daemon=True).start()

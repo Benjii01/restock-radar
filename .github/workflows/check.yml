@@ -2,16 +2,22 @@ name: Restock check
 
 on:
   schedule:
-    # Every 30 minutes - the only interval actually proven to fire on this repo.
+    # Stays at every 30 minutes because that is the only interval GitHub's
+    # scheduler reliably fires on this repo. The *check* cadence is no longer
+    # tied to it: each run now sweeps repeatedly for ~25 minutes (see the
+    # --for/--every flags below), so checks land every 15 minutes while only
+    # asking cron for something it will honour.
     #
-    # Don't lower this without testing. */10 was tried on 2026-09-09 and
-    # GitHub's scheduler silently dropped every single run (two hours, zero
-    # firings) while */30 had been firing reliably. GitHub throttles
-    # high-frequency crons hard and drops them rather than delaying them.
-    # Genuinely faster checks need a VPS cron, not GitHub Actions.
+    # Don't lower this. */10 was tried on 2026-09-09 and GitHub silently
+    # dropped every single run (two hours, zero firings) while */30 fired
+    # reliably. GitHub throttles high-frequency crons by dropping them.
     #
-    # Separately: if run logs show "check failed (HTTP Error 403)", that's the
-    # retailers rate-limiting us, and the fix is also a longer interval.
+    # NOTE: a long-running job like this only makes sense on a PUBLIC repo,
+    # where Actions minutes are unlimited. While the repo is private the free
+    # 2,000 min/month cap is blown in about two days.
+    #
+    # If run logs show "check failed (HTTP Error 403)", that's the retailers
+    # rate-limiting us - raise --every rather than lowering it.
     - cron: "*/30 * * * *"
   workflow_dispatch:        # lets you trigger a check by hand from the Actions tab
 
@@ -23,6 +29,9 @@ concurrency:
 jobs:
   check:
     runs-on: ubuntu-latest
+    # hard stop well before the next cron firing, so a hung sweep can never
+    # overlap the following run or bill for a full six hours
+    timeout-minutes: 28
     permissions:
       contents: write       # needed to commit the updated stock.json
     steps:
@@ -32,11 +41,12 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Run one sweep
+      - name: Sweep every 15 min until the next run is due
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}   # #ps5 channel
           DISCORD_WEBHOOK_GPU: ${{ secrets.DISCORD_WEBHOOK_GPU }}   # #gpus channel
-        run: python checker.py --once
+          DISCORD_PING: ${{ secrets.DISCORD_PING }}                 # optional; unset = @everyone
+        run: python checker.py --for 25 --every 900
 
       - name: Save results
         run: |
