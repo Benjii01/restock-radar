@@ -80,42 +80,49 @@ STORES = {
     # own postal code) and as the value you paste into a retailer's
     # "find a store" box to switch to that exact location.
     "bb": {
+        "region": "NL",
         "name": "Best Buy · Stavanger Dr", "km": 3.0,
         "kind": "bestbuy", "store_id": "909", "postal_code": "A1A 5E8",
         "store_url": "https://stores.bestbuy.ca/en-ca/nl/st-johns/3-stavanger-dr",
         "method": "official API", "conf": "high",
     },
     "bb_aval": {
+        "region": "NL",
         "name": "Best Buy Express · Avalon Mall", "km": 2.2,
         "kind": "bestbuy", "store_id": "122", "postal_code": "A1B 1W3",
         "store_url": "https://stores.bestbuy.ca/en-ca/nl/st-john%27s/48-kenmount-rd-unit-0185",
         "method": "official API", "conf": "high",
     },
     "stap_stav": {
+        "region": "NL",
         "name": "Staples · Stavanger Dr", "km": 9.0,
         "kind": "staples", "store_id": "65", "postal_code": "A1A 5E8",
         "store_url": "https://stores.staples.ca/nl/st-johns/office-supplies-ca-65.html",
         "method": "official API", "conf": "high",
     },
     "stap_mtpearl": {
+        "region": "NL",
         "name": "Staples · Mount Pearl", "km": 0.1,
         "kind": "staples", "store_id": "101", "postal_code": "A1N 4Y9",
         "store_url": "https://stores.staples.ca/nl/mountpearl/office-supplies-ca-101.html",
         "method": "official API", "conf": "high",
     },
     "stap_kelsey": {
+        "region": "NL",
         "name": "Staples · Kelsey Dr", "km": 3.7,
         "kind": "staples", "store_id": "434", "postal_code": "A1B 5C8",
         "store_url": "https://stores.staples.ca/nl/st-johns/office-supplies-ca-434.html",
         "method": "official API", "conf": "high",
     },
     "stap_cb": {
+        "region": "NL",
         "name": "Staples · Corner Brook", "km": 680.0,
         "kind": "staples", "store_id": "218", "postal_code": "A2H 1R4",
         "store_url": "https://stores.staples.ca/nl/cornerbrook/office-supplies-ca-218.html",
         "method": "official API", "conf": "high",
     },
     "stap_wood": {
+        "region": "ON",
         "name": "Staples · Woodstock ON", "km": 2900.0,
         "kind": "staples", "store_id": "235", "postal_code": "N4V 1B8",
         "store_url": "https://stores.staples.ca/on/woodstock/office-supplies-ca-235.html",
@@ -129,36 +136,42 @@ STORES = {
     # Express above is kept anyway - it's 2 km away and the API treats it as
     # a real pickup point, so a ship-to-store unit there would show up.)
     "bb_on620": {
+        "region": "ON",
         "name": "Best Buy · Brantford ON", "km": 47.0,
         "kind": "bestbuy", "store_id": "620", "postal_code": "N3R 7J9",
         "store_url": "https://stores.bestbuy.ca/en-ca/on/brantford/61-lynden-rd-unit-a",
         "method": "official API", "conf": "high",
     },
     "bb_on936": {
+        "region": "ON",
         "name": "Best Buy · London South ON", "km": 53.0,
         "kind": "bestbuy", "store_id": "936", "postal_code": "N6E 1M2",
         "store_url": "https://stores.bestbuy.ca/en-ca/on/london/1080-wellington-rd",
         "method": "official API", "conf": "high",
     },
     "bb_on980": {
+        "region": "ON",
         "name": "Best Buy · North London ON", "km": 57.0,
         "kind": "bestbuy", "store_id": "980", "postal_code": "N5X 3Y2",
         "store_url": "https://stores.bestbuy.ca/en-ca/on/london/1735-richmond-st-unit-1",
         "method": "official API", "conf": "high",
     },
     "bb_on995": {
+        "region": "ON",
         "name": "Best Buy · Cambridge ON", "km": 51.0,
         "kind": "bestbuy", "store_id": "995", "postal_code": "N1R 8K5",
         "store_url": "https://stores.bestbuy.ca/en-ca/on/cambridge/28-pinebush-rd",
         "method": "official API", "conf": "high",
     },
     "bb_on935": {
+        "region": "ON",
         "name": "Best Buy · Kitchener ON", "km": 52.0,
         "kind": "bestbuy", "store_id": "935", "postal_code": "N2C 1X2",
         "store_url": "https://stores.bestbuy.ca/en-ca/on/kitchener/215-fairway-rd-s",
         "method": "official API", "conf": "high",
     },
     "bb_on608": {
+        "region": "ON",
         "name": "Best Buy · Waterloo ON", "km": 60.0,
         "kind": "bestbuy", "store_id": "608", "postal_code": "N2L 6L3",
         "store_url": "https://stores.bestbuy.ca/en-ca/on/waterloo/580-king-st-n-bldg-b",
@@ -169,150 +182,175 @@ STORES = {
     # arrive. Burlington is the edge (78 km / ~50 min); Oakville, Mississauga
     # and Toronto are 60-90 min and deliberately left out.
     "bb_on631": {
+        "region": "ON",
         "name": "Best Buy · Guelph ON", "km": 60.0,
         "kind": "bestbuy", "store_id": "631", "postal_code": "N1G 5L4",
         "store_url": "https://stores.bestbuy.ca/en-ca/on/guelph/151-stone-rd-west",
         "method": "official API", "conf": "high",
     },
     "bb_on982": {
+        "region": "ON",
         "name": "Best Buy · Ancaster ON", "km": 65.0,
         "kind": "bestbuy", "store_id": "982", "postal_code": "L9K 1J9",
         "store_url": "https://stores.bestbuy.ca/en-ca/on/ancaster/14-martindale-crescent",
         "method": "official API", "conf": "high",
     },
     "bb_on942": {
+        "region": "ON",
         "name": "Best Buy · Burlington ON", "km": 78.0,
         "kind": "bestbuy", "store_id": "942", "postal_code": "L7P 5C6",
         "store_url": "https://stores.bestbuy.ca/en-ca/on/burlington/1200-brant-st-unit-1",
         "method": "official API", "conf": "high",
     },
     "bb_on984": {
+        "region": "ON",
         "name": "Best Buy · Hamilton ON", "km": 85.0,
         "kind": "bestbuy", "store_id": "984", "postal_code": "L8J 0B4",
         "store_url": "https://stores.bestbuy.ca/en-ca/on/hamilton/1779-stone-church-rd-e",
         "method": "official API", "conf": "high",
     },
     "stap_on260": {
+        "region": "ON",
         "name": "Staples · Tillsonburg ON", "km": 27.0,
         "kind": "staples", "store_id": "260", "postal_code": "N4G 5A7",
         "store_url": "https://stores.staples.ca/on/tillsonburg/office-supplies-ca-260.html",
         "method": "official API", "conf": "high",
     },
     "stap_on284": {
+        "region": "ON",
         "name": "Staples · Stratford ON", "km": 41.0,
         "kind": "staples", "store_id": "284", "postal_code": "N4Z 1A5",
         "store_url": "https://stores.staples.ca/on/stratford/office-supplies-ca-284.html",
         "method": "official API", "conf": "high",
     },
     "stap_on103": {
+        "region": "ON",
         "name": "Staples · Brantford ON", "km": 47.0,
         "kind": "staples", "store_id": "103", "postal_code": "N3R 7J2",
         "store_url": "https://stores.staples.ca/on/brantford/office-supplies-ca-103.html",
         "method": "official API", "conf": "high",
     },
     "stap_on9": {
+        "region": "ON",
         "name": "Staples · London East ON", "km": 50.0,
         "kind": "staples", "store_id": "9", "postal_code": "N5V 1P7",
         "store_url": "https://stores.staples.ca/on/london/office-supplies-ca-9.html",
         "method": "official API", "conf": "high",
     },
     "stap_on53": {
+        "region": "ON",
         "name": "Staples · Cambridge ON", "km": 51.0,
         "kind": "staples", "store_id": "53", "postal_code": "N1R 6J5",
         "store_url": "https://stores.staples.ca/on/cambridge/office-supplies-ca-53.html",
         "method": "official API", "conf": "high",
     },
     "stap_on5": {
+        "region": "ON",
         "name": "Staples · Kitchener S ON", "km": 52.0,
         "kind": "staples", "store_id": "5", "postal_code": "N2E 3W7",
         "store_url": "https://stores.staples.ca/on/kitchener/office-supplies-ca-5.html",
         "method": "official API", "conf": "high",
     },
     "stap_on8": {
+        "region": "ON",
         "name": "Staples · London S ON", "km": 53.0,
         "kind": "staples", "store_id": "8", "postal_code": "N6C 4P6",
         "store_url": "https://stores.staples.ca/on/london/office-supplies-ca-8.html",
         "method": "official API", "conf": "high",
     },
     "stap_on445": {
+        "region": "ON",
         "name": "Staples · Kitchener W ON", "km": 54.0,
         "kind": "staples", "store_id": "445", "postal_code": "N2N 0B1",
         "store_url": "https://stores.staples.ca/on/kitchener/office-supplies-ca-445.html",
         "method": "official API", "conf": "high",
     },
     "stap_on262": {
+        "region": "ON",
         "name": "Staples · London W ON", "km": 55.0,
         "kind": "staples", "store_id": "262", "postal_code": "N6L 1A6",
         "store_url": "https://stores.staples.ca/on/london/office-supplies-ca-262.html",
         "method": "official API", "conf": "high",
     },
     "stap_on67": {
+        "region": "ON",
         "name": "Staples · London N ON", "km": 57.0,
         "kind": "staples", "store_id": "67", "postal_code": "N5X 3Y2",
         "store_url": "https://stores.staples.ca/on/london/office-supplies-ca-67.html",
         "method": "official API", "conf": "high",
     },
     "stap_on120": {
+        "region": "ON",
         "name": "Staples · Waterloo ON", "km": 60.0,
         "kind": "staples", "store_id": "120", "postal_code": "N2J 4G8",
         "store_url": "https://stores.staples.ca/on/waterloo/office-supplies-ca-120.html",
         "method": "official API", "conf": "high",
     },
     "stap_on441": {
+        "region": "ON",
         "name": "Staples · St. Thomas ON", "km": 62.0,
         "kind": "staples", "store_id": "441", "postal_code": "N5P 1G4",
         "store_url": "https://stores.staples.ca/on/stthomas/office-supplies-ca-441.html",
         "method": "official API", "conf": "high",
     },
     "stap_on201": {
+        "region": "ON",
         "name": "Staples · Guelph N ON", "km": 66.0,
         "kind": "staples", "store_id": "201", "postal_code": "N1H 1G7",
         "store_url": "https://stores.staples.ca/on/guelph/office-supplies-ca-201.html",
         "method": "official API", "conf": "high",
     },
     "stap_on81": {
+        "region": "ON",
         "name": "Staples · Guelph S ON", "km": 68.0,
         "kind": "staples", "store_id": "81", "postal_code": "N1G 4Z1",
         "store_url": "https://stores.staples.ca/on/guelph/office-supplies-ca-81.html",
         "method": "official API", "conf": "high",
     },
     "stap_on59": {
+        "region": "ON",
         "name": "Staples · Ancaster ON", "km": 84.0,
         "kind": "staples", "store_id": "59", "postal_code": "L9K 1L6",
         "store_url": "https://stores.staples.ca/on/ancaster/office-supplies-ca-59.html",
         "method": "official API", "conf": "high",
     },
     "stap_on222": {
+        "region": "ON",
         "name": "Staples · Hamilton Mtn ON", "km": 95.0,
         "kind": "staples", "store_id": "222", "postal_code": "L9A 5C5",
         "store_url": "https://stores.staples.ca/on/hamilton/office-supplies-ca-222.html",
         "method": "official API", "conf": "high",
     },
     "stap_on456": {
+        "region": "ON",
         "name": "Staples · Hamilton E ON", "km": 97.0,
         "kind": "staples", "store_id": "456", "postal_code": "L9H 7K6",
         "store_url": "https://stores.staples.ca/on/hamilton/office-supplies-ca-456.html",
         "method": "official API", "conf": "high",
     },
     "stap_on14": {
+        "region": "ON",
         "name": "Staples · Burlington Plains Rd ON", "km": 78.0,
         "kind": "staples", "store_id": "14", "postal_code": "L7T 4K1",
         "store_url": "https://stores.staples.ca/on/burlington/office-supplies-ca-14.html",
         "method": "official API", "conf": "high",
     },
     "stap_on229": {
+        "region": "ON",
         "name": "Staples · Burlington Davidson Ct ON", "km": 85.0,
         "kind": "staples", "store_id": "229", "postal_code": "L7M 4X7",
         "store_url": "https://stores.staples.ca/on/burlington/office-supplies-ca-229.html",
         "method": "official API", "conf": "high",
     },
     "stap_on439": {
+        "region": "ON",
         "name": "Staples · Hamilton Barton St ON", "km": 90.0,
         "kind": "staples", "store_id": "439", "postal_code": "L8H 2V4",
         "store_url": "https://stores.staples.ca/on/hamilton/office-supplies-ca-439.html",
         "method": "official API", "conf": "high",
     },
     "wm_stav": {
+        "region": "NL",
         # Walmart Canada's inventory API returns a consistent 403 (Cloudflare
         # bot-blocked), confirmed 2026-09-05. check_walmart() is left in the
         # code in case that changes, but this store is "manual" until then.
@@ -321,11 +359,13 @@ STORES = {
         "method": "no feed · call to verify", "conf": "none",
     },
     "eb_aval": {
+        "region": "NL",
         "name": "EB Games · Avalon Mall", "km": 2.2,
         "kind": "manual",
         "method": "no feed · call to verify", "conf": "none",
     },
     "cost": {
+        "region": "NL",
         "name": "Costco · Blackmarsh Rd", "km": 4.6,
         "kind": "manual",
         "method": "no feed · call to verify", "conf": "none",
@@ -552,17 +592,25 @@ def build_status(hits, now, channel):
         if not rows:
             continue
         lines.append(f"\n**{product['product']}** · ${product['msrp']}")
-        # anything in stock floats to the top, then nearest first
-        rows.sort(key=lambda h: (h["status"] == "out", STORES[h["store"]]["km"]))
-        for h in rows:
-            store = STORES[h["store"]]
-            icon = ICON.get(h["status"], "⬜")
-            if h["status"] == "out":
-                lines.append(f"{icon} {store['name']}")
-            else:
-                postal = store.get("postal_code", "")
-                tail = f" · `{postal}`" if postal else ""
-                lines.append(f"{icon} **{store['name']} — {h['qty']} in stock**{tail}")
+        # Newfoundland and Ontario are separate hunting grounds with a
+        # different person driving to each, so they are listed apart rather
+        # than interleaved. Distance is not a useful sort once they're split -
+        # in stock first, then alphabetical.
+        for region, heading in (("NL", "Newfoundland"), ("ON", "Ontario")):
+            here = [h for h in rows if STORES[h["store"]].get("region") == region]
+            if not here:
+                continue
+            lines.append(f"__{heading}__")
+            here.sort(key=lambda h: (h["status"] == "out", STORES[h["store"]]["name"]))
+            for h in here:
+                store = STORES[h["store"]]
+                icon = ICON.get(h["status"], "⬜")
+                if h["status"] == "out":
+                    lines.append(f"{icon} {store['name']}")
+                else:
+                    postal = store.get("postal_code", "")
+                    tail = f" · `{postal}`" if postal else ""
+                    lines.append(f"{icon} **{store['name']} — {h['qty']} in stock**{tail}")
 
     manual = [s["name"] for s in STORES.values() if s["kind"] == "manual"]
     if manual:
