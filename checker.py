@@ -122,6 +122,7 @@ STORES = {
         "method": "official API", "conf": "high",
     },
     "stap_wood": {
+        "drive": 5, "dir": "S",
         "region": "ON",
         "name": "Staples · Woodstock ON", "km": 2900.0,
         "kind": "staples", "store_id": "235", "postal_code": "N4V 1B8",
@@ -136,6 +137,7 @@ STORES = {
     # Express above is kept anyway - it's 2 km away and the API treats it as
     # a real pickup point, so a ship-to-store unit there would show up.)
     "bb_on620": {
+        "drive": 40, "dir": "E",
         "region": "ON",
         "name": "Best Buy · Brantford ON", "km": 47.0,
         "kind": "bestbuy", "store_id": "620", "postal_code": "N3R 7J9",
@@ -143,6 +145,7 @@ STORES = {
         "method": "official API", "conf": "high",
     },
     "bb_on936": {
+        "drive": 40, "dir": "SW",
         "region": "ON",
         "name": "Best Buy · London South ON", "km": 53.0,
         "kind": "bestbuy", "store_id": "936", "postal_code": "N6E 1M2",
@@ -150,6 +153,7 @@ STORES = {
         "method": "official API", "conf": "high",
     },
     "bb_on980": {
+        "drive": 55, "dir": "W",
         "region": "ON",
         "name": "Best Buy · North London ON", "km": 57.0,
         "kind": "bestbuy", "store_id": "980", "postal_code": "N5X 3Y2",
@@ -157,6 +161,7 @@ STORES = {
         "method": "official API", "conf": "high",
     },
     "bb_on995": {
+        "drive": 40, "dir": "NE",
         "region": "ON",
         "name": "Best Buy · Cambridge ON", "km": 51.0,
         "kind": "bestbuy", "store_id": "995", "postal_code": "N1R 8K5",
@@ -164,6 +169,7 @@ STORES = {
         "method": "official API", "conf": "high",
     },
     "bb_on935": {
+        "drive": 45, "dir": "NE",
         "region": "ON",
         "name": "Best Buy · Kitchener ON", "km": 52.0,
         "kind": "bestbuy", "store_id": "935", "postal_code": "N2C 1X2",
@@ -171,6 +177,7 @@ STORES = {
         "method": "official API", "conf": "high",
     },
     "bb_on608": {
+        "drive": 55, "dir": "NE",
         "region": "ON",
         "name": "Best Buy · Waterloo ON", "km": 60.0,
         "kind": "bestbuy", "store_id": "608", "postal_code": "N2L 6L3",
@@ -182,6 +189,7 @@ STORES = {
     # arrive. Burlington is the edge (78 km / ~50 min); Oakville, Mississauga
     # and Toronto are 60-90 min and deliberately left out.
     "bb_on631": {
+        "drive": 60, "dir": "NE",
         "region": "ON",
         "name": "Best Buy · Guelph ON", "km": 60.0,
         "kind": "bestbuy", "store_id": "631", "postal_code": "N1G 5L4",
@@ -189,6 +197,7 @@ STORES = {
         "method": "official API", "conf": "high",
     },
     "bb_on982": {
+        "drive": 55, "dir": "E",
         "region": "ON",
         "name": "Best Buy · Ancaster ON", "km": 65.0,
         "kind": "bestbuy", "store_id": "982", "postal_code": "L9K 1J9",
@@ -196,6 +205,7 @@ STORES = {
         "method": "official API", "conf": "high",
     },
     "bb_on942": {
+        "drive": 70, "dir": "E",
         "region": "ON",
         "name": "Best Buy · Burlington ON", "km": 78.0,
         "kind": "bestbuy", "store_id": "942", "postal_code": "L7P 5C6",
@@ -203,6 +213,7 @@ STORES = {
         "method": "official API", "conf": "high",
     },
     "bb_on984": {
+        "drive": 65, "dir": "E",
         "region": "ON",
         "name": "Best Buy · Hamilton ON", "km": 85.0,
         "kind": "bestbuy", "store_id": "984", "postal_code": "L8J 0B4",
@@ -210,6 +221,7 @@ STORES = {
         "method": "official API", "conf": "high",
     },
     "stap_on260": {
+        "drive": 40, "dir": "S",
         "region": "ON",
         "name": "Staples · Tillsonburg ON", "km": 27.0,
         "kind": "staples", "store_id": "260", "postal_code": "N4G 5A7",
@@ -217,6 +229,7 @@ STORES = {
         "method": "official API", "conf": "high",
     },
     "stap_on284": {
+        "drive": 35, "dir": "NW",
         "region": "ON",
         "name": "Staples · Stratford ON", "km": 41.0,
         "kind": "staples", "store_id": "284", "postal_code": "N4Z 1A5",
@@ -224,6 +237,7 @@ STORES = {
         "method": "official API", "conf": "high",
     },
     "stap_on103": {
+        "drive": 40, "dir": "E",
         "region": "ON",
         "name": "Staples · Brantford ON", "km": 47.0,
         "kind": "staples", "store_id": "103", "postal_code": "N3R 7J2",
@@ -231,6 +245,7 @@ STORES = {
         "method": "official API", "conf": "high",
     },
     "stap_on9": {
+        "drive": 40, "dir": "SW",
         "region": "ON",
         "name": "Staples · London East ON", "km": 50.0,
         "kind": "staples", "store_id": "9", "postal_code": "N5V 1P7",
@@ -238,6 +253,7 @@ STORES = {
         "method": "official API", "conf": "high",
     },
     "stap_on53": {
+        "drive": 40, "dir": "NE",
         "region": "ON",
         "name": "Staples · Cambridge ON", "km": 51.0,
         "kind": "staples", "store_id": "53", "postal_code": "N1R 6J5",
@@ -245,6 +261,7 @@ STORES = {
         "method": "official API", "conf": "high",
     },
     "stap_on5": {
+        "drive": 45, "dir": "NE",
         "region": "ON",
         "name": "Staples · Kitchener S ON", "km": 52.0,
         "kind": "staples", "store_id": "5", "postal_code": "N2E 3W7",
@@ -252,6 +269,7 @@ STORES = {
         "method": "official API", "conf": "high",
     },
     "stap_on8": {
+        "drive": 45, "dir": "SW",
         "region": "ON",
         "name": "Staples · London S ON", "km": 53.0,
         "kind": "staples", "store_id": "8", "postal_code": "N6C 4P6",
@@ -259,6 +277,7 @@ STORES = {
         "method": "official API", "conf": "high",
     },
     "stap_on445": {
+        "drive": 50, "dir": "NE",
         "region": "ON",
         "name": "Staples · Kitchener W ON", "km": 54.0,
         "kind": "staples", "store_id": "445", "postal_code": "N2N 0B1",
@@ -266,6 +285,7 @@ STORES = {
         "method": "official API", "conf": "high",
     },
     "stap_on262": {
+        "drive": 45, "dir": "SW",
         "region": "ON",
         "name": "Staples · London W ON", "km": 55.0,
         "kind": "staples", "store_id": "262", "postal_code": "N6L 1A6",
@@ -273,6 +293,7 @@ STORES = {
         "method": "official API", "conf": "high",
     },
     "stap_on67": {
+        "drive": 55, "dir": "W",
         "region": "ON",
         "name": "Staples · London N ON", "km": 57.0,
         "kind": "staples", "store_id": "67", "postal_code": "N5X 3Y2",
@@ -280,6 +301,7 @@ STORES = {
         "method": "official API", "conf": "high",
     },
     "stap_on120": {
+        "drive": 55, "dir": "NE",
         "region": "ON",
         "name": "Staples · Waterloo ON", "km": 60.0,
         "kind": "staples", "store_id": "120", "postal_code": "N2J 4G8",
@@ -287,6 +309,7 @@ STORES = {
         "method": "official API", "conf": "high",
     },
     "stap_on441": {
+        "drive": 60, "dir": "SW",
         "region": "ON",
         "name": "Staples · St. Thomas ON", "km": 62.0,
         "kind": "staples", "store_id": "441", "postal_code": "N5P 1G4",
@@ -294,6 +317,7 @@ STORES = {
         "method": "official API", "conf": "high",
     },
     "stap_on201": {
+        "drive": 65, "dir": "NE",
         "region": "ON",
         "name": "Staples · Guelph N ON", "km": 66.0,
         "kind": "staples", "store_id": "201", "postal_code": "N1H 1G7",
@@ -301,6 +325,7 @@ STORES = {
         "method": "official API", "conf": "high",
     },
     "stap_on81": {
+        "drive": 60, "dir": "NE",
         "region": "ON",
         "name": "Staples · Guelph S ON", "km": 68.0,
         "kind": "staples", "store_id": "81", "postal_code": "N1G 4Z1",
@@ -308,6 +333,7 @@ STORES = {
         "method": "official API", "conf": "high",
     },
     "stap_on59": {
+        "drive": 55, "dir": "E",
         "region": "ON",
         "name": "Staples · Ancaster ON", "km": 84.0,
         "kind": "staples", "store_id": "59", "postal_code": "L9K 1L6",
@@ -315,6 +341,7 @@ STORES = {
         "method": "official API", "conf": "high",
     },
     "stap_on222": {
+        "drive": 60, "dir": "E",
         "region": "ON",
         "name": "Staples · Hamilton Mtn ON", "km": 95.0,
         "kind": "staples", "store_id": "222", "postal_code": "L9A 5C5",
@@ -322,6 +349,7 @@ STORES = {
         "method": "official API", "conf": "high",
     },
     "stap_on456": {
+        "drive": 65, "dir": "E",
         "region": "ON",
         "name": "Staples · Hamilton E ON", "km": 97.0,
         "kind": "staples", "store_id": "456", "postal_code": "L9H 7K6",
@@ -329,6 +357,7 @@ STORES = {
         "method": "official API", "conf": "high",
     },
     "stap_on14": {
+        "drive": 70, "dir": "E",
         "region": "ON",
         "name": "Staples · Burlington Plains Rd ON", "km": 78.0,
         "kind": "staples", "store_id": "14", "postal_code": "L7T 4K1",
@@ -336,6 +365,7 @@ STORES = {
         "method": "official API", "conf": "high",
     },
     "stap_on229": {
+        "drive": 70, "dir": "E",
         "region": "ON",
         "name": "Staples · Burlington Davidson Ct ON", "km": 85.0,
         "kind": "staples", "store_id": "229", "postal_code": "L7M 4X7",
@@ -343,6 +373,7 @@ STORES = {
         "method": "official API", "conf": "high",
     },
     "stap_on439": {
+        "drive": 70, "dir": "E",
         "region": "ON",
         "name": "Staples · Hamilton Barton St ON", "km": 90.0,
         "kind": "staples", "store_id": "439", "postal_code": "L8H 2V4",
@@ -647,17 +678,27 @@ def build_status(hits, now, channel):
             here = [h for h in rows if STORES[h["store"]].get("region") == region]
             if not here:
                 continue
-            lines.append(f"__{heading}__")
-            here.sort(key=lambda h: (h["status"] == "out", STORES[h["store"]]["name"]))
+            label = heading
+            if region == "ON":
+                label += " · drive from Woodstock (Knightsbridge Rd)"
+            lines.append(f"__{label}__")
+            # nearest first where we know the drive, so the list reads as a
+            # route: what you would pass on the way to anything further out
+            here.sort(key=lambda h: (h["status"] == "out",
+                                     STORES[h["store"]].get("drive", 9999),
+                                     STORES[h["store"]]["name"]))
             for h in here:
                 store = STORES[h["store"]]
                 icon = ICON.get(h["status"], "⬜")
+                trip = ""
+                if store.get("drive"):
+                    trip = f" · ~{store['drive']} min {store['dir']}"
                 if h["status"] == "out":
-                    lines.append(f"{icon} {store['name']}")
+                    lines.append(f"{icon} {store['name']}{trip}")
                 else:
                     postal = store.get("postal_code", "")
                     tail = f" · `{postal}`" if postal else ""
-                    lines.append(f"{icon} **{store['name']} — {h['qty']} in stock**{tail}")
+                    lines.append(f"{icon} **{store['name']} — {h['qty']} in stock**{trip}{tail}")
 
     manual = [s["name"] for s in STORES.values() if s["kind"] == "manual"]
     if manual:
@@ -804,6 +845,11 @@ def sweep():
                 code is involved, so the link alone finishes the job.
                 """
                 out = []
+                if store.get("drive"):
+                    # round trip, since that is the number that decides
+                    # whether the trip is worth making at all
+                    out.append(f"Drive: ~{store['drive']} min {store['dir']} "
+                               f"(~{store['drive'] * 2} min return)")
                 if store.get("postal_code"):
                     out.append(f"1. Copy: `{store['postal_code']}`")
                 product_url = product.get("urls", {}).get(store_key)
