@@ -349,6 +349,16 @@ STORES = {
         "store_url": "https://stores.staples.ca/on/hamilton/office-supplies-ca-439.html",
         "method": "official API", "conf": "high",
     },
+    # Ship-to-home, not a building. Best Buy returns online stock in the
+    # same response as the store list, and it was being thrown away - yet
+    # online is usually the first thing to come back, and you can order it
+    # the second it does instead of driving anywhere.
+    "bb_online": {
+        "region": "WEB",
+        "name": "Best Buy · Online (ships to you)", "km": 0.0,
+        "kind": "bestbuy", "store_id": "online",
+        "method": "official API", "conf": "high",
+    },
     "wm_stav": {
         "region": "NL",
         # Walmart Canada's inventory API returns a consistent 403 (Cloudflare
@@ -375,11 +385,16 @@ STORES = {
 # The PS5 Pro's identifiers at each chain. A retailer uses one item number and
 # one product page nationally, so these are per-chain, not per-store.
 BESTBUY_PS5 = "19492009"
+# Best Buy carries the Pro under two separate listings that hold stock
+# independently - a restock can land on either. Both are Best Buy itself,
+# not marketplace sellers, and both were read back from their search API.
+BESTBUY_PS5_ALT = "18477929"
 STAPLES_PS5 = "3103551"
 RTX5080_URL = "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5080-16gb-gddr7-video-card/18931347"
 RTX5090_URL = "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5090-32gb-gddr7-video-card/18931348"
 STAPLES_PS5_URL = "https://www.staples.ca/products/3103551-en-sony-playstation-5-pro-console"
-BESTBUY_PS5_URL = "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929"
+BESTBUY_PS5_URL = "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/19492009"
+BESTBUY_PS5_ALT_URL = "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929"
 
 # The products you're hunting. `skus` maps a store key -> that store's own SKU.
 # To add a Pokemon/One Piece box once you've picked one, copy this block and
@@ -402,6 +417,14 @@ PRODUCTS = [
             **{k: BESTBUY_PS5_URL for k, v in STORES.items() if v["kind"] == "bestbuy"},
             **{k: STAPLES_PS5_URL for k, v in STORES.items() if v["kind"] == "staples"},
         },
+    },
+    {
+        "id": "p5alt", "cat": "PS5", "tag": "CONSOLE", "channel": "ps5",
+        "product": "PlayStation 5 Pro 2TB (2nd listing)", "sku": BESTBUY_PS5_ALT,
+        "msrp": 1099.95,
+        # Best Buy only - Staples lists the console once
+        "skus": {k: BESTBUY_PS5_ALT for k, v in STORES.items() if v["kind"] == "bestbuy"},
+        "urls": {k: BESTBUY_PS5_ALT_URL for k, v in STORES.items() if v["kind"] == "bestbuy"},
     },
     {
         "id": "gpu1", "cat": "GPU", "tag": "GRAPHICS CARD", "channel": "gpu",
@@ -455,7 +478,10 @@ def check_bestbuy(sku, store_id):
     """
     cache = _bestbuy_cache.get(sku)
     if cache is None:
-        ids = [v["store_id"] for v in STORES.values() if v["kind"] == "bestbuy"]
+        # "online" is a pseudo-store standing for ship-to-home, not a real
+        # location, so it must not go into the locations list
+        ids = [v["store_id"] for v in STORES.values()
+               if v["kind"] == "bestbuy" and v["store_id"] != "online"]
         url = ("https://www.bestbuy.ca/ecomm-api/availability/products"
                "?accept=application%2Fvnd.bestbuy.standardproduct.v1%2Bjson"
                "&accept-language=en-CA&locations=" + "%7C".join(ids) +
@@ -471,6 +497,13 @@ def check_bestbuy(sku, store_id):
                     # unit - enough to fire the alert and let you phone them
                     qty = 1 if loc.get("hasInventory") else 0
                 cache[str(loc["locationKey"])] = (int(qty), price)
+            # the same response carries ship-to-home stock; "online" is the
+            # pseudo-store that reports it
+            ship = av.get("shipping") or {}
+            online = ship.get("quantityRemaining")
+            if online is None:
+                online = 1 if ship.get("purchasable") else 0
+            cache["online"] = (int(online), price)
         _bestbuy_cache[sku] = cache
     # a store missing from the response is unknown, not out of stock
     return cache.get(str(store_id), (None, None))
@@ -596,7 +629,8 @@ def build_status(hits, now, channel):
         # different person driving to each, so they are listed apart rather
         # than interleaved. Distance is not a useful sort once they're split -
         # in stock first, then alphabetical.
-        for region, heading in (("NL", "Newfoundland"), ("ON", "Ontario")):
+        for region, heading in (("WEB", "Online"), ("NL", "Newfoundland"),
+                                ("ON", "Ontario")):
             here = [h for h in rows if STORES[h["store"]].get("region") == region]
             if not here:
                 continue
