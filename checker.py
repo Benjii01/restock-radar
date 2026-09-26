@@ -786,16 +786,26 @@ def sweep():
             previous[key] = (state, qty)
 
             def where_to_buy():
-                """The 'how do I act on this' lines shared by both alerts."""
+                """The 'how do I act on this' lines shared by both alerts.
+
+                Ordered for speed on a phone. There is no store picker to
+                deep-link: Best Buy searches within 50km of a postal code that
+                it keeps in a cookie, and the URL never changes when you set
+                one (confirmed 2026-09-26). So the code has to be pasted by
+                hand every time, which makes it the first thing you need and
+                the reason it leads here - long-press the backticks to copy.
+                Online stock is the only genuinely one-tap case: no postal
+                code is involved, so the link alone finishes the job.
+                """
                 out = []
                 if store.get("postal_code"):
-                    # paste this into the retailer's "find a store" box to
-                    # switch to this location - their store picker is
-                    # session-based, so no link can do it for you
-                    out.append(f"Set store with postal code: `{store['postal_code']}`")
+                    out.append(f"1. Copy: `{store['postal_code']}`")
                 product_url = product.get("urls", {}).get(store_key)
                 if product_url:
-                    out.append(f"Buy: {product_url}")
+                    step = "2. Open" if store.get("postal_code") else "Buy now"
+                    out.append(f"{step}: {product_url}")
+                    if store.get("postal_code"):
+                        out.append('3. Paste it under "Pick Up" and hit Check')
                 if store.get("store_url"):
                     out.append(f"Store (address & phone): {store['store_url']}")
                 phone = _staples_phone.get(store.get("store_id", ""))
