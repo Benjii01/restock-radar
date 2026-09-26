@@ -296,6 +296,12 @@
       "method": "official API",
       "conf": "high"
     },
+    "bb_online": {
+      "name": "Best Buy \u00b7 Online (ships to you)",
+      "km": 0.0,
+      "method": "official API",
+      "conf": "high"
+    },
     "wm_stav": {
       "name": "Walmart \u00b7 Stavanger Dr",
       "km": 3.1,
@@ -325,18 +331,19 @@
       "sku": "19492009",
       "msrp": 1099.99,
       "urls": {
-        "bb": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
-        "bb_aval": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
-        "bb_on620": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
-        "bb_on936": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
-        "bb_on980": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
-        "bb_on995": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
-        "bb_on935": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
-        "bb_on608": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
-        "bb_on631": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
-        "bb_on982": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
-        "bb_on942": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
-        "bb_on984": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
+        "bb": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/19492009",
+        "bb_aval": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/19492009",
+        "bb_on620": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/19492009",
+        "bb_on936": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/19492009",
+        "bb_on980": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/19492009",
+        "bb_on995": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/19492009",
+        "bb_on935": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/19492009",
+        "bb_on608": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/19492009",
+        "bb_on631": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/19492009",
+        "bb_on982": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/19492009",
+        "bb_on942": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/19492009",
+        "bb_on984": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/19492009",
+        "bb_online": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/19492009",
         "stap_stav": "https://www.staples.ca/products/3103551-en-sony-playstation-5-pro-console",
         "stap_mtpearl": "https://www.staples.ca/products/3103551-en-sony-playstation-5-pro-console",
         "stap_kelsey": "https://www.staples.ca/products/3103551-en-sony-playstation-5-pro-console",
@@ -365,6 +372,30 @@
       }
     },
     {
+      "id": "p5alt",
+      "cat": "PS5",
+      "tag": "CONSOLE",
+      "channel": "ps5",
+      "product": "PlayStation 5 Pro 2TB (2nd listing)",
+      "sku": "18477929",
+      "msrp": 1099.95,
+      "urls": {
+        "bb": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
+        "bb_aval": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
+        "bb_on620": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
+        "bb_on936": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
+        "bb_on980": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
+        "bb_on995": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
+        "bb_on935": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
+        "bb_on608": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
+        "bb_on631": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
+        "bb_on982": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
+        "bb_on942": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
+        "bb_on984": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
+        "bb_online": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929"
+      }
+    },
+    {
       "id": "gpu1",
       "cat": "GPU",
       "tag": "GRAPHICS CARD",
@@ -384,7 +415,8 @@
         "bb_on631": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5080-16gb-gddr7-video-card/18931347",
         "bb_on982": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5080-16gb-gddr7-video-card/18931347",
         "bb_on942": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5080-16gb-gddr7-video-card/18931347",
-        "bb_on984": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5080-16gb-gddr7-video-card/18931347"
+        "bb_on984": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5080-16gb-gddr7-video-card/18931347",
+        "bb_online": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5080-16gb-gddr7-video-card/18931347"
       }
     },
     {
@@ -407,7 +439,8 @@
         "bb_on631": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5090-32gb-gddr7-video-card/18931348",
         "bb_on982": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5090-32gb-gddr7-video-card/18931348",
         "bb_on942": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5090-32gb-gddr7-video-card/18931348",
-        "bb_on984": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5090-32gb-gddr7-video-card/18931348"
+        "bb_on984": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5090-32gb-gddr7-video-card/18931348",
+        "bb_online": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5090-32gb-gddr7-video-card/18931348"
       }
     }
   ],
@@ -709,6 +742,118 @@
       "seenSecs": 0
     },
     {
+      "pid": "p5",
+      "store": "bb_online",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5alt",
+      "store": "bb",
+      "qty": 0,
+      "price": 1099.95,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5alt",
+      "store": "bb_aval",
+      "qty": 0,
+      "price": 1099.95,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5alt",
+      "store": "bb_on620",
+      "qty": 0,
+      "price": 1099.95,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5alt",
+      "store": "bb_on936",
+      "qty": 0,
+      "price": 1099.95,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5alt",
+      "store": "bb_on980",
+      "qty": 0,
+      "price": 1099.95,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5alt",
+      "store": "bb_on995",
+      "qty": 0,
+      "price": 1099.95,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5alt",
+      "store": "bb_on935",
+      "qty": 0,
+      "price": 1099.95,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5alt",
+      "store": "bb_on608",
+      "qty": 0,
+      "price": 1099.95,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5alt",
+      "store": "bb_on631",
+      "qty": 0,
+      "price": 1099.95,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5alt",
+      "store": "bb_on982",
+      "qty": 0,
+      "price": 1099.95,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5alt",
+      "store": "bb_on942",
+      "qty": 0,
+      "price": 1099.95,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5alt",
+      "store": "bb_on984",
+      "qty": 0,
+      "price": 1099.95,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5alt",
+      "store": "bb_online",
+      "qty": 0,
+      "price": 1099.95,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
       "pid": "gpu1",
       "store": "bb",
       "qty": 0,
@@ -805,6 +950,14 @@
       "seenSecs": 0
     },
     {
+      "pid": "gpu1",
+      "store": "bb_online",
+      "qty": 0,
+      "price": 1449.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
       "pid": "gpu2",
       "store": "bb",
       "qty": 0,
@@ -895,6 +1048,14 @@
     {
       "pid": "gpu2",
       "store": "bb_on984",
+      "qty": 0,
+      "price": 2899.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "gpu2",
+      "store": "bb_online",
       "qty": 0,
       "price": 2899.99,
       "status": "out",
@@ -1223,5 +1384,5 @@
       "extra": "1 unit(s) \u00b7 $1099.99"
     }
   ],
-  "updated": "2026-09-26T00:15:30.355473"
+  "updated": "2026-09-26T00:43:15.304661"
 }
