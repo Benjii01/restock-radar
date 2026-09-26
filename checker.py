@@ -620,7 +620,13 @@ ICON = {"in": "\U0001F7E2", "low": "\U0001F7E1", "out": "⬜"}
 
 
 def build_status(hits, now, channel):
-    lines = [f"**RESTOCK RADAR** · updated {now:%b %d, %H:%M}"]
+    # Discord renders <t:epoch:R> as a live "3 minutes ago" that keeps
+    # counting up on its own between sweeps, and <t:epoch:t> as a clock in
+    # whoever is reading it's own timezone - which beats printing the
+    # runner's UTC and leaving everyone to do the subtraction.
+    stamp = int(now.timestamp())
+    lines = [f"**RESTOCK RADAR** · checked <t:{stamp}:R> at <t:{stamp}:t>",
+             f"next check <t:{stamp + 900}:R>"]
     by_pid = {}
     for h in hits:
         by_pid.setdefault(h["pid"], []).append(h)
