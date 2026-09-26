@@ -13,7 +13,7 @@ message the moment something goes from out-of-stock to in-stock.
 SETUP: see SETUP.md. You only need to edit the CONFIG block below.
 """
 
-import json, os, sys, time, threading, http.server, socketserver, functools, urllib.request, urllib.error, urllib.parse
+import json, os, re, sys, time, threading, http.server, socketserver, functools, urllib.request, urllib.error, urllib.parse
 from datetime import datetime
 from pathlib import Path
 
@@ -718,6 +718,14 @@ LEGACY_STATUS_FILE = Path(__file__).parent / "status_message.txt"
 ICON = {"in": "\U0001F7E2", "low": "\U0001F7E1", "out": "⬜"}
 
 
+def _city(store):
+    """The city slug from the store's page URL (.../on/kitchener/...), which
+    both Best Buy and Staples use - the display names are too inconsistent
+    ("Kitchener S", "Sherway Etobicoke") to parse. Falls back to the name."""
+    m = re.search(r"/[a-z]{2}/([^/]+)/", store.get("store_url", ""))
+    return m.group(1) if m else store["name"]
+
+
 def build_status(hits, now, channel):
     # Discord renders <t:epoch:R> as a live "3 minutes ago" that keeps
     # counting up on its own between sweeps, and <t:epoch:t> as a clock in
@@ -751,8 +759,18 @@ def build_status(hits, now, channel):
                 label += " · drive from Woodstock (Knightsbridge Rd)"
             lines.append(f"__{label}__")
             # nearest first where we know the drive, so the list reads as a
-            # route: what you would pass on the way to anything further out
+            # route: what you would pass on the way to anything further out.
+            # Stores in the same city stay together, ranked by that city's
+            # nearest store - one trip covers them all, so they shouldn't be
+            # split up by a 5-minute difference in drive time.
+            city_drive = {}
+            for h in here:
+                c = _city(STORES[h["store"]])
+                city_drive[c] = min(city_drive.get(c, 9999),
+                                    STORES[h["store"]].get("drive", 9999))
             here.sort(key=lambda h: (h["status"] == "out",
+                                     city_drive[_city(STORES[h["store"]])],
+                                     _city(STORES[h["store"]]),
                                      STORES[h["store"]].get("drive", 9999),
                                      STORES[h["store"]]["name"]))
             for h in here:
