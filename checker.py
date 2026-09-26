@@ -62,6 +62,7 @@ STATUS_WEBHOOKS = {
 }
 
 CHECK_EVERY_SECONDS = 120  # don't go below 60 - Walmart blocks fast pollers
+NEXT_CHECK_SECS = CHECK_EVERY_SECONDS  # for the status message; --every overrides
 
 # Who to mention on a restock. A plain message notifies nobody - Discord only
 # raises a push notification (phone, watch, desktop badge) on a mention, which
@@ -568,7 +569,7 @@ def check_bestbuy(sku, store_id):
     in the response, so a single request covers the whole chain. Results are
     cached per sweep exactly the way Staples is: 12 stores cost one request
     per product instead of 12. That headroom is the point - checking every
-    15 minutes across a dozen stores is what would otherwise earn us the
+    2 minutes across a dozen stores is what would otherwise earn us the
     HTTP 403 rate-limit the workflow logs warn about.
 
     NOTE: verify this endpoint before trusting it - Best Buy changes it
@@ -749,7 +750,7 @@ def build_status(hits, now, channel):
     # runner's UTC and leaving everyone to do the subtraction.
     stamp = int(now.timestamp())
     lines = [f"**RESTOCK RADAR** · checked <t:{stamp}:R> at <t:{stamp}:t>",
-             f"next check <t:{stamp + 900}:R>"]
+             f"next check <t:{stamp + NEXT_CHECK_SECS}:R>"]
     by_pid = {}
     for h in hits:
         by_pid.setdefault(h["pid"], []).append(h)
@@ -1131,11 +1132,12 @@ if __name__ == "__main__":
     if "--for" in sys.argv:
         # One Actions run that keeps sweeping, rather than one sweep per cron
         # firing. GitHub silently drops crons tighter than */30 (tried */10 on
-        # 2026-09-09: zero runs in two hours), so a 10-15 minute cadence has to
+        # 2026-09-09: zero runs in two hours), so a few-minute cadence has to
         # come from inside a single run the scheduler is happy to start.
-        #   python checker.py --for 25 --every 900   -> sweeps at 0 and 15 min
+        #   python checker.py --for 25 --every 120   -> a sweep every 2 min
         minutes = float(_arg("--for", "25"))
         every = float(_arg("--every", CHECK_EVERY_SECONDS))
+        NEXT_CHECK_SECS = int(every)
         deadline = time.monotonic() + minutes * 60
         swept = 0
         while True:

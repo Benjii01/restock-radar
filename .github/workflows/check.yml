@@ -5,7 +5,7 @@ on:
     # Stays at every 30 minutes because that is the only interval GitHub's
     # scheduler reliably fires on this repo. The *check* cadence is no longer
     # tied to it: each run now sweeps repeatedly for ~25 minutes (see the
-    # --for/--every flags below), so checks land every 15 minutes while only
+    # --for/--every flags below), so checks land every 2 minutes while only
     # asking cron for something it will honour.
     #
     # Don't lower this. */10 was tried on 2026-09-09 and GitHub silently
@@ -41,12 +41,12 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Sweep every 15 min until the next run is due
+      - name: Sweep every 2 min until the next run is due
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
           DISCORD_WEBHOOK_PS5_STATUS: ${{ secrets.DISCORD_WEBHOOK_PS5_STATUS }}  # optional; unset = status stays in the alert channel
           DISCORD_PING: ${{ secrets.DISCORD_PING }}                 # optional; unset = @everyone
-        run: python checker.py --for 25 --every 900
+        run: python checker.py --for 25 --every 120
 
       - name: Save results
         run: |
