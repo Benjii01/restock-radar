@@ -52,17 +52,24 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add stock.json status_message.json
-          git diff --staged --quiet && exit 0
-          git commit -m "stock update $(date -u '+%Y-%m-%d %H:%M UTC')"
-          # A run now holds its checkout for ~16 minutes rather than ~20
-          # seconds, so any push to main while it sweeps leaves this commit
-          # behind origin and the plain push is rejected. Rebase onto whatever
-          # landed in the meantime and retry: the stock file is regenerated
-          # from scratch each sweep, so there is nothing to merge by hand.
+          git diff --quiet stock.json status_message.json && exit 0
+          # These two files are regenerated in full every sweep, so there is
+          # never anything to merge - the freshest copy simply wins. Rebasing
+          # them was wrong: when two runs touch the same generated file git
+          # stops mid-rebase with a conflict, and every later attempt then
+          # dies on "unmerged files". So: hold the fresh copies aside, take
+          # whatever is on origin, put them back, commit that.
+          mkdir -p "$RUNNER_TEMP/out"
+          cp stock.json status_message.json "$RUNNER_TEMP/out/"
           for attempt in 1 2 3; do
-            git pull --rebase origin main && git push && exit 0
-            echo "push attempt $attempt was rejected - retrying"
+            git fetch -q origin main
+            git reset -q --hard origin/main
+            cp "$RUNNER_TEMP/out/stock.json" "$RUNNER_TEMP/out/status_message.json" .
+            git add stock.json status_message.json
+            git diff --staged --quiet && exit 0
+            git commit -q -m "stock update $(date -u '+%Y-%m-%d %H:%M UTC')"
+            git push -q && exit 0
+            echo "push attempt $attempt lost the race - refetching and retrying"
             sleep 5
           done
           echo "could not push the stock update after 3 attempts"
