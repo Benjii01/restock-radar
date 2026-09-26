@@ -35,7 +35,14 @@ jobs:
     permissions:
       contents: write       # needed to commit the updated stock.json
     steps:
+      # ref: main, not the default of the commit that triggered the run. A run
+      # queued behind another (concurrency, above) would otherwise start from
+      # the files as they were when it was queued, missing the stock.json and
+      # status_message.json the previous run just committed - so it re-alerts
+      # on old stock and posts a duplicate status message (2026-09-26).
       - uses: actions/checkout@v4
+        with:
+          ref: main
 
       - uses: actions/setup-python@v5
         with:
