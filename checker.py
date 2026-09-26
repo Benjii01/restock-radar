@@ -52,6 +52,15 @@ WEBHOOKS = {
     "ps5": _load_webhook(),
 }
 
+# Optional: a separate channel holding nothing but the status message, so it
+# is the only thing there instead of buried under alerts. Unset = the status
+# lives in the alert channel as before.
+#
+#   channel "ps5" -> webhook_ps5_status.txt / DISCORD_WEBHOOK_PS5_STATUS
+STATUS_WEBHOOKS = {
+    "ps5": _load_webhook("ps5_status"),
+}
+
 CHECK_EVERY_SECONDS = 120  # don't go below 60 - Walmart blocks fast pollers
 
 # Who to mention on a restock. A plain message notifies nobody - Discord only
@@ -808,14 +817,18 @@ def _fit(text, limit=STATUS_LIMIT):
 
 def push_status(text, channel):
     """Edit that channel's status message, or post a new one and remember its id."""
-    hook = webhook_for(channel)
+    # A webhook can only edit its own messages, so a dedicated status channel
+    # keeps its id under its own key - switching either way just posts fresh
+    # rather than trying to edit a message the other webhook owns.
+    hook = STATUS_WEBHOOKS.get(channel) or webhook_for(channel)
+    key = f"{channel}_status" if STATUS_WEBHOOKS.get(channel) else channel
     if not hook:
         return
     body = json.dumps({"content": "", "embeds": [{"description": _fit(text)}]}).encode()
     headers = {**UA, "Content-Type": "application/json"}
 
     ids = _load_status_ids()
-    msg_id = ids.get(channel, "")
+    msg_id = ids.get(key, "")
     if msg_id:
         # Only a 404 means the pinned message is actually gone. Anything else
         # (connection reset, timeout, 429, 5xx) is a blip - posting a fresh
@@ -846,7 +859,7 @@ def push_status(text, channel):
         with urllib.request.urlopen(req, timeout=15) as r:
             new_id = json.loads(r.read().decode()).get("id", "")
         if new_id:
-            ids[channel] = new_id
+            ids[key] = new_id
             STATUS_FILE.write_text(json.dumps(ids, indent=2), encoding="utf-8")
             print(f"  [{channel}] posted new status message - pin it in Discord")
     except Exception as e:
@@ -986,6 +999,13 @@ def sweep():
                     "time": now.strftime("%H:%M"), "tag": "GONE",
                     "status": "out", "extra": "sold out",
                 })
+                # no ping - there is nothing left to act on, this just keeps
+                # the channel from ending on a stale "1 unit" message
+                line = f"{was_qty} → 0 unit(s)" if was_qty is not None else "0 unit(s)"
+                notify("\n".join(["**SOLD OUT**", product["product"],
+                                  store["name"], line]),
+                       product.get("channel", "ps5"))
+                print(f"  ALERT sold out {product['product']} @ {store['name']}")
 
     del alerts[60:]
 

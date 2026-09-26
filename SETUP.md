@@ -26,8 +26,8 @@ summary as a reminder to phone them.
 
 Webhooks never go in the code. They're read from, in order:
 
-1. Environment variable — `DISCORD_WEBHOOK_URL`, `DISCORD_WEBHOOK_GPU`
-2. A local gitignored file — `webhook.txt`, `webhook_gpu.txt`
+1. Environment variable — `DISCORD_WEBHOOK_URL`, and optionally `DISCORD_WEBHOOK_PS5_STATUS`
+2. A local gitignored file — `webhook.txt`, `webhook_ps5_status.txt`
 
 On GitHub they're repository secrets (Settings → Secrets and variables →
 Actions). Locally, create the files — they're in `.gitignore` and must stay
@@ -54,8 +54,12 @@ Each product has a `channel`, and each channel maps to its own webhook:
   Editing a message sends no notification, so it stays silently current. Its id
   lives in `status_message.json`. If you delete the message, the next run posts
   a fresh one — re-pin it.
+- **Optionally, a status-only channel.** Set `DISCORD_WEBHOOK_PS5_STATUS` to a
+  webhook for a second channel (e.g. `#ps5-status`) and the status message goes
+  there instead, so it's the only thing in that channel rather than buried under
+  alerts. Alerts and pings stay where they are.
 - **New messages for events**, which do notify: something coming in stock, and
-  quantity changes while in stock (3 → 1). Selling out is recorded silently.
+  quantity changes while in stock (3 → 1), and selling out (no ping).
 
 Alerts include the product link, that store's own page (address and phone), and
 the store's postal code — you need the postal code because retailer store

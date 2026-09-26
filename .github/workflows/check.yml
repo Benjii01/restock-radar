@@ -44,6 +44,7 @@ jobs:
       - name: Sweep every 15 min until the next run is due
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          DISCORD_WEBHOOK_PS5_STATUS: ${{ secrets.DISCORD_WEBHOOK_PS5_STATUS }}  # optional; unset = status stays in the alert channel
           DISCORD_PING: ${{ secrets.DISCORD_PING }}                 # optional; unset = @everyone
         run: python checker.py --for 25 --every 900
 
