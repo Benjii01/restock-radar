@@ -527,6 +527,10 @@ def check_walmart(sku, store_id):
 
 
 _staples_cache = {}   # sku -> {store_id: qty}, reset each sweep
+# store_id -> local phone number, harvested from the same response. Staples
+# will hold an item if you phone the store, and unlike Best Buy - whose every
+# store page lists one national 1-866 number - these are direct lines.
+_staples_phone = {}
 
 
 def check_staples(sku, store_id, postal_code):
@@ -557,6 +561,9 @@ def check_staples(sku, store_id, postal_code):
     # absorb every store this response mentions, not just the one we wanted
     for sid, info in data.get("availability", {}).get(sku, {}).items():
         cache[sid] = int(info.get("availableqty", 0))
+        digits = "".join(c for c in str(info.get("phoneNumber", "")) if c.isdigit())
+        if len(digits) == 10:
+            _staples_phone[sid] = f"{digits[:3]}-{digits[3:6]}-{digits[6:]}"
 
     return cache.get(store_id), None
 
@@ -791,6 +798,11 @@ def sweep():
                     out.append(f"Buy: {product_url}")
                 if store.get("store_url"):
                     out.append(f"Store (address & phone): {store['store_url']}")
+                phone = _staples_phone.get(store.get("store_id", ""))
+                if phone and store["kind"] == "staples":
+                    # Staples will put one aside if you ring the store - the
+                    # closest thing to holding stock that actually exists
+                    out.append(f"Call to hold: {phone}")
                 return out
 
             if was_state in (None, "out") and state in ("in", "low"):
