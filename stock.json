@@ -136,6 +136,78 @@
       "method": "official API",
       "conf": "high"
     },
+    "bb_on622": {
+      "name": "Best Buy \u00b7 Mississauga W ON",
+      "km": 0.0,
+      "postal_code": "L5N 0A2",
+      "store_url": "https://stores.bestbuy.ca/en-ca/on/mississauga/2975-argentia-rd",
+      "method": "official API",
+      "conf": "high"
+    },
+    "bb_on926": {
+      "name": "Best Buy \u00b7 Mississauga Heartland ON",
+      "km": 0.0,
+      "postal_code": "L5R 4G6",
+      "store_url": "https://stores.bestbuy.ca/en-ca/on/mississauga/6075-mavis-rd-unit-1",
+      "method": "official API",
+      "conf": "high"
+    },
+    "bb_on930": {
+      "name": "Best Buy \u00b7 Oakville ON",
+      "km": 0.0,
+      "postal_code": "L6H 7E5",
+      "store_url": "https://stores.bestbuy.ca/en-ca/on/oakville/2500-winston-park-dr-unit-a",
+      "method": "official API",
+      "conf": "high"
+    },
+    "bb_on954": {
+      "name": "Best Buy \u00b7 Brampton ON",
+      "km": 0.0,
+      "postal_code": "L6S 6G6",
+      "store_url": "https://stores.bestbuy.ca/en-ca/on/brampton/9200-airport-rd",
+      "method": "official API",
+      "conf": "high"
+    },
+    "bb_on938": {
+      "name": "Best Buy \u00b7 Sherway Etobicoke ON",
+      "km": 0.0,
+      "postal_code": "M9C 1A7",
+      "store_url": "https://stores.bestbuy.ca/en-ca/on/etobicoke/167-north-queen-st",
+      "method": "official API",
+      "conf": "high"
+    },
+    "bb_on950": {
+      "name": "Best Buy \u00b7 St Catharines ON",
+      "km": 0.0,
+      "postal_code": "L2S 0C7",
+      "store_url": "https://stores.bestbuy.ca/en-ca/on/st-catharines/420-vansickle-rd-unit-l1",
+      "method": "official API",
+      "conf": "high"
+    },
+    "bb_on610": {
+      "name": "Best Buy \u00b7 Sarnia ON",
+      "km": 0.0,
+      "postal_code": "N7S 3X9",
+      "store_url": "https://stores.bestbuy.ca/en-ca/on/sarnia/unit-a-1380-exmouth-st",
+      "method": "official API",
+      "conf": "high"
+    },
+    "bb_on615": {
+      "name": "Best Buy \u00b7 Orangeville ON",
+      "km": 0.0,
+      "postal_code": "L9W 2E8",
+      "store_url": "https://stores.bestbuy.ca/en-ca/on/orangeville/95-first-st",
+      "method": "official API",
+      "conf": "high"
+    },
+    "bb_on624": {
+      "name": "Best Buy \u00b7 Chatham ON",
+      "km": 0.0,
+      "postal_code": "N7L 0E8",
+      "store_url": "https://stores.bestbuy.ca/en-ca/on/chatham/802-st-claire-st",
+      "method": "official API",
+      "conf": "high"
+    },
     "stap_on260": {
       "name": "Staples \u00b7 Tillsonburg ON",
       "km": 27.0,
@@ -343,6 +415,15 @@
         "bb_on982": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/19492009",
         "bb_on942": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/19492009",
         "bb_on984": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/19492009",
+        "bb_on622": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/19492009",
+        "bb_on926": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/19492009",
+        "bb_on930": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/19492009",
+        "bb_on954": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/19492009",
+        "bb_on938": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/19492009",
+        "bb_on950": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/19492009",
+        "bb_on610": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/19492009",
+        "bb_on615": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/19492009",
+        "bb_on624": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/19492009",
         "bb_online": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/19492009",
         "stap_stav": "https://www.staples.ca/products/3103551-en-sony-playstation-5-pro-console",
         "stap_mtpearl": "https://www.staples.ca/products/3103551-en-sony-playstation-5-pro-console",
@@ -392,55 +473,16 @@
         "bb_on982": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
         "bb_on942": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
         "bb_on984": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
+        "bb_on622": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
+        "bb_on926": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
+        "bb_on930": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
+        "bb_on954": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
+        "bb_on938": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
+        "bb_on950": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
+        "bb_on610": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
+        "bb_on615": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
+        "bb_on624": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929",
         "bb_online": "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929"
-      }
-    },
-    {
-      "id": "gpu1",
-      "cat": "GPU",
-      "tag": "GRAPHICS CARD",
-      "channel": "gpu",
-      "product": "NVIDIA GeForce RTX 5080 16GB GDDR7",
-      "sku": "18931347",
-      "msrp": 1449.99,
-      "urls": {
-        "bb": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5080-16gb-gddr7-video-card/18931347",
-        "bb_aval": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5080-16gb-gddr7-video-card/18931347",
-        "bb_on620": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5080-16gb-gddr7-video-card/18931347",
-        "bb_on936": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5080-16gb-gddr7-video-card/18931347",
-        "bb_on980": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5080-16gb-gddr7-video-card/18931347",
-        "bb_on995": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5080-16gb-gddr7-video-card/18931347",
-        "bb_on935": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5080-16gb-gddr7-video-card/18931347",
-        "bb_on608": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5080-16gb-gddr7-video-card/18931347",
-        "bb_on631": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5080-16gb-gddr7-video-card/18931347",
-        "bb_on982": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5080-16gb-gddr7-video-card/18931347",
-        "bb_on942": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5080-16gb-gddr7-video-card/18931347",
-        "bb_on984": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5080-16gb-gddr7-video-card/18931347",
-        "bb_online": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5080-16gb-gddr7-video-card/18931347"
-      }
-    },
-    {
-      "id": "gpu2",
-      "cat": "GPU",
-      "tag": "GRAPHICS CARD",
-      "channel": "gpu",
-      "product": "NVIDIA GeForce RTX 5090 32GB GDDR7",
-      "sku": "18931348",
-      "msrp": 2899.99,
-      "urls": {
-        "bb": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5090-32gb-gddr7-video-card/18931348",
-        "bb_aval": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5090-32gb-gddr7-video-card/18931348",
-        "bb_on620": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5090-32gb-gddr7-video-card/18931348",
-        "bb_on936": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5090-32gb-gddr7-video-card/18931348",
-        "bb_on980": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5090-32gb-gddr7-video-card/18931348",
-        "bb_on995": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5090-32gb-gddr7-video-card/18931348",
-        "bb_on935": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5090-32gb-gddr7-video-card/18931348",
-        "bb_on608": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5090-32gb-gddr7-video-card/18931348",
-        "bb_on631": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5090-32gb-gddr7-video-card/18931348",
-        "bb_on982": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5090-32gb-gddr7-video-card/18931348",
-        "bb_on942": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5090-32gb-gddr7-video-card/18931348",
-        "bb_on984": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5090-32gb-gddr7-video-card/18931348",
-        "bb_online": "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5090-32gb-gddr7-video-card/18931348"
       }
     }
   ],
@@ -576,6 +618,78 @@
     {
       "pid": "p5",
       "store": "bb_on984",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on622",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on926",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on930",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on954",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on938",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on950",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on610",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on615",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on624",
       "qty": 0,
       "price": 1099.99,
       "status": "out",
@@ -847,217 +961,81 @@
     },
     {
       "pid": "p5alt",
-      "store": "bb_online",
+      "store": "bb_on622",
       "qty": 0,
       "price": 1099.95,
       "status": "out",
       "seenSecs": 0
     },
     {
-      "pid": "gpu1",
-      "store": "bb",
+      "pid": "p5alt",
+      "store": "bb_on926",
       "qty": 0,
-      "price": 1449.99,
+      "price": 1099.95,
       "status": "out",
       "seenSecs": 0
     },
     {
-      "pid": "gpu1",
-      "store": "bb_aval",
+      "pid": "p5alt",
+      "store": "bb_on930",
       "qty": 0,
-      "price": 1449.99,
+      "price": 1099.95,
       "status": "out",
       "seenSecs": 0
     },
     {
-      "pid": "gpu1",
-      "store": "bb_on620",
+      "pid": "p5alt",
+      "store": "bb_on954",
       "qty": 0,
-      "price": 1449.99,
+      "price": 1099.95,
       "status": "out",
       "seenSecs": 0
     },
     {
-      "pid": "gpu1",
-      "store": "bb_on936",
+      "pid": "p5alt",
+      "store": "bb_on938",
       "qty": 0,
-      "price": 1449.99,
+      "price": 1099.95,
       "status": "out",
       "seenSecs": 0
     },
     {
-      "pid": "gpu1",
-      "store": "bb_on980",
+      "pid": "p5alt",
+      "store": "bb_on950",
       "qty": 0,
-      "price": 1449.99,
+      "price": 1099.95,
       "status": "out",
       "seenSecs": 0
     },
     {
-      "pid": "gpu1",
-      "store": "bb_on995",
+      "pid": "p5alt",
+      "store": "bb_on610",
       "qty": 0,
-      "price": 1449.99,
+      "price": 1099.95,
       "status": "out",
       "seenSecs": 0
     },
     {
-      "pid": "gpu1",
-      "store": "bb_on935",
+      "pid": "p5alt",
+      "store": "bb_on615",
       "qty": 0,
-      "price": 1449.99,
+      "price": 1099.95,
       "status": "out",
       "seenSecs": 0
     },
     {
-      "pid": "gpu1",
-      "store": "bb_on608",
+      "pid": "p5alt",
+      "store": "bb_on624",
       "qty": 0,
-      "price": 1449.99,
+      "price": 1099.95,
       "status": "out",
       "seenSecs": 0
     },
     {
-      "pid": "gpu1",
-      "store": "bb_on631",
-      "qty": 0,
-      "price": 1449.99,
-      "status": "out",
-      "seenSecs": 0
-    },
-    {
-      "pid": "gpu1",
-      "store": "bb_on982",
-      "qty": 0,
-      "price": 1449.99,
-      "status": "out",
-      "seenSecs": 0
-    },
-    {
-      "pid": "gpu1",
-      "store": "bb_on942",
-      "qty": 0,
-      "price": 1449.99,
-      "status": "out",
-      "seenSecs": 0
-    },
-    {
-      "pid": "gpu1",
-      "store": "bb_on984",
-      "qty": 0,
-      "price": 1449.99,
-      "status": "out",
-      "seenSecs": 0
-    },
-    {
-      "pid": "gpu1",
+      "pid": "p5alt",
       "store": "bb_online",
       "qty": 0,
-      "price": 1449.99,
-      "status": "out",
-      "seenSecs": 0
-    },
-    {
-      "pid": "gpu2",
-      "store": "bb",
-      "qty": 0,
-      "price": 2899.99,
-      "status": "out",
-      "seenSecs": 0
-    },
-    {
-      "pid": "gpu2",
-      "store": "bb_aval",
-      "qty": 0,
-      "price": 2899.99,
-      "status": "out",
-      "seenSecs": 0
-    },
-    {
-      "pid": "gpu2",
-      "store": "bb_on620",
-      "qty": 0,
-      "price": 2899.99,
-      "status": "out",
-      "seenSecs": 0
-    },
-    {
-      "pid": "gpu2",
-      "store": "bb_on936",
-      "qty": 0,
-      "price": 2899.99,
-      "status": "out",
-      "seenSecs": 0
-    },
-    {
-      "pid": "gpu2",
-      "store": "bb_on980",
-      "qty": 0,
-      "price": 2899.99,
-      "status": "out",
-      "seenSecs": 0
-    },
-    {
-      "pid": "gpu2",
-      "store": "bb_on995",
-      "qty": 0,
-      "price": 2899.99,
-      "status": "out",
-      "seenSecs": 0
-    },
-    {
-      "pid": "gpu2",
-      "store": "bb_on935",
-      "qty": 0,
-      "price": 2899.99,
-      "status": "out",
-      "seenSecs": 0
-    },
-    {
-      "pid": "gpu2",
-      "store": "bb_on608",
-      "qty": 0,
-      "price": 2899.99,
-      "status": "out",
-      "seenSecs": 0
-    },
-    {
-      "pid": "gpu2",
-      "store": "bb_on631",
-      "qty": 0,
-      "price": 2899.99,
-      "status": "out",
-      "seenSecs": 0
-    },
-    {
-      "pid": "gpu2",
-      "store": "bb_on982",
-      "qty": 0,
-      "price": 2899.99,
-      "status": "out",
-      "seenSecs": 0
-    },
-    {
-      "pid": "gpu2",
-      "store": "bb_on942",
-      "qty": 0,
-      "price": 2899.99,
-      "status": "out",
-      "seenSecs": 0
-    },
-    {
-      "pid": "gpu2",
-      "store": "bb_on984",
-      "qty": 0,
-      "price": 2899.99,
-      "status": "out",
-      "seenSecs": 0
-    },
-    {
-      "pid": "gpu2",
-      "store": "bb_online",
-      "qty": 0,
-      "price": 2899.99,
+      "price": 1099.95,
       "status": "out",
       "seenSecs": 0
     }
@@ -1392,5 +1370,5 @@
       "extra": "1 unit(s) \u00b7 $1099.99"
     }
   ],
-  "updated": "2026-09-26T02:15:35.411604"
+  "updated": "2026-09-26T02:45:25.049285"
 }
