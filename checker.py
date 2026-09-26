@@ -726,6 +726,22 @@ def _city(store):
     return m.group(1) if m else store["name"]
 
 
+def _split_name(store):
+    """"Staples · Kitchener S ON" -> ("Kitchener", "Staples S").
+
+    Finds the words in the name that spell the URL's city slug, so
+    "Sherway Etobicoke" and "St. Thomas" split correctly too."""
+    retailer, _, place = store["name"].partition(" · ")
+    words = re.sub(r"\s+[A-Z]{2}$", "", place).split()
+    slug = re.sub(r"[^a-z]", "", _city(store).lower())
+    for i in range(len(words)):
+        for j in range(i + 1, len(words) + 1):
+            if re.sub(r"[^a-z]", "", "".join(words[i:j]).lower()) == slug:
+                rest = " ".join(words[:i] + words[j:])
+                return " ".join(words[i:j]), f"{retailer} {rest}".strip()
+    return " ".join(words), retailer
+
+
 def build_status(hits, now, channel):
     # Discord renders <t:epoch:R> as a live "3 minutes ago" that keeps
     # counting up on its own between sweeps, and <t:epoch:t> as a clock in
@@ -773,6 +789,15 @@ def build_status(hits, now, channel):
                                      _city(STORES[h["store"]]),
                                      STORES[h["store"]].get("drive", 9999),
                                      STORES[h["store"]]["name"]))
+            # Out-of-stock Ontario stores collapse to one line per city with
+            # the city in bold - 40 near-identical white lines were a wall
+            # you couldn't scan. In-stock stores keep a line of their own.
+            if region == "ON":
+                cities = {}
+                for h in here:
+                    if h["status"] == "out":
+                        cities.setdefault(_city(STORES[h["store"]]), []).append(h)
+                here = [h for h in here if h["status"] != "out"]
             for h in here:
                 store = STORES[h["store"]]
                 icon = ICON.get(h["status"], "⬜")
@@ -785,6 +810,18 @@ def build_status(hits, now, channel):
                     postal = store.get("postal_code", "")
                     tail = f" · `{postal}`" if postal else ""
                     lines.append(f"{icon} **{store['name']} — {h['qty']} in stock**{trip}{tail}")
+            if region == "ON":
+                for group in cities.values():   # already in route order
+                    names = [_split_name(STORES[h["store"]]) for h in group]
+                    drives = [STORES[h["store"]].get("drive") for h in group]
+                    near = STORES[group[0]["store"]]
+                    trip = ""
+                    if all(drives):
+                        span = (f"{min(drives)}" if min(drives) == max(drives)
+                                else f"{min(drives)}–{max(drives)}")
+                        trip = f" · ~{span} min {near['dir']}"
+                    lines.append(f"{ICON['out']} **{names[0][0]}**{trip} — "
+                                 + ", ".join(n[1] for n in names))
 
     manual = [s["name"] for s in STORES.values() if s["kind"] == "manual"]
     if manual:
