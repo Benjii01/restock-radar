@@ -795,12 +795,41 @@ def _load_status_ids():
     return {}
 
 
+# Discord rejects a message body over its limit outright, and push_status
+# treats that like any other failed edit - three retries, then "leaving pin
+# alone until next run", every run, forever. That is exactly how the PS5
+# status message quietly froze once the store list grew past 2000 characters
+# while the shorter GPU one kept updating. Sending the status as an embed
+# raises the ceiling to 4096, and _fit() guarantees we stay under it.
+STATUS_LIMIT = 4096
+
+
+def _fit(text, limit=STATUS_LIMIT):
+    """Trim to fit, dropping out-of-stock lines last-first.
+
+    An empty checkbox is the least useful line in the message, so those go
+    before anything else. Nothing in stock is ever dropped.
+    """
+    if len(text) <= limit:
+        return text
+    lines = text.split("\n")
+    note, dropped = "", 0
+    for i in range(len(lines) - 1, -1, -1):
+        if lines[i].startswith(ICON["out"]):
+            lines.pop(i)
+            dropped += 1
+            note = f"\n*+{dropped} more out of stock*"
+            if len("\n".join(lines)) + len(note) <= limit:
+                break
+    return "\n".join(lines)[:limit - len(note)] + note
+
+
 def push_status(text, channel):
     """Edit that channel's status message, or post a new one and remember its id."""
     hook = webhook_for(channel)
     if not hook:
         return
-    body = json.dumps({"content": text}).encode()
+    body = json.dumps({"content": "", "embeds": [{"description": _fit(text)}]}).encode()
     headers = {**UA, "Content-Type": "application/json"}
 
     ids = _load_status_ids()
