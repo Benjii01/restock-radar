@@ -43,8 +43,7 @@ jobs:
 
       - name: Sweep every 15 min until the next run is due
         env:
-          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}   # #ps5 channel
-          DISCORD_WEBHOOK_GPU: ${{ secrets.DISCORD_WEBHOOK_GPU }}   # #gpus channel
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
           DISCORD_PING: ${{ secrets.DISCORD_PING }}                 # optional; unset = @everyone
         run: python checker.py --for 25 --every 900
 

@@ -26,7 +26,8 @@ from pathlib import Path
 # gitignored files; on GitHub Actions from repository secrets:
 #
 #   channel "ps5" -> webhook.txt      / DISCORD_WEBHOOK_URL
-#   channel "gpu" -> webhook_gpu.txt  / DISCORD_WEBHOOK_GPU
+# (a "gpu" channel used to live here too; graphics cards were dropped
+#  2026-09-26. Re-adding one is a webhook entry plus a product.)
 #
 def _load_webhook(channel=""):
     # ﻿ is a BOM - Windows tooling loves to prepend one, and Python's
@@ -49,7 +50,6 @@ def _load_webhook(channel=""):
 # Anything unrecognised falls back to the ps5 webhook rather than vanishing.
 WEBHOOKS = {
     "ps5": _load_webhook(),
-    "gpu": _load_webhook("gpu"),
 }
 
 CHECK_EVERY_SECONDS = 120  # don't go below 60 - Walmart blocks fast pollers
@@ -498,8 +498,6 @@ BESTBUY_PS5 = "19492009"
 # not marketplace sellers, and both were read back from their search API.
 BESTBUY_PS5_ALT = "18477929"
 STAPLES_PS5 = "3103551"
-RTX5080_URL = "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5080-16gb-gddr7-video-card/18931347"
-RTX5090_URL = "https://www.bestbuy.ca/en-ca/product/nvidia-geforce-rtx-5090-32gb-gddr7-video-card/18931348"
 STAPLES_PS5_URL = "https://www.staples.ca/products/3103551-en-sony-playstation-5-pro-console"
 BESTBUY_PS5_URL = "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/19492009"
 BESTBUY_PS5_ALT_URL = "https://www.bestbuy.ca/en-ca/product/playstation-5-pro-console/18477929"
@@ -533,22 +531,6 @@ PRODUCTS = [
         # Best Buy only - Staples lists the console once
         "skus": {k: BESTBUY_PS5_ALT for k, v in STORES.items() if v["kind"] == "bestbuy"},
         "urls": {k: BESTBUY_PS5_ALT_URL for k, v in STORES.items() if v["kind"] == "bestbuy"},
-    },
-    {
-        "id": "gpu1", "cat": "GPU", "tag": "GRAPHICS CARD", "channel": "gpu",
-        # this is the plain NVIDIA reference card at true MSRP - other AIB
-        # models (MSI/ASUS/ZOTAC/PNY) sell for $2000-3000+ right now and
-        # aren't worth chasing for resale margin the way this one is
-        "product": "NVIDIA GeForce RTX 5080 16GB GDDR7", "sku": "18931347", "msrp": 1449.99,
-        # Staples Canada only sells prebuilt systems, not standalone cards
-        "skus": {k: "18931347" for k, v in STORES.items() if v["kind"] == "bestbuy"},
-        "urls": {k: RTX5080_URL for k, v in STORES.items() if v["kind"] == "bestbuy"},
-    },
-    {
-        "id": "gpu2", "cat": "GPU", "tag": "GRAPHICS CARD", "channel": "gpu",
-        "product": "NVIDIA GeForce RTX 5090 32GB GDDR7", "sku": "18931348", "msrp": 2899.99,
-        "skus": {k: "18931348" for k, v in STORES.items() if v["kind"] == "bestbuy"},
-        "urls": {k: RTX5090_URL for k, v in STORES.items() if v["kind"] == "bestbuy"},
     },
 ]
 
