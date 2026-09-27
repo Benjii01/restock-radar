@@ -1,8 +1,8 @@
 # Restock Radar
 
 Watches Canadian retailers for stock on specific products and messages Discord
-the moment something appears. Runs itself on GitHub Actions every 10 minutes —
-no PC required.
+the moment something appears. Runs itself on GitHub Actions, checking every
+minute — no PC required.
 
 Built for St. John's NL and the Woodstock ON area, but the store list is just
 config.
@@ -37,14 +37,40 @@ would be in the history permanently.
 ### Running it
 
 ```
-python checker.py           # loop forever, serve stock.json on :8000
-python checker.py --once    # single sweep - what GitHub Actions runs
+python checker.py                       # loop forever, serve stock.json on :8000
+python checker.py --once                # single sweep, then exit
+python checker.py --for 25 --every 60   # sweep every minute for 25 min - what GitHub Actions runs
 ```
 
 GitHub Actions handles the real schedule (`.github/workflows/check.yml`).
-Each run does one sweep and commits `stock.json` and `status_message.json`
-back, which is how state survives between runs — without it, every run would
-look like a first run and re-alert on everything already in stock.
+Each run sweeps every minute for ~25 minutes, then commits `stock.json` and
+`status_message.json` back, which is how state survives between runs — without
+it, every run would look like a first run and re-alert on everything already in
+stock. The check interval is the `--every` flag in the workflow; change it
+there, nothing else needs touching.
+
+### What starts the runs: an external ticker
+
+**GitHub's own scheduler is not what keeps this running.** The workflow's
+`*/30` cron fires late and irregularly (runs at :27 or :49 past the hour, or
+not at all), so an external cron service calls GitHub's API to start the
+workflow at :00 and :30 every hour. Those runs show up in the Actions tab with
+the event `workflow_dispatch`; the stray `schedule` runs are GitHub's cron
+acting as a backup.
+
+The ticker was set up outside this repo, so nothing here records which service
+it is or holds its token. Things to know:
+
+- **If runs stop appearing at :00 and :30**, the ticker is the first suspect —
+  its GitHub token may have expired, or the service disabled the job after
+  failures. Checks then fall back to GitHub's irregular cron alone.
+- **Don't make it fire more often than every 30 minutes.** Each run already
+  lasts ~25 minutes, and only one runs at a time (`concurrency` in the
+  workflow), so extra triggers just queue up or get dropped. How often stock is
+  *checked* is the `--every` flag, not the ticker.
+- It calls: `POST https://api.github.com/repos/Benjii01/restock-radar/actions/workflows/check.yml/dispatches`
+  with body `{"ref": "main"}` and a GitHub token that has Actions write access.
+  That's everything needed to recreate it on another service.
 
 ## How Discord is used
 
