@@ -691,10 +691,9 @@ COLOR = {"in": 0x2ECC71, "up": 0x2ECC71, "down": 0xF1C40F, "gone": 0xE74C3C}
 
 
 def notify(text, channel="ps5", ping=False, embed=None):
-    """Post an alert. `text` is the one line above the box: it is what the
-    phone's push notification shows, and the only part of a message Discord
-    mobile's "Copy Text" copies - so the postal code belongs there, not just
-    in the box. `embed` is the box itself."""
+    """Post an alert. `text` is the line above the box - just the headline
+    (IN STOCK, SOLD OUT...), since everything else is in the box. `embed` is
+    the box itself."""
     hook = webhook_for(channel)
     if not hook:
         print(f"  [no webhook for '{channel}']", text)
@@ -1063,11 +1062,6 @@ def sweep():
                     out["thumbnail"] = {"url": product["image"]}
                 return out
 
-            def summary(heading, stock, act=True):
-                """The line above the box - push notification and copy text."""
-                tail = f" · `{postal}`" if act and postal else ""
-                return f"**{heading}** · {store['name']} · {stock}{tail}"
-
             if was_state in (None, "out") and state in ("in", "low"):
                 line = f"{qty} unit(s) · ${price or product['msrp']}"
                 alerts.insert(0, {
@@ -1077,7 +1071,7 @@ def sweep():
                     "status": state, "extra": line,
                 })
                 stock = f"{qty} unit(s)"
-                notify(summary("IN STOCK", stock), product.get("channel", "ps5"),
+                notify("**IN STOCK**", product.get("channel", "ps5"),
                        ping=True, embed=box(COLOR["in"], "IN STOCK", stock))
                 print(f"  ALERT {product['product']} @ {store['name']} - {line}")
             elif (state in ("in", "low") and was_state in ("in", "low")
@@ -1090,7 +1084,7 @@ def sweep():
                     "status": state, "extra": line,
                 })
                 heading = f"STOCK {direction.upper()}"
-                notify(summary(heading, line), product.get("channel", "ps5"),
+                notify(f"**{heading}**", product.get("channel", "ps5"),
                        embed=box(COLOR["down" if qty < was_qty else "up"], heading, line))
                 print(f"  ALERT qty {direction} {product['product']} @ {store['name']} - {line}")
             elif was_state in ("in", "low") and state == "out":
@@ -1102,7 +1096,7 @@ def sweep():
                 # no ping - there is nothing left to act on, this just keeps
                 # the channel from ending on a stale "1 unit" message
                 line = f"{was_qty} → 0 unit(s)" if was_qty is not None else "0 unit(s)"
-                notify(summary("SOLD OUT", line, act=False), product.get("channel", "ps5"),
+                notify("**SOLD OUT**", product.get("channel", "ps5"),
                        embed=box(COLOR["gone"], "SOLD OUT", line, act=False))
                 print(f"  ALERT sold out {product['product']} @ {store['name']}")
 
