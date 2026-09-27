@@ -683,11 +683,11 @@ def webhook_for(channel):
     return WEBHOOKS.get(channel) or WEBHOOKS.get("ps5", "")
 
 
-# Phone alarm through Pushover. A Discord ping is an ordinary notification:
-# silent mode and Do Not Disturb swallow it. Pushover's emergency priority,
-# with Critical Alerts allowed in its iPhone app, rings at full volume through
-# both and repeats until you tap it. Both keys are repo secrets; with either
-# missing there's simply no alarm.
+# Optional heads-up through Pushover, for a restock notification separate
+# from Discord. Deliberately gentle: one ordinary notification that follows
+# the phone's silent mode and Focus - no Critical Alert, no repeats (asked
+# for 2026-09-27: "a heads up, not to disturb what I'm doing"). Both keys
+# are repo secrets; with either missing nothing is sent.
 PUSHOVER_TOKEN = os.environ.get("PUSHOVER_TOKEN", "").strip()   # the app's API token
 PUSHOVER_USER = os.environ.get("PUSHOVER_USER", "").strip()     # your user key
 
@@ -699,10 +699,7 @@ def alarm(product, store, stock, url):
         "token": PUSHOVER_TOKEN, "user": PUSHOVER_USER,
         "title": f"IN STOCK: {product['product']}",
         "message": f"{store['name']} - {stock}",
-        "priority": 2,        # emergency: repeats until acknowledged
-        "retry": 30,          # ring again every 30 s...
-        "expire": 300,        # ...for 5 minutes - after that it's likely gone
-        "sound": "persistent",
+        "priority": 0,        # normal: one notification, the phone's own sound settings
     }
     if url:
         fields.update(url=url, url_title="Open checkout" if "checkout" in url else "Open product page")
