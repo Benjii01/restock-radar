@@ -1063,6 +1063,20 @@ def sweep():
                             quote_via=urllib.parse.quote)
                         how = (f"**[Copy {postal} & open {retailer}]({copy})**\n"
                                'Then paste it under "Pick Up" and hit Check')
+                        if store["kind"] == "bestbuy":
+                            # Best Buy's express reserve checkout takes the
+                            # store and SKU in the URL and opens at "Pickup
+                            # Person" with the store already chosen - no
+                            # postal code at all. Checks out that one item
+                            # only, cart aside. If the store has sold out it
+                            # falls back to the store search page, which is
+                            # when the copy link below earns its keep.
+                            # (verified by hand 2026-09-27)
+                            atc = ("https://www.bestbuy.ca/checkout/?qit=1#/en-CA/"
+                                   f"reserve-pickup?storeId={store['store_id']}&sku={sku}")
+                            how = (f"**[Reserve at this store - straight to checkout]({atc})**\n"
+                                   f"Backup: [copy {postal} & open Best Buy]({copy}), "
+                                   'paste it under "Pick Up"')
                     else:
                         how = f"[Buy now]({product_url}) - ships to you"
                     fields.append({"name": "How to buy", "value": how})
