@@ -52,6 +52,8 @@ jobs:
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
           DISCORD_WEBHOOK_PS5_STATUS: ${{ secrets.DISCORD_WEBHOOK_PS5_STATUS }}  # optional; unset = status stays in the alert channel
+          PUSHOVER_TOKEN: ${{ secrets.PUSHOVER_TOKEN }}             # optional; phone alarm on restock
+          PUSHOVER_USER: ${{ secrets.PUSHOVER_USER }}
           DISCORD_PING: ${{ secrets.DISCORD_PING }}                 # optional; unset = @everyone
         run: python checker.py --for 25 --every 60
 

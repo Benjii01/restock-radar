@@ -683,6 +683,37 @@ def webhook_for(channel):
     return WEBHOOKS.get(channel) or WEBHOOKS.get("ps5", "")
 
 
+# Phone alarm through Pushover. A Discord ping is an ordinary notification:
+# silent mode and Do Not Disturb swallow it. Pushover's emergency priority,
+# with Critical Alerts allowed in its iPhone app, rings at full volume through
+# both and repeats until you tap it. Both keys are repo secrets; with either
+# missing there's simply no alarm.
+PUSHOVER_TOKEN = os.environ.get("PUSHOVER_TOKEN", "").strip()   # the app's API token
+PUSHOVER_USER = os.environ.get("PUSHOVER_USER", "").strip()     # your user key
+
+
+def alarm(product, store, stock, url):
+    if not (PUSHOVER_TOKEN and PUSHOVER_USER):
+        return
+    fields = {
+        "token": PUSHOVER_TOKEN, "user": PUSHOVER_USER,
+        "title": f"IN STOCK: {product['product']}",
+        "message": f"{store['name']} - {stock}",
+        "priority": 2,        # emergency: repeats until acknowledged
+        "retry": 30,          # ring again every 30 s...
+        "expire": 300,        # ...for 5 minutes - after that it's likely gone
+        "sound": "persistent",
+    }
+    if url:
+        fields.update(url=url, url_title="Open checkout" if "checkout" in url else "Open product page")
+    try:
+        urllib.request.urlopen(urllib.request.Request(
+            "https://api.pushover.net/1/messages.json",
+            data=urllib.parse.urlencode(fields).encode(), headers=UA), timeout=10)
+    except Exception as e:
+        print("  pushover failed:", e)
+
+
 # docs/copy.html on GitHub Pages - copies a postal code and forwards to the
 # product page, since a Discord message can't write to the clipboard itself
 COPY_PAGE = "https://benjii01.github.io/restock-radar/copy.html"
@@ -1107,6 +1138,7 @@ def sweep():
                 stock = f"{qty} unit(s)"
                 notify("**IN STOCK**", product.get("channel", "ps5"),
                        ping=True, embed=box(COLOR["in"], "IN STOCK", stock))
+                alarm(product, store, stock, atc or product_url)
                 print(f"  ALERT {product['product']} @ {store['name']} - {line}")
             elif (state in ("in", "low") and was_state in ("in", "low")
                     and was_qty is not None and qty != was_qty):
