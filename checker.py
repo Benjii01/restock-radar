@@ -26,8 +26,6 @@ from pathlib import Path
 # gitignored files; on GitHub Actions from repository secrets:
 #
 #   channel "ps5" -> webhook.txt      / DISCORD_WEBHOOK_URL
-# (a "gpu" channel used to live here too; graphics cards were dropped
-#  2026-09-26. Re-adding one is a webhook entry plus a product.)
 #
 def _load_webhook(channel=""):
     # ﻿ is a BOM - Windows tooling loves to prepend one, and Python's
@@ -844,6 +842,20 @@ def build_status(hits, now, channel):
     return "\n".join(lines)
 
 
+def prune_status_ids():
+    """Forget status messages for channels that no longer exist, so a removed
+    channel's id doesn't ride along in status_message.json forever. Done here
+    rather than by editing the file, because each run saves back its own copy
+    and would just restore a hand-deleted entry."""
+    ids = _load_status_ids()
+    keep = set(WEBHOOKS) | {f"{c}_status" for c in STATUS_WEBHOOKS}
+    kept = {k: v for k, v in ids.items() if k in keep}
+    if kept != ids and STATUS_FILE.exists():
+        STATUS_FILE.write_text(json.dumps(kept, indent=2), encoding="utf-8")
+        print("  dropped status ids for removed channels:",
+              ", ".join(sorted(set(ids) - set(kept))))
+
+
 def _load_status_ids():
     if STATUS_FILE.exists():
         try:
@@ -859,8 +871,7 @@ def _load_status_ids():
 # Discord rejects a message body over its limit outright, and push_status
 # treats that like any other failed edit - three retries, then "leaving pin
 # alone until next run", every run, forever. That is exactly how the PS5
-# status message quietly froze once the store list grew past 2000 characters
-# while the shorter GPU one kept updating. Sending the status as an embed
+# status message quietly froze once the store list grew past 2000 characters. Sending the status as an embed
 # raises the ceiling to 4096, and _fit() guarantees we stay under it.
 STATUS_LIMIT = 4096
 
@@ -1165,6 +1176,7 @@ if __name__ == "__main__":
                   f"create webhook_{_ch}.txt)\n")
 
     load_previous_state()
+    prune_status_ids()
 
     if "--for" in sys.argv:
         # One Actions run that keeps sweeping, rather than one sweep per cron
