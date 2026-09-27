@@ -789,7 +789,7 @@ def build_status(hits, now, channel):
                 continue
             label = heading
             if region == "ON":
-                label += " · drive from Woodstock (Knightsbridge Rd)"
+                label += " · drive from Woodstock"
             lines.append(f"__{label}__")
             # nearest first where we know the drive, so the list reads as a
             # route: what you would pass on the way to anything further out.
