@@ -683,34 +683,6 @@ def webhook_for(channel):
     return WEBHOOKS.get(channel) or WEBHOOKS.get("ps5", "")
 
 
-# Instant restock signal for the Checkout Autofill extension (and the ntfy
-# phone app, if subscribed). Discord can't be watched by a browser without a
-# bot login, and stock.json only reaches GitHub at the end of each 25-minute
-# run - far too late - so each restock is also published to an ntfy.sh
-# topic the moment it's seen. The topic name is the only secret: anyone who
-# knows it can read it, so it's long and random and kept in a repo secret.
-NTFY_TOPIC = os.environ.get("NTFY_TOPIC", "").strip()
-
-
-def push_restock(product, store, stock, url):
-    if not NTFY_TOPIC or not url:
-        return
-    body = json.dumps({
-        "topic": NTFY_TOPIC,
-        "title": f"IN STOCK: {product['product']}",
-        "message": f"{store['name']} - {stock}",
-        "click": url,                         # what the extension opens
-        "tags": [store.get("region", "")],    # lets it pick regions
-        "priority": 5,
-    }).encode()
-    try:
-        urllib.request.urlopen(urllib.request.Request(
-            "https://ntfy.sh/", data=body,
-            headers={**UA, "Content-Type": "application/json"}), timeout=10)
-    except Exception as e:
-        print("  ntfy failed:", e)
-
-
 # docs/copy.html on GitHub Pages - copies a postal code and forwards to the
 # product page, since a Discord message can't write to the clipboard itself
 COPY_PAGE = "https://benjii01.github.io/restock-radar/copy.html"
@@ -1135,7 +1107,6 @@ def sweep():
                 stock = f"{qty} unit(s)"
                 notify("**IN STOCK**", product.get("channel", "ps5"),
                        ping=True, embed=box(COLOR["in"], "IN STOCK", stock))
-                push_restock(product, store, stock, atc or product_url)
                 print(f"  ALERT {product['product']} @ {store['name']} - {line}")
             elif (state in ("in", "low") and was_state in ("in", "low")
                     and was_qty is not None and qty != was_qty):
