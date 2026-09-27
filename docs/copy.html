@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Copy postal code</title>
+<!--
+  Opened from a Restock Radar alert:
+    copy.html?c=N2N%200B1&s=Best%20Buy%20%C2%B7%20Kitchener%20ON&to=https://www.bestbuy.ca/...
+
+  Copies the postal code and sends you on to the product page, where it gets
+  pasted into the "Pick Up" box. Phones only allow copying during a tap, so
+  it first tries to copy on load (some browsers allow it - then this page is
+  gone before you notice it) and otherwise waits for the one button.
+
+  `to` is only followed to Best Buy or Staples, so nobody can use this page
+  to bounce people to some other site.
+-->
+<style>
+  :root {
+    --bg: #f3f5f8; --ink: #17202b; --muted: #5b6776; --line: #d9dfe7;
+    --panel: #ffffff; --accent: #0a5bd3; --accent-ink: #ffffff; --ok: #1d8a4e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      color-scheme: dark;
+      --bg: #11151b; --ink: #e8ecf1; --muted: #97a3b2; --line: #28303b;
+      --panel: #181e26; --accent: #3d8bff; --ok: #3fbf78;
+    }
+  }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+    padding-inline: 16px; padding-block: max(32px, env(safe-area-inset-top)) 32px;
+  }
+  main {
+    max-width: 420px; margin: 0 auto; background: var(--panel);
+    border: 1px solid var(--line); border-radius: 12px;
+    padding: 24px 18px; display: grid; gap: 16px; text-align: center;
+  }
+  .store { color: var(--muted); font-size: 15px; }
+  .code {
+    font: 600 44px/1 ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    letter-spacing: .06em; user-select: all;
+  }
+  .go {
+    display: block; background: var(--accent); color: var(--accent-ink);
+    text-decoration: none; font-weight: 600; font-size: 18px;
+    padding: 18px; border-radius: 10px;
+  }
+  .go:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+  .status { min-height: 1.5em; font-weight: 500; color: var(--ok); }
+  .status.fail { color: var(--muted); }
+  .hint { color: var(--muted); font-size: 14px; margin: 0; }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <div class="store" id="store"></div>
+  <div class="code" id="code"></div>
+  <a class="go" id="go" href="#">Copy &amp; open</a>
+  <div class="status" id="status" role="status"></div>
+  <p class="hint">Then paste it under "Pick Up" and hit Check.</p>
+</main>
+<script>
+  const q = new URLSearchParams(location.search);
+  const code = (q.get("c") || "").slice(0, 12);
+  const storeName = (q.get("s") || "").slice(0, 80);
+  let to = "";
+  try {
+    const u = new URL(q.get("to") || "");
+    const ok = u.protocol === "https:" &&
+      /(^|\.)(bestbuy|staples)\.ca$/.test(u.hostname);
+    if (ok) to = u.href;
+  } catch (_) {}
+
+  const retailer = /staples\.ca$/.test(to ? new URL(to).hostname : "") ? "Staples" : "Best Buy";
+  const go = document.getElementById("go");
+  const status = document.getElementById("status");
+  document.getElementById("code").textContent = code || "No postal code";
+  document.getElementById("store").textContent = storeName;
+  document.title = code ? "Copy " + code : "Copy postal code";
+
+  if (to) {
+    go.href = to;
+    go.textContent = "Copy " + code + " & open " + retailer;
+  } else {
+    go.textContent = "Copy " + code;
+  }
+
+  function copied() {
+    status.className = "status";
+    status.textContent = "Copied " + code + (to ? ". Opening " + retailer + "…" : ".");
+  }
+  function selectCode() {
+    const r = document.createRange();
+    r.selectNodeContents(document.getElementById("code"));
+    const s = getSelection(); s.removeAllRanges(); s.addRange(r);
+  }
+  function legacyCopy() {
+    selectCode();
+    try { return document.execCommand("copy"); } catch (_) { return false; }
+  }
+
+  // Inside the tap: copy, and only once that has landed move on to the
+  // store - navigating straight away can unload the page mid-copy.
+  let copiedOnce = false;
+  function onward() { if (to) setTimeout(() => location.assign(to), 300); }
+  function failed() {
+    status.className = "status fail";
+    status.textContent = "Couldn't copy - the code is selected above, copy it by hand.";
+    selectCode();
+    if (to) go.textContent = "Open " + retailer;
+    copiedOnce = true;   // next tap just follows the link
+  }
+  go.addEventListener("click", (e) => {
+    if (copiedOnce) return;          // plain link from here on
+    e.preventDefault();
+    if (!code) return;
+    const win = () => { copiedOnce = true; copied(); onward(); };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(code).then(win, () => legacyCopy() ? win() : failed());
+    } else {
+      legacyCopy() ? win() : failed();
+    }
+  });
+
+  // Try once without a tap. Where the browser allows it this skips the
+  // button entirely; where it doesn't, the rejection is silent and the
+  // button is there.
+  if (code && to && navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(code).then(() => {
+      copied();
+      setTimeout(() => location.replace(to), 400);
+    }, () => {});
+  }
+</script>
+</body>
+</html>

@@ -683,6 +683,10 @@ def webhook_for(channel):
     return WEBHOOKS.get(channel) or WEBHOOKS.get("ps5", "")
 
 
+# docs/copy.html on GitHub Pages - copies a postal code and forwards to the
+# product page, since a Discord message can't write to the clipboard itself
+COPY_PAGE = "https://benjii01.github.io/restock-radar/copy.html"
+
 # Side-bar colour of each alert's box: green is good news (in stock, or more
 # of it), yellow is stock going, red is gone
 COLOR = {"in": 0x2ECC71, "up": 0x2ECC71, "down": 0xF1C40F, "gone": 0xE74C3C}
@@ -1051,9 +1055,14 @@ def sweep():
                                    "inline": True})
                 if act and product_url:
                     if postal:
-                        how = (f"1. Copy `{postal}`\n"
-                               f"2. Open the [product page]({product_url})\n"
-                               '3. Paste it under "Pick Up" and hit Check')
+                        # one tap copies the code and opens the store's page -
+                        # Discord itself can't put anything on the clipboard
+                        retailer = "Staples" if store["kind"] == "staples" else "Best Buy"
+                        copy = COPY_PAGE + "?" + urllib.parse.urlencode(
+                            {"c": postal, "s": store["name"], "to": product_url},
+                            quote_via=urllib.parse.quote)
+                        how = (f"**[Copy {postal} & open {retailer}]({copy})**\n"
+                               'Then paste it under "Pick Up" and hit Check')
                     else:
                         how = f"[Buy now]({product_url}) - ships to you"
                     fields.append({"name": "How to buy", "value": how})
