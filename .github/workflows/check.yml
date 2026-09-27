@@ -52,6 +52,7 @@ jobs:
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
           DISCORD_WEBHOOK_PS5_STATUS: ${{ secrets.DISCORD_WEBHOOK_PS5_STATUS }}  # optional; unset = status stays in the alert channel
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}                     # optional; instant restock signal for the browser extension
           DISCORD_PING: ${{ secrets.DISCORD_PING }}                 # optional; unset = @everyone
         run: python checker.py --for 25 --every 60
 
