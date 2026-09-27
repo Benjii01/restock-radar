@@ -14,7 +14,7 @@ SETUP: see SETUP.md. You only need to edit the CONFIG block below.
 """
 
 import json, os, re, sys, time, threading, http.server, socketserver, functools, urllib.request, urllib.error, urllib.parse
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 # ----------------------------------------------------------------------------
@@ -685,7 +685,16 @@ def webhook_for(channel):
     return WEBHOOKS.get(channel) or WEBHOOKS.get("ps5", "")
 
 
-def notify(text, channel="ps5", ping=False):
+# Side-bar colour of each alert's box: green is good news (in stock, or more
+# of it), yellow is stock going, red is gone
+COLOR = {"in": 0x2ECC71, "up": 0x2ECC71, "down": 0xF1C40F, "gone": 0xE74C3C}
+
+
+def notify(text, channel="ps5", ping=False, embed=None):
+    """Post an alert. `text` is the one line above the box: it is what the
+    phone's push notification shows, and the only part of a message Discord
+    mobile's "Copy Text" copies - so the postal code belongs there, not just
+    in the box. `embed` is the box itself."""
     hook = webhook_for(channel)
     if not hook:
         print(f"  [no webhook for '{channel}']", text)
@@ -696,10 +705,16 @@ def notify(text, channel="ps5", ping=False):
     # @everyone as literal text and notifies nobody. The empty parse list on the
     # quieter alerts stops a product name containing an @ from pinging the
     # channel by accident.
-    body = json.dumps({
+    payload = {
         "content": text,
         "allowed_mentions": {"parse": ["everyone", "users", "roles"] if ping else []},
-    }).encode()
+    }
+    if embed:
+        # the timestamp renders as "Today at 4:16 PM" in the reader's own zone
+        embed = {**embed, "footer": {"text": "Restock Radar"},
+                 "timestamp": datetime.now(timezone.utc).isoformat()}
+        payload["embeds"] = [embed]
+    body = json.dumps(payload).encode()
     try:
         urllib.request.urlopen(
             urllib.request.Request(
@@ -989,40 +1004,69 @@ def sweep():
             was_state, was_qty = previous.get(key, (None, None))
             previous[key] = (state, qty)
 
-            def where_to_buy():
-                """The 'how do I act on this' lines shared by both alerts.
+            product_url = product.get("urls", {}).get(store_key)
+            postal = store.get("postal_code", "")
 
-                Ordered for speed on a phone. There is no store picker to
-                deep-link: Best Buy searches within 50km of a postal code that
-                it keeps in a cookie, and the URL never changes when you set
-                one (confirmed 2026-09-26). So the code has to be pasted by
-                hand every time, which makes it the first thing you need and
-                the reason it leads here - long-press the backticks to copy.
-                Online stock is the only genuinely one-tap case: no postal
-                code is involved, so the link alone finishes the job.
+            def box(color, heading, stock, act=True):
+                """One alert's embed. Fields are ordered for speed on a phone.
+
+                There is no store picker to deep-link: Best Buy searches within
+                50km of a postal code that it keeps in a cookie, and the URL
+                never changes when you set one (confirmed 2026-09-26). So the
+                code has to be pasted by hand every time, which is why "How to
+                buy" leads with it. Online stock is the only genuinely one-tap
+                case: no postal code is involved, so the link alone does it.
                 """
-                out = []
-                if store.get("drive"):
+                fields = [
+                    {"name": "Store", "value": store["name"], "inline": True},
+                    {"name": "Stock", "value": stock, "inline": True},
+                    {"name": "Price", "value": f"${price or product['msrp']}", "inline": True},
+                ]
+                # a sold-out box only needs to say what went - the rest is
+                # for acting on stock, and there is none left to act on
+                if act and store.get("drive"):
                     # round trip, since that is the number that decides
                     # whether the trip is worth making at all
-                    out.append(f"Drive: ~{store['drive']} min {store['dir']} "
-                               f"(~{store['drive'] * 2} min return)")
-                if store.get("postal_code"):
-                    out.append(f"1. Copy: `{store['postal_code']}`")
-                product_url = product.get("urls", {}).get(store_key)
-                if product_url:
-                    step = "2. Open" if store.get("postal_code") else "Buy now"
-                    out.append(f"{step}: {product_url}")
-                    if store.get("postal_code"):
-                        out.append('3. Paste it under "Pick Up" and hit Check')
-                if store.get("store_url"):
-                    out.append(f"Store (address & phone): {store['store_url']}")
+                    fields.append({"name": "Drive", "inline": True,
+                                   "value": f"~{store['drive']} min {store['dir']}\n"
+                                            f"(~{store['drive'] * 2} min return)"})
+                if act and postal:
+                    fields.append({"name": "Postal code", "value": f"`{postal}`",
+                                   "inline": True})
                 phone = _staples_phone.get(store.get("store_id", ""))
-                if phone and store["kind"] == "staples":
+                if act and phone and store["kind"] == "staples":
                     # Staples will put one aside if you ring the store - the
                     # closest thing to holding stock that actually exists
-                    out.append(f"Call to hold: {phone}")
+                    fields.append({"name": "Call to hold", "value": phone,
+                                   "inline": True})
+                if act and product_url:
+                    if postal:
+                        how = (f"1. Copy `{postal}`\n"
+                               f"2. Open the [product page]({product_url})\n"
+                               '3. Paste it under "Pick Up" and hit Check')
+                    else:
+                        how = f"[Buy now]({product_url}) - ships to you"
+                    fields.append({"name": "How to buy", "value": how})
+                links = []
+                if product_url:
+                    links.append(f"[Product page]({product_url})")
+                if store.get("store_url"):
+                    links.append(f"[Store address & phone]({store['store_url']})")
+                if links:
+                    fields.append({"name": "Links", "value": " · ".join(links)})
+                out = {"color": color,
+                       "title": f"{heading} | {product['product']}",
+                       "fields": fields}
+                if product_url:
+                    out["url"] = product_url
+                if product.get("image"):
+                    out["thumbnail"] = {"url": product["image"]}
                 return out
+
+            def summary(heading, stock, act=True):
+                """The line above the box - push notification and copy text."""
+                tail = f" · `{postal}`" if act and postal else ""
+                return f"**{heading}** · {store['name']} · {stock}{tail}"
 
             if was_state in (None, "out") and state in ("in", "low"):
                 line = f"{qty} unit(s) · ${price or product['msrp']}"
@@ -1032,9 +1076,9 @@ def sweep():
                     "tag": "IN" if state == "in" else "LOW",
                     "status": state, "extra": line,
                 })
-                notify("\n".join(["**IN STOCK**", product["product"],
-                                  store["name"], line] + where_to_buy()),
-                       product.get("channel", "ps5"), ping=True)
+                stock = f"{qty} unit(s)"
+                notify(summary("IN STOCK", stock), product.get("channel", "ps5"),
+                       ping=True, embed=box(COLOR["in"], "IN STOCK", stock))
                 print(f"  ALERT {product['product']} @ {store['name']} - {line}")
             elif (state in ("in", "low") and was_state in ("in", "low")
                     and was_qty is not None and qty != was_qty):
@@ -1045,9 +1089,9 @@ def sweep():
                     "time": now.strftime("%H:%M"), "tag": "QTY",
                     "status": state, "extra": line,
                 })
-                notify("\n".join([f"**STOCK {direction.upper()}**", product["product"],
-                                  store["name"], line] + where_to_buy()),
-                       product.get("channel", "ps5"))
+                heading = f"STOCK {direction.upper()}"
+                notify(summary(heading, line), product.get("channel", "ps5"),
+                       embed=box(COLOR["down" if qty < was_qty else "up"], heading, line))
                 print(f"  ALERT qty {direction} {product['product']} @ {store['name']} - {line}")
             elif was_state in ("in", "low") and state == "out":
                 alerts.insert(0, {
@@ -1058,9 +1102,8 @@ def sweep():
                 # no ping - there is nothing left to act on, this just keeps
                 # the channel from ending on a stale "1 unit" message
                 line = f"{was_qty} → 0 unit(s)" if was_qty is not None else "0 unit(s)"
-                notify("\n".join(["**SOLD OUT**", product["product"],
-                                  store["name"], line]),
-                       product.get("channel", "ps5"))
+                notify(summary("SOLD OUT", line, act=False), product.get("channel", "ps5"),
+                       embed=box(COLOR["gone"], "SOLD OUT", line, act=False))
                 print(f"  ALERT sold out {product['product']} @ {store['name']}")
 
     del alerts[60:]
