@@ -39,11 +39,11 @@ would be in the history permanently.
 ```
 python checker.py                       # loop forever, serve stock.json on :8000
 python checker.py --once                # single sweep, then exit
-python checker.py --for 25 --every 60   # sweep every minute for 25 min - what GitHub Actions runs
+python checker.py --for 29 --every 60   # sweep every minute for 29 min - what GitHub Actions runs
 ```
 
 GitHub Actions handles the real schedule (`.github/workflows/check.yml`).
-Each run sweeps every minute for ~25 minutes, then commits `stock.json` and
+Each run sweeps every minute for ~29 minutes, then commits `stock.json` and
 `status_message.json` back, which is how state survives between runs — without
 it, every run would look like a first run and re-alert on everything already in
 stock. The check interval is the `--every` flag in the workflow; change it

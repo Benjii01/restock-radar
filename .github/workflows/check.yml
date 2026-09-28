@@ -4,7 +4,7 @@ on:
   schedule:
     # Stays at every 30 minutes because that is the only interval GitHub's
     # scheduler reliably fires on this repo. The *check* cadence is no longer
-    # tied to it: each run now sweeps repeatedly for ~25 minutes (see the
+    # tied to it: each run now sweeps repeatedly for ~29 minutes (see the
     # --for/--every flags below), so checks land every minute while only
     # asking cron for something it will honour.
     #
@@ -29,9 +29,13 @@ concurrency:
 jobs:
   check:
     runs-on: ubuntu-latest
-    # hard stop well before the next cron firing, so a hung sweep can never
-    # overlap the following run or bill for a full six hours
-    timeout-minutes: 28
+    # Each run sweeps for 29 minutes, deliberately running into the next
+    # :00/:30 start - the concurrency group above queues that run and starts
+    # it the moment this one finishes, so checking is continuous apart from
+    # the minute a new run takes to set up. 25 minutes (the old length) left
+    # ~7 unchecked minutes every half hour, 12% of the day (measured
+    # 2026-09-27). The timeout is only a backstop for a hung sweep.
+    timeout-minutes: 34
     permissions:
       contents: write       # needed to commit the updated stock.json
     steps:
@@ -55,7 +59,7 @@ jobs:
           PUSHOVER_TOKEN: ${{ secrets.PUSHOVER_TOKEN }}             # optional; phone alarm on restock
           PUSHOVER_USER: ${{ secrets.PUSHOVER_USER }}
           DISCORD_PING: ${{ secrets.DISCORD_PING }}                 # optional; unset = @everyone
-        run: python checker.py --for 25 --every 60
+        run: python checker.py --for 29 --every 60
 
       - name: Save results
         run: |
