@@ -1044,6 +1044,30 @@
     {
       "pid": "p5",
       "store": "bb_on622",
+      "time": "21:42",
+      "tag": "GONE",
+      "status": "out",
+      "extra": "sold out"
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on622",
+      "time": "21:42",
+      "tag": "QTY",
+      "status": "low",
+      "extra": "3 \u2192 1 unit(s)"
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on622",
+      "time": "21:41",
+      "tag": "IN",
+      "status": "in",
+      "extra": "3 unit(s) \u00b7 $1099.99"
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on622",
       "time": "16:21",
       "tag": "GONE",
       "status": "out",
@@ -1496,31 +1520,7 @@
       "tag": "GONE",
       "status": "out",
       "extra": "sold out"
-    },
-    {
-      "pid": "p5",
-      "store": "bb_on608",
-      "time": "20:00",
-      "tag": "LOW",
-      "status": "low",
-      "extra": "1 unit(s) \u00b7 $1099.99"
-    },
-    {
-      "pid": "p5",
-      "store": "stap_on8",
-      "time": "18:30",
-      "tag": "GONE",
-      "status": "out",
-      "extra": "sold out"
-    },
-    {
-      "pid": "p5",
-      "store": "bb_on935",
-      "time": "18:21",
-      "tag": "GONE",
-      "status": "out",
-      "extra": "sold out"
     }
   ],
-  "updated": "2026-09-28T21:40:31.269660"
+  "updated": "2026-09-28T22:08:45.519260"
 }
