@@ -1007,9 +1007,37 @@ def load_previous_state():
     print(f"  restored {len(previous)} store states, {len(alerts)} past alerts")
 
 
+# Watchdog. The bot can't report its own silence, so after every sweep it
+# pings Healthchecks.io, which raises the alarm (Pushover, Discord) when the
+# pings stop - a stalled run, a gap between runs, GitHub not starting one -
+# or when a sweep says the stores are refusing us. Its dashboard doubles as
+# a live log of every sweep. Off unless the HC_PING_URL secret is set.
+HC_PING_URL = os.environ.get("HC_PING_URL", "").strip().rstrip("/")
+sweep_stats = {"ok": 0, "failed": 0}
+_bad_sweeps = 0   # in a row - one hiccup isn't worth waking anyone for
+
+
+def heartbeat(error=None):
+    global _bad_sweeps
+    ok, failed = sweep_stats["ok"], sweep_stats["failed"]
+    # "blind": most lookups failing (blocked, 403s, a site down)
+    bad = error is not None or failed >= max(ok, 1)
+    _bad_sweeps = _bad_sweeps + 1 if bad else 0
+    if not HC_PING_URL:
+        return
+    note = f"{ok} store checks ok, {failed} failed" + (f" - sweep error: {error}" if error else "")
+    url = HC_PING_URL + ("/fail" if _bad_sweeps >= 2 else "")
+    try:
+        urllib.request.urlopen(urllib.request.Request(
+            url, data=note.encode(), headers=UA), timeout=5)
+    except Exception as e:
+        print("  heartbeat failed:", e)
+
+
 def sweep():
     hits = []
     now = datetime.now()
+    sweep_stats.update(ok=0, failed=0)
     _staples_cache.clear()   # stock moves between sweeps - never reuse across them
     _bestbuy_cache.clear()
 
@@ -1030,7 +1058,9 @@ def sweep():
                     qty, price = check_walmart(sku, store["store_id"])
             except Exception as e:
                 print(f"  {store['name']}: check failed ({e})")
+                sweep_stats["failed"] += 1
                 continue
+            sweep_stats["ok"] += 1
 
             state = status_for(qty)
             if state is None:
@@ -1242,17 +1272,21 @@ if __name__ == "__main__":
         deadline = time.monotonic() + minutes * 60
         swept = 0
         while True:
+            started = time.monotonic()
             try:
                 sweep()
+                heartbeat()
             except Exception as e:
                 print("sweep error:", e)
+                heartbeat(e)
             swept += 1
-            # stop once another interval wouldn't fit - overrunning would
-            # collide with the next cron firing, and the commit step still
+            # stop once another interval wouldn't fit - the commit step still
             # has to run after this
-            if time.monotonic() + every > deadline:
+            if started + every > deadline:
                 break
-            time.sleep(every)
+            # sweeps start `every` seconds apart - sleeping a full interval
+            # after each one would add the sweep's own seconds every time
+            time.sleep(max(0, started + every - time.monotonic()))
         print(f"{swept} sweep(s) over {minutes:g} min - exiting before the next run")
     elif "--once" in sys.argv:
         sweep()
@@ -1260,8 +1294,11 @@ if __name__ == "__main__":
         threading.Thread(target=serve, daemon=True).start()
         print("checking every", CHECK_EVERY_SECONDS, "seconds - leave this window open\n")
         while True:
+            started = time.monotonic()
             try:
                 sweep()
+                heartbeat()
             except Exception as e:
                 print("sweep error:", e)
-            time.sleep(CHECK_EVERY_SECONDS)
+                heartbeat(e)
+            time.sleep(max(0, started + CHECK_EVERY_SECONDS - time.monotonic()))
