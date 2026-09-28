@@ -65,7 +65,7 @@ it is or holds its token. Things to know:
   its GitHub token may have expired, or the service disabled the job after
   failures. Checks then fall back to GitHub's irregular cron alone.
 - **Don't make it fire more often than every 30 minutes.** Each run already
-  lasts ~25 minutes, and only one runs at a time (`concurrency` in the
+  lasts ~29 minutes, and only one runs at a time (`concurrency` in the
   workflow), so extra triggers just queue up or get dropped. How often stock is
   *checked* is the `--every` flag, not the ticker.
 - It calls: `POST https://api.github.com/repos/Benjii01/restock-radar/actions/workflows/check.yml/dispatches`
