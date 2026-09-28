@@ -52,7 +52,7 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Sweep every minute until the next run is due
+      - name: Sweep every minute (Best Buy every 15 s) until the next run is due
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
           DISCORD_WEBHOOK_PS5_STATUS: ${{ secrets.DISCORD_WEBHOOK_PS5_STATUS }}  # optional; unset = status stays in the alert channel
@@ -60,7 +60,7 @@ jobs:
           PUSHOVER_USER: ${{ secrets.PUSHOVER_USER }}
           HC_PING_URL: ${{ secrets.HC_PING_URL }}                   # optional; watchdog that alerts when checks stop
           DISCORD_PING: ${{ secrets.DISCORD_PING }}                 # optional; unset = @everyone
-        run: python checker.py --for 29 --every 60
+        run: python checker.py --for 29 --every 60 --quick 15
 
       - name: Save results
         run: |

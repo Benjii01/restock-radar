@@ -1055,16 +1055,23 @@ def heartbeat(error=None):
         print("  heartbeat failed:", e)
 
 
-def sweep():
+def sweep(full=True):
+    """One pass over the stores, alerting on any change.
+
+    full=False is the quick in-between check: Best Buy only - two requests
+    cover every Best Buy store and online, where nearly all stock has shown
+    up - with alerts exactly as usual, but no status message, no stock.json
+    and no health counts; the next full sweep does those."""
     hits = []
     now = datetime.now()
-    sweep_stats.update(ok=0, failed=0)
-    _staples_cache.clear()   # stock moves between sweeps - never reuse across them
+    if full:
+        sweep_stats.update(ok=0, failed=0)
+        _staples_cache.clear()   # stock moves between sweeps - never reuse across them
     _bestbuy_cache.clear()
 
     for product in PRODUCTS:
         for store_key, store in STORES.items():
-            if store["kind"] == "manual":
+            if store["kind"] == "manual" or (not full and store["kind"] != "bestbuy"):
                 continue
             sku = product.get("skus", {}).get(store_key)
             if not sku:
@@ -1079,9 +1086,11 @@ def sweep():
                     qty, price = check_walmart(sku, store["store_id"])
             except Exception as e:
                 print(f"  {store['name']}: check failed ({e})")
-                sweep_stats["failed"] += 1
+                if full:
+                    sweep_stats["failed"] += 1
                 continue
-            sweep_stats["ok"] += 1
+            if full:
+                sweep_stats["ok"] += 1
 
             state = status_for(qty)
             if state is None:
@@ -1215,6 +1224,8 @@ def sweep():
                 print(f"  ALERT sold out {product['product']} @ {store['name']}")
 
     del alerts[60:]
+    if not full:
+        return
 
     OUT.write_text(json.dumps({
         "stores": {k: {kk: vv for kk, vv in v.items()
@@ -1287,8 +1298,10 @@ if __name__ == "__main__":
         # 2026-09-09: zero runs in two hours), so a few-minute cadence has to
         # come from inside a single run the scheduler is happy to start.
         #   python checker.py --for 29 --every 60    -> a sweep every minute
+        #   ... --quick 15   -> plus Best Buy alone every 15 s in between
         minutes = float(_arg("--for", "25"))
         every = float(_arg("--every", CHECK_EVERY_SECONDS))
+        quick = float(_arg("--quick", 0))
         NEXT_CHECK_SECS = int(every)
         deadline = time.monotonic() + minutes * 60
         swept = 0
@@ -1305,6 +1318,16 @@ if __name__ == "__main__":
             # has to run after this
             if started + every > deadline:
                 break
+            # quick Best Buy checks at +15, +30, +45 s (with --quick 15)
+            if quick:
+                at = started + quick
+                while at < started + every - 1:
+                    time.sleep(max(0, at - time.monotonic()))
+                    try:
+                        sweep(full=False)
+                    except Exception as e:
+                        print("quick check error:", e)
+                    at += quick
             # sweeps start `every` seconds apart - sleeping a full interval
             # after each one would add the sweep's own seconds every time
             time.sleep(max(0, started + every - time.monotonic()))
