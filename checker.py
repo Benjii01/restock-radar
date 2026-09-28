@@ -793,8 +793,20 @@ def build_status(hits, now, channel):
     # whoever is reading it's own timezone - which beats printing the
     # runner's UTC and leaving everyone to do the subtraction.
     stamp = int(now.timestamp())
+    # Health, readable at a glance. "checked ... ago" is rendered live by
+    # Discord and keeps counting while nothing edits this message - so a
+    # stalled bot shows up as "checked 6 minutes ago" without the bot having
+    # to say anything. The line below it covers the other failure: running
+    # but blocked, with stores not answering.
+    ok, failed = sweep_stats["ok"], sweep_stats["failed"]
+    if failed == 0:
+        health = f"🟢 all {ok} store checks answered"
+    elif failed < ok:
+        health = f"🟡 {failed} of {ok + failed} store checks failed - partly blind"
+    else:
+        health = f"🔴 {failed} of {ok + failed} store checks failed - stores not answering"
     lines = [f"**RESTOCK RADAR** · checked <t:{stamp}:R> at <t:{stamp}:t>",
-             f"next check <t:{stamp + NEXT_CHECK_SECS}:R>"]
+             f"next check <t:{stamp + NEXT_CHECK_SECS}:R> · {health}"]
     by_pid = {}
     for h in hits:
         by_pid.setdefault(h["pid"], []).append(h)
