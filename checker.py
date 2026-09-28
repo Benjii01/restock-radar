@@ -594,6 +594,15 @@ def check_bestbuy(sku, store_id):
                     # older shape only says yes/no, so treat "yes" as a single
                     # unit - enough to fire the alert and let you phone them
                     qty = 1 if loc.get("hasInventory") else 0
+                if qty or loc.get("hasInventory"):
+                    # Single units keep appearing for a minute, mostly on the
+                    # hour, then vanishing (Brampton, 2026-09-27). Log Best
+                    # Buy's whole record whenever a store shows stock, so the
+                    # next one shows whether the count was real or the
+                    # yes/no fallback above, and whether it was reservable.
+                    print(f"  [bestbuy raw] sku {sku}: " + json.dumps(
+                        {k: loc.get(k) for k in ("name", "locationKey", "quantityOnHand",
+                                                 "hasInventory", "isReservable", "reservable")}))
                 cache[str(loc["locationKey"])] = (int(qty), price)
             # the same response carries ship-to-home stock; "online" is the
             # pseudo-store that reports it
