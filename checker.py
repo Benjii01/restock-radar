@@ -683,11 +683,13 @@ def webhook_for(channel):
     return WEBHOOKS.get(channel) or WEBHOOKS.get("ps5", "")
 
 
-# Optional heads-up through Pushover, for a restock notification separate
-# from Discord. Deliberately gentle: one ordinary notification that follows
-# the phone's silent mode and Focus - no Critical Alert, no repeats (asked
-# for 2026-09-27: "a heads up, not to disturb what I'm doing"). Both keys
-# are repo secrets; with either missing nothing is sent.
+# Restock alarm through Pushover. Emergency priority, so with Critical
+# Alerts allowed in the Pushover iPhone app it sounds on the phone itself -
+# a normal notification goes only to the Apple Watch while it's worn, and the
+# phone stays silent (found 2026-09-28; "I WANT BOTH TO GO OFF"). Volume is
+# set in the Pushover app. Repeats until tapped, for a few minutes - real
+# stock has lasted longer than that, phantoms haven't. Both keys are repo
+# secrets; with either missing nothing is sent.
 PUSHOVER_TOKEN = os.environ.get("PUSHOVER_TOKEN", "").strip()   # the app's API token
 PUSHOVER_USER = os.environ.get("PUSHOVER_USER", "").strip()     # your user key
 
@@ -699,7 +701,9 @@ def alarm(product, store, stock, url):
         "token": PUSHOVER_TOKEN, "user": PUSHOVER_USER,
         "title": f"IN STOCK: {product['product']}",
         "message": f"{store['name']} - {stock}",
-        "priority": 0,        # normal: one notification, the phone's own sound settings
+        "priority": 2,        # emergency: Critical Alert on the phone, and the watch
+        "retry": 30,          # again every 30 s until tapped...
+        "expire": 180,        # ...for 3 minutes
     }
     if url:
         fields.update(url=url, url_title="Open checkout" if "checkout" in url else "Open product page")
