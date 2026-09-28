@@ -683,13 +683,11 @@ def webhook_for(channel):
     return WEBHOOKS.get(channel) or WEBHOOKS.get("ps5", "")
 
 
-# Restock alarm through Pushover. Emergency priority, so with Critical
-# Alerts allowed in the Pushover iPhone app it sounds on the phone itself -
-# a normal notification goes only to the Apple Watch while it's worn, and the
-# phone stays silent (found 2026-09-28; "I WANT BOTH TO GO OFF"). Volume is
-# set in the Pushover app. Repeats until tapped, for a few minutes - real
-# stock has lasted longer than that, phantoms haven't. Both keys are repo
-# secrets; with either missing nothing is sent.
+# Restock notice through Pushover: one high-priority notification, no
+# repeats (asked 2026-09-28). While an Apple Watch is worn iOS delivers it to
+# the watch only - Pushover's own help confirms one app can't sound on both;
+# untick Pushover in the Watch app to have it ring the phone instead. Both
+# keys are repo secrets; with either missing nothing is sent.
 PUSHOVER_TOKEN = os.environ.get("PUSHOVER_TOKEN", "").strip()   # the app's API token
 PUSHOVER_USER = os.environ.get("PUSHOVER_USER", "").strip()     # your user key
 
@@ -701,9 +699,7 @@ def alarm(product, store, stock, url):
         "token": PUSHOVER_TOKEN, "user": PUSHOVER_USER,
         "title": f"IN STOCK: {product['product']}",
         "message": f"{store['name']} - {stock}",
-        "priority": 2,        # emergency: Critical Alert on the phone, and the watch
-        "retry": 30,          # again every 30 s until tapped...
-        "expire": 180,        # ...for 3 minutes
+        "priority": 1,        # high: sounds even in Pushover's quiet hours; sent once
     }
     if url:
         fields.update(url=url, url_title="Open checkout" if "checkout" in url else "Open product page")
