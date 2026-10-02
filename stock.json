@@ -738,9 +738,9 @@
     {
       "pid": "p5",
       "store": "stap_on5",
-      "qty": 0,
+      "qty": 1,
       "price": 1099.99,
-      "status": "out",
+      "status": "low",
       "seenSecs": 0
     },
     {
@@ -1041,6 +1041,14 @@
     }
   ],
   "alerts": [
+    {
+      "pid": "p5",
+      "store": "stap_on5",
+      "time": "16:56",
+      "tag": "LOW",
+      "status": "low",
+      "extra": "1 unit(s) \u00b7 $1099.99"
+    },
     {
       "pid": "p5",
       "store": "bb",
@@ -1512,15 +1520,7 @@
       "tag": "LOW",
       "status": "low",
       "extra": "1 unit(s) \u00b7 $1099.99"
-    },
-    {
-      "pid": "p5",
-      "store": "bb_on608",
-      "time": "18:58",
-      "tag": "GONE",
-      "status": "out",
-      "extra": "sold out"
     }
   ],
-  "updated": "2026-10-02T16:50:10.453063"
+  "updated": "2026-10-02T17:18:23.461751"
 }
