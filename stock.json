@@ -546,9 +546,9 @@
     {
       "pid": "p5",
       "store": "bb_on620",
-      "qty": 1,
+      "qty": 0,
       "price": 1099.99,
-      "status": "low",
+      "status": "out",
       "seenSecs": 0
     },
     {
@@ -1044,6 +1044,14 @@
     {
       "pid": "p5",
       "store": "bb_on620",
+      "time": "21:41",
+      "tag": "GONE",
+      "status": "out",
+      "extra": "sold out"
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on620",
       "time": "21:30",
       "tag": "LOW",
       "status": "low",
@@ -1512,15 +1520,7 @@
       "tag": "GONE",
       "status": "out",
       "extra": "sold out"
-    },
-    {
-      "pid": "p5",
-      "store": "bb_on622",
-      "time": "00:11",
-      "tag": "GONE",
-      "status": "out",
-      "extra": "sold out"
     }
   ],
-  "updated": "2026-10-04T21:36:37.099007"
+  "updated": "2026-10-04T22:04:47.312488"
 }
