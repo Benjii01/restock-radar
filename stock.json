@@ -505,6 +505,14 @@
     },
     {
       "pid": "p5",
+      "store": "stap_stav",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
       "store": "stap_mtpearl",
       "qty": 0,
       "price": 1099.99,
@@ -818,6 +826,14 @@
     {
       "pid": "p5",
       "store": "stap_on456",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "stap_on14",
       "qty": 0,
       "price": 1099.99,
       "status": "out",
@@ -1506,5 +1522,5 @@
       "extra": "sold out"
     }
   ],
-  "updated": "2026-10-07T17:09:38.724583"
+  "updated": "2026-10-07T17:58:23.447968"
 }
