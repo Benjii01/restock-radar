@@ -634,9 +634,9 @@
     {
       "pid": "p5",
       "store": "bb_on926",
-      "qty": 3,
+      "qty": 0,
       "price": 1099.99,
-      "status": "in",
+      "status": "out",
       "seenSecs": 0
     },
     {
@@ -650,9 +650,9 @@
     {
       "pid": "p5",
       "store": "bb_on954",
-      "qty": 0,
+      "qty": 6,
       "price": 1099.99,
-      "status": "out",
+      "status": "in",
       "seenSecs": 0
     },
     {
@@ -1041,6 +1041,86 @@
     }
   ],
   "alerts": [
+    {
+      "pid": "p5",
+      "store": "bb_on954",
+      "time": "21:57",
+      "tag": "QTY",
+      "status": "in",
+      "extra": "8 \u2192 6 unit(s)"
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on954",
+      "time": "21:57",
+      "tag": "QTY",
+      "status": "in",
+      "extra": "9 \u2192 8 unit(s)"
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on954",
+      "time": "21:56",
+      "tag": "QTY",
+      "status": "in",
+      "extra": "10 \u2192 9 unit(s)"
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on954",
+      "time": "21:56",
+      "tag": "QTY",
+      "status": "in",
+      "extra": "12 \u2192 10 unit(s)"
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on954",
+      "time": "21:56",
+      "tag": "IN",
+      "status": "in",
+      "extra": "12 unit(s) \u00b7 $1099.99"
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on926",
+      "time": "21:37",
+      "tag": "GONE",
+      "status": "out",
+      "extra": "sold out"
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on926",
+      "time": "21:37",
+      "tag": "LOW",
+      "status": "low",
+      "extra": "1 unit(s) \u00b7 $1099.99"
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on926",
+      "time": "21:36",
+      "tag": "GONE",
+      "status": "out",
+      "extra": "sold out"
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on926",
+      "time": "21:35",
+      "tag": "LOW",
+      "status": "low",
+      "extra": "1 unit(s) \u00b7 $1099.99"
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on926",
+      "time": "21:30",
+      "tag": "GONE",
+      "status": "out",
+      "extra": "sold out"
+    },
     {
       "pid": "p5",
       "store": "bb_on926",
@@ -1440,87 +1520,7 @@
       "tag": "GONE",
       "status": "out",
       "extra": "sold out"
-    },
-    {
-      "pid": "p5",
-      "store": "bb_on620",
-      "time": "00:00",
-      "tag": "LOW",
-      "status": "low",
-      "extra": "1 unit(s) \u00b7 $1099.99"
-    },
-    {
-      "pid": "p5",
-      "store": "bb_on620",
-      "time": "23:41",
-      "tag": "GONE",
-      "status": "out",
-      "extra": "sold out"
-    },
-    {
-      "pid": "p5",
-      "store": "bb_on620",
-      "time": "23:40",
-      "tag": "LOW",
-      "status": "low",
-      "extra": "1 unit(s) \u00b7 $1099.99"
-    },
-    {
-      "pid": "p5",
-      "store": "bb_on622",
-      "time": "12:00",
-      "tag": "GONE",
-      "status": "out",
-      "extra": "sold out"
-    },
-    {
-      "pid": "p5",
-      "store": "bb_on622",
-      "time": "12:00",
-      "tag": "LOW",
-      "status": "low",
-      "extra": "1 unit(s) \u00b7 $1099.99"
-    },
-    {
-      "pid": "p5",
-      "store": "bb_on622",
-      "time": "04:00",
-      "tag": "GONE",
-      "status": "out",
-      "extra": "sold out"
-    },
-    {
-      "pid": "p5",
-      "store": "bb_on622",
-      "time": "04:00",
-      "tag": "LOW",
-      "status": "low",
-      "extra": "1 unit(s) \u00b7 $1099.99"
-    },
-    {
-      "pid": "p5",
-      "store": "bb_on622",
-      "time": "03:00",
-      "tag": "GONE",
-      "status": "out",
-      "extra": "sold out"
-    },
-    {
-      "pid": "p5",
-      "store": "bb_on622",
-      "time": "03:00",
-      "tag": "LOW",
-      "status": "low",
-      "extra": "1 unit(s) \u00b7 $1099.99"
-    },
-    {
-      "pid": "p5",
-      "store": "bb_on622",
-      "time": "02:01",
-      "tag": "GONE",
-      "status": "out",
-      "extra": "sold out"
     }
   ],
-  "updated": "2026-10-13T21:28:27.752764"
+  "updated": "2026-10-13T21:58:26.043844"
 }
