@@ -489,6 +489,22 @@
   "hits": [
     {
       "pid": "p5",
+      "store": "bb",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "bb_aval",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
       "store": "stap_stav",
       "qty": 0,
       "price": 1099.99,
@@ -522,6 +538,158 @@
     {
       "pid": "p5",
       "store": "stap_wood",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on620",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on936",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on980",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on995",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on935",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on608",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on631",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on982",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on942",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on984",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on622",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on926",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on930",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on954",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on938",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on950",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on610",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on615",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on624",
       "qty": 0,
       "price": 1099.99,
       "status": "out",
@@ -692,6 +860,174 @@
       "store": "bb_online",
       "qty": 0,
       "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5alt",
+      "store": "bb",
+      "qty": 0,
+      "price": 1099.95,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5alt",
+      "store": "bb_aval",
+      "qty": 0,
+      "price": 1099.95,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5alt",
+      "store": "bb_on620",
+      "qty": 0,
+      "price": 1099.95,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5alt",
+      "store": "bb_on936",
+      "qty": 0,
+      "price": 1099.95,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5alt",
+      "store": "bb_on980",
+      "qty": 0,
+      "price": 1099.95,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5alt",
+      "store": "bb_on995",
+      "qty": 0,
+      "price": 1099.95,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5alt",
+      "store": "bb_on935",
+      "qty": 0,
+      "price": 1099.95,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5alt",
+      "store": "bb_on608",
+      "qty": 0,
+      "price": 1099.95,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5alt",
+      "store": "bb_on631",
+      "qty": 0,
+      "price": 1099.95,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5alt",
+      "store": "bb_on982",
+      "qty": 0,
+      "price": 1099.95,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5alt",
+      "store": "bb_on942",
+      "qty": 0,
+      "price": 1099.95,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5alt",
+      "store": "bb_on984",
+      "qty": 0,
+      "price": 1099.95,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5alt",
+      "store": "bb_on622",
+      "qty": 0,
+      "price": 1099.95,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5alt",
+      "store": "bb_on926",
+      "qty": 0,
+      "price": 1099.95,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5alt",
+      "store": "bb_on930",
+      "qty": 0,
+      "price": 1099.95,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5alt",
+      "store": "bb_on954",
+      "qty": 0,
+      "price": 1099.95,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5alt",
+      "store": "bb_on938",
+      "qty": 0,
+      "price": 1099.95,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5alt",
+      "store": "bb_on950",
+      "qty": 0,
+      "price": 1099.95,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5alt",
+      "store": "bb_on610",
+      "qty": 0,
+      "price": 1099.95,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5alt",
+      "store": "bb_on615",
+      "qty": 0,
+      "price": 1099.95,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5alt",
+      "store": "bb_on624",
+      "qty": 0,
+      "price": 1099.95,
       "status": "out",
       "seenSecs": 0
     },
@@ -1186,5 +1522,5 @@
       "extra": "4 \u2192 3 unit(s)"
     }
   ],
-  "updated": "2026-10-16T06:30:51.263079"
+  "updated": "2026-10-16T06:59:35.443704"
 }
