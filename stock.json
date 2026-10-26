@@ -1043,6 +1043,54 @@
   "alerts": [
     {
       "pid": "p5",
+      "store": "bb_on995",
+      "time": "21:01",
+      "tag": "GONE",
+      "status": "out",
+      "extra": "sold out"
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on995",
+      "time": "21:00",
+      "tag": "LOW",
+      "status": "low",
+      "extra": "1 unit(s) \u00b7 $1099.99"
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on608",
+      "time": "21:00",
+      "tag": "GONE",
+      "status": "out",
+      "extra": "sold out"
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on608",
+      "time": "21:00",
+      "tag": "LOW",
+      "status": "low",
+      "extra": "1 unit(s) \u00b7 $1099.99"
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on995",
+      "time": "20:52",
+      "tag": "GONE",
+      "status": "out",
+      "extra": "sold out"
+    },
+    {
+      "pid": "p5",
+      "store": "bb_on995",
+      "time": "20:52",
+      "tag": "LOW",
+      "status": "low",
+      "extra": "1 unit(s) \u00b7 $1099.99"
+    },
+    {
+      "pid": "p5",
       "store": "bb_on608",
       "time": "20:18",
       "tag": "GONE",
@@ -1472,55 +1520,7 @@
       "tag": "LOW",
       "status": "low",
       "extra": "1 unit(s) \u00b7 $1099.99"
-    },
-    {
-      "pid": "p5",
-      "store": "bb_on610",
-      "time": "19:01",
-      "tag": "GONE",
-      "status": "out",
-      "extra": "sold out"
-    },
-    {
-      "pid": "p5",
-      "store": "bb_on610",
-      "time": "19:00",
-      "tag": "LOW",
-      "status": "low",
-      "extra": "1 unit(s) \u00b7 $1099.99"
-    },
-    {
-      "pid": "p5",
-      "store": "bb_on980",
-      "time": "18:31",
-      "tag": "GONE",
-      "status": "out",
-      "extra": "sold out"
-    },
-    {
-      "pid": "p5",
-      "store": "bb_on980",
-      "time": "18:29",
-      "tag": "LOW",
-      "status": "low",
-      "extra": "1 unit(s) \u00b7 $1099.99"
-    },
-    {
-      "pid": "p5",
-      "store": "bb_on980",
-      "time": "17:39",
-      "tag": "GONE",
-      "status": "out",
-      "extra": "sold out"
-    },
-    {
-      "pid": "p5",
-      "store": "bb_on980",
-      "time": "17:39",
-      "tag": "LOW",
-      "status": "low",
-      "extra": "1 unit(s) \u00b7 $1099.99"
     }
   ],
-  "updated": "2026-10-26T20:38:52.061801"
+  "updated": "2026-10-26T21:07:14.810623"
 }
