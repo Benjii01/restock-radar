@@ -529,6 +529,14 @@
     },
     {
       "pid": "p5",
+      "store": "stap_cb",
+      "qty": 0,
+      "price": 1099.99,
+      "status": "out",
+      "seenSecs": 0
+    },
+    {
+      "pid": "p5",
       "store": "stap_wood",
       "qty": 0,
       "price": 1099.99,
@@ -1514,5 +1522,5 @@
       "extra": "2 \u2192 1 unit(s)"
     }
   ],
-  "updated": "2026-10-27T14:59:08.345938"
+  "updated": "2026-10-27T15:28:32.383733"
 }
