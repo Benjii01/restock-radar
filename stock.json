@@ -537,14 +537,6 @@
     },
     {
       "pid": "p5",
-      "store": "stap_wood",
-      "qty": 0,
-      "price": 1099.99,
-      "status": "out",
-      "seenSecs": 0
-    },
-    {
-      "pid": "p5",
       "store": "bb_on620",
       "qty": 0,
       "price": 1099.99,
@@ -1522,5 +1514,5 @@
       "extra": "sold out"
     }
   ],
-  "updated": "2026-10-29T20:28:27.505488"
+  "updated": "2026-10-29T20:58:24.196292"
 }
